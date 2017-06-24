@@ -7,6 +7,7 @@
     
 </template>
 <script>
+import {API_ROUTER_CONFIG} from '@/api/config/api_config'
     export default {
         data () {
             return {
@@ -15,7 +16,7 @@
         },
         methods:{
           login(){
-
+            alert(API_ROUTER_CONFIG.login)
           }
         }
     }
