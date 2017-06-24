@@ -21,6 +21,33 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+
+//路由mock数据
+var appData = require('../data.json');
+var dataLogin = appData.dataLogin;
+var dataRegister = appData.dataRegister;
+
+//路由
+var apiRoutes = express.Router();
+apiRoutes.get('/login',function(req,res){
+  // console.log("1")
+  res.json({
+    msg:'',
+    status:'0',
+    data:dataLogin
+  })
+})
+apiRoutes.post('/register',function(req,res){
+  res.json({
+    msg:'',
+    status:'0',
+    data:dataRegister
+  })
+})
+
+app.use('/zxg/weixin/index',apiRoutes);
+
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
