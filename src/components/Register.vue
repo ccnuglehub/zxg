@@ -1,40 +1,27 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    
-    
-  </div>
+	<div class="register">
+		<img class="app_logo" src="../assets/app_logo.png">
+		<Input  placeholder="请输入...">
+		<span slot="prepend"></span>
+		</Input>
+	</div>
 </template>
 
 <script>
 export default {
-  name: 'hello',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
+  	name: 'register',
+  	data () {
+    	return {
+      		msg: 'Welcome to Your Vue.js App'
+    	}
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
+.app_logo {
+	margin-top: 90px;
+	width: 71%;
 }
 </style>
