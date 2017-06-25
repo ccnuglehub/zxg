@@ -5,6 +5,7 @@ import Register from '@/components/Register'
 import Work from '@/components/Work'
 import AddProject from '@/components/AddProject'
 import WorkerDetail from '@/components/WorkerDetail'
+import Newslist from '@/components/Newslist'
 
 Vue.use(Router)
 
@@ -14,6 +15,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path:'/newslist',
+      name:'newslist',
+      component: Newslist,
     },
     {
       path: '/register',
