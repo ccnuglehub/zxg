@@ -77,9 +77,10 @@ export default {
 .work_info_bottom {
     color: rgb(255,152,0);
 }
-.worker_info {
+.worker_info {ß
     padding: 2.3vh 9vw;
     font-size: 16px;
     text-align: left;
 }
 </style>
+
