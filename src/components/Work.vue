@@ -1,194 +1,120 @@
 <template>
-	<div class="register">
-		<img class="app_logo" src="../assets/app_logo.png">
-		<div class="n_input_box">
-			<Input v-model="user_name" @on-blur="nameValidate(user_name)" class="input" placeholder="请输入姓名">
-				<span slot="prepend"><Icon type="person"></Icon></span>
-			</Input>
-			<div class="input error"><span v-show="!name_flag">姓名格式不正确</span></div>
+	<div class="work">
+		<div class="top_menue">
+		    <div class="top_menue_item">
+            </div>
+            <div class="top_menue_item">
+            </div>
+            <div class="top_menue_item">
+            </div>
+            <div class="top_menue_item">
+            </div>
 		</div>
-		<div class="m_box">
-			<div class="input mb_input">
-				<div class="m_input_box">
-					<Input v-model="user_tel" @on-blur="phoneValidate(user_tel)" class="m_input" placeholder="请输入电话">
-						<span slot="prepend"><Icon type="ios-telephone"></Icon></span>
-					</Input>
-				</div>
-				<Button @click="sendMcode" class="m_bt" type="success" long>发送验证码</Button>
-			</div>
-			<div class="input error"><span v-show="!phone_flag">电话号码格式不正确</span></div>
-		</div>
-		<div class="input_box">
-			<Input v-model="auth_code" @on-blur="emptyValidate(auth_code)" class="input" placeholder="请输入短信验证码">
-				<span slot="prepend"><Icon type="locked"></Icon></Icon></span>
-			</Input>
-			<div class="input error"><span v-show="empty_flag">验证码不能为空</span></div>
-		</div>
-		<div class="select_box">
-			<label class="select_lable">请选择身份</label>
-			<Select v-model="user_local" class="select">
-				<Option v-for="item in user_type_list" :value="item.value" :key="item">{{ item.value }}</Option>
-			</Select>
-		</div>
-		<div class="select_box">
-			<label class="select_lable"></label>
-			<Select v-model="user_type" class="select">
-				<Option v-for="item in user_local_list" :value="item.value" :key="item">{{ item.value }}</Option>
-			</Select>
-		</div>
-		<Button @click="register" class="register_bt" type="success" long>注册</Button>
+        <div class="item_list">
+            <div class="item_list_item">
+                <img class="work_photo" src="../assets/people.png">
+                <div class="work_info lb_item">
+                    <div class="work_info_top">
+                        <div class="lb_item worker_type">油漆工</div>
+                        <div class="lb_item worker_name">王凯</div>
+                        <div class="lb_item worker_auth authed">已实名认证</div>
+                    </div>
+                    <Rate allow-half v-model="valueHalf"></Rate>
+                    <div class="work_info_bottom">
+                        <div class="lb_item worker_region">江汉区</div>
+                        <div class="lb_item">已接单：149</div>
+                    </div>
+                </div>
+            </div>
+            <div class="item_list_item">
+                <img class="work_photo" src="../assets/people.png">
+                <div class="work_info lb_item">
+                    <div class="work_info_top">
+                        <div class="lb_item worker_type">油漆工</div>
+                        <div class="lb_item worker_name">王凯</div>
+                        <div class="lb_item worker_auth authed">已实名认证</div>
+                    </div>
+                    <Rate allow-half v-model="valueHalf"></Rate>
+                    <div class="work_info_bottom">
+                        <div class="lb_item worker_region">江汉区</div>
+                        <div class="lb_item">已接单：149</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 </template>
 
 <script>
-import { checkPhone, checkName, checkEmpty } from '../util/util.js'
-
 export default {
-  	name: 'register',
+  	name: 'work',
   	data () {
     	return {
-      		user_name: '',
-			user_tel: '',
-			user_type: '',
-			auth_code: '',
-			user_local: '',
-			phone_flag: true,
-			name_flag: true,
-			empty_flag: false,
-			user_type_list: [
-				{
-					id: 1,
-					value: '项目经理'
-				},
-				{
-					id: 2,
-					value: '物业公司'
-				},
-				{
-					id: 3,
-					value: '业主'
-				},
-				{
-					id: 4,
-					value: '油漆工'
-				},
-				{
-					id: 5,
-					value: '泥瓦工'
-				},
-				{
-					id: 6,
-					value: '水电工'
-				},
-				{
-					id: 7,
-					value: '木工'
-				}
-			],
-			user_local_list: []	
+      		valueHalf: 4
 		}
   	},
 	methods: {
-		checkPhone,
-		checkName,
-		checkEmpty,
-		phoneValidate(val){
-			this.phone_flag = this.checkPhone(val)
-		},
-		nameValidate(val){
-			this.name_flag = this.checkName(val)
-		},
-		emptyValidate(val){
-			this.empty_flag = this.checkEmpty(val)
-		},
-		sendMcode(){
-			if(!this.phone_flag) {
-				return
-			}
-			this.$http.post('url', data,
-                {emulateJSON: true}).then((response) => {
-                  
-                }, (response) => {
-                      // error callback 
-            })
-		},
-		register(){
-			if(!this.phone_flag || !this.name_flag || this.empty_flag) {
-				return
-			}
-			if(this.checkEmpty(this.user_name) || this.checkEmpty(this.user_tel)) {
-				return
-			}
-			this.$http.post('url', data,
-                {emulateJSON: true}).then((response) => {
-                  
-                }, (response) => {
-                      // error callback 
-            })
-		}
+		
 	}
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.app_logo {
-	margin-top: 90px;
-	margin-bottom: 65px;
-	width: 71%;
+.top_menue_item {
+    display: inline-block;
+    background: red;
+    height: 100%;
+    width: 25%;
 }
-.input {
-	margin: 0 auto;
+.top_menue {
+    font-size: 0;
+    height: 36px;
 }
-.select_box {
-	font-size: 0;
-	margin-bottom: 20px;
+.item_list {
+     height: 100vh;
+     background:#eee;
+     padding-top: 1px;
+     font-size: 0;
 }
-.select {
-	font-size: 12px;
-	width: 42%;
-	height: 30px;
+.item_list_item {
+    margin: 13px 13px;
+    background: #fff;
+    padding: 15px;
+    text-align: left;
 }
-.m_input {
-	width: 100%;
+.work_photo {
+    width: 26%;
+    vertical-align: middle;
 }
-.select_lable,
-.select {
-	vertical-align: middle;
+.work_info {
+    width: 74%;
+    padding-left: 16px;
+    font-size: 14px;
 }
-.select_lable {
-	display: inline-block;
-	height: 30px;
-	line-height: 30px;
-	font-size: 12px;
-	width: 24%;
-	text-align: left;
+.worker_type {
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 22px;
 }
-.input,
-.register_bt {
-	width: 66%;
+.worker_name {
+    margin-right: 13%;
 }
-.m_bt {
-	width: 30%;
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 4%;
-	font-size: 12px;
-	padding: 6px 0;
+.worker_auth {
+    font-size: 12px;
+    padding: 2px 6px;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 5px;
+    color: rgb(182,178,182);
 }
-.m_input_box {
-	display: inline-block;
-	width: 65%;
-	vertical-align: middle;
-	font-size: 12px;
+.lb_item {
+    vertical-align: middle;
+    display: inline-block;
 }
-.mb_input {
-	font-size: 0;
+.worker_region {
+    margin-right: 28px;
 }
-.error {
-	text-align: left;
-	padding-left: 12px;
-	color: red;
-	height: 20px;
+.authed {
+    color: rgb(255,152,0);
 }
 </style>
