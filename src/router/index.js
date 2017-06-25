@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
-import Newslist from '@/components/Newslist'
+import Work from '@/components/Work'
+import AddProject from '@/components/AddProject'
+import WorkerDetail from '@/components/WorkerDetail'
 
 Vue.use(Router)
 
@@ -19,9 +21,19 @@ export default new Router({
       component: Register
     },
     {
-      path:'/newslist',
-      name:'newslist',
-      component: Newslist,
+      path: '/work',
+      name: 'work',
+      component: Work
+    },
+    {
+      path: '/add_project',
+      name: 'add_project',
+      component: AddProject
+    },
+    {
+      path: '/worker_detail',
+      name: 'worker_detail',
+      component: WorkerDetail
     },
     {
       path: '*',
