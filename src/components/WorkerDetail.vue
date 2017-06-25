@@ -14,7 +14,9 @@
                 </div>
             </div>
         </div>
-        <div class="worker_info">jlkjjj</div>
+        <div class="worker_info">
+            
+        </div>
 	</div>
 </template>
 
