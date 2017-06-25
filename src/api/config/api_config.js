@@ -11,7 +11,8 @@ const api_router_config = {
 	login:"/zxg/weixin/index/login",
 	register:"/zxg/weixin/index/register",
 	newslist:"/zxg/weixin/index/newslist",
-	banner:"/zxg/weixin/index/banner"
+	banner:"/zxg/weixin/index/banner",
+	newslist:"/zxg/weixin/index/newslist"
 }
 
 const api_assets_config = {

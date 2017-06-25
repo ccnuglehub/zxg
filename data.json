@@ -5,6 +5,7 @@
 	"dataBanner":[
 		{
 			"news_id":"1",
+
 			"news_title":"这是一条新闻，来自mook数据",
 			"news_keyword":"",
 			"news_image":"/static/banner/banner1.png",
@@ -14,6 +15,16 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/static/banner/banner1.png",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		},
 		{
@@ -27,6 +38,15 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/static/banner/banner2.png",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		},
 		{
@@ -40,6 +60,15 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/static/banner/banner3.png",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		},
 		{
@@ -53,6 +82,14 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/static/banner/banner4.jpeg",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
 			"news_description":""
 		}
 
@@ -70,6 +107,18 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+	"dataNewsList":[
+		{
+			"news_id":"5",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/src/assets/newslist/newslist1.jpeg",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		},
 		{
@@ -83,6 +132,15 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/src/assets/newslist/newslist2.jpeg",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		},
 		{
@@ -96,6 +154,15 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/src/assets/newslist/newslist3.jpeg",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		},
 		{
@@ -109,6 +176,15 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/src/assets/newslist/newslist1.jpeg",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		},
 		{
@@ -122,6 +198,15 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/src/assets/newslist/newslist2.jpeg",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		},
 		{
@@ -135,6 +220,15 @@
 			"news_status":"",
 			"news_list_order":"",
 			"news_abstract":"6月19日，北卡罗来纳州立大学统计系教授、华中师范大学特聘教授吕文斌做客第七期“教育科学大讲堂”，为全校师生作了题为《精准教育中的大数据挖掘与分析》的专题报告。",
+			"news_title":"",
+			"news_keyword":"",
+			"news_image":"/src/assets/newslist/newslist3.jpeg",
+			"news_create_time":"",
+			"news_create_person":"",
+			"news_type":"",
+			"news_status":"",
+			"news_list_order":"",
+			"news_abstract":"",
 			"news_description":""
 		}
 	]
