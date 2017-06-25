@@ -6,6 +6,7 @@ import Work from '@/components/Work'
 import AddProject from '@/components/AddProject'
 import WorkerDetail from '@/components/WorkerDetail'
 import Newslist from '@/components/Newslist'
+import NewsDetail from "@/components/NewsDetail"
 
 Vue.use(Router)
 
@@ -20,6 +21,11 @@ export default new Router({
       path:'/newslist',
       name:'newslist',
       component: Newslist,
+    },
+    {
+      path:"/newsDetail",
+      name:"newsDetail",
+      component:NewsDetail
     },
     {
       path: '/register',
