@@ -26,6 +26,7 @@ var app = express()
 var appData = require('../data.json');
 var dataLogin = appData.dataLogin;
 var dataRegister = appData.dataRegister;
+var dataNewslist = appData.dataBanner;
 
 //路由
 var apiRoutes = express.Router();
@@ -42,6 +43,13 @@ apiRoutes.post('/register',function(req,res){
     msg:'',
     status:'0',
     data:dataRegister
+  })
+})
+apiRoutes.post('/newslist',function(req,res){
+  res.json({
+    msg:'',
+    status:'0',
+    data:dataNewslist
   })
 })
 
