@@ -14,16 +14,63 @@
                 </div>
             </div>
         </div>
+        <div class="project_intro project_intro_bottom">
+            <div class="bottom_title">
+                <div class="intro_title intro_title_b">工人信息</div>
+                <div class="b_bt_box">
+                    <div class="bt">添加工人</div>
+                </div>
+            </div>
+            <div class="etc_items_bottom_box">
+                <div class="etc_items_bottom">
+                    <div class="etc_bottom_type">油漆工</div>
+                    <div class="etc_bottom_name">王凯</div>
+                </div>
+                <div class="bt_box_bottom">
+                    <div class="bt_item_bottom">
+                        <div class="bt">进行中</div>
+                    </div>
+                    <div class="bt_item_bottom">
+                        <div class="bt">关注</div>
+                    </div>
+                    <div class="bt_item_bottom">
+                        <div class="bt">移除</div>
+                    </div>
+                </div>
+            </div>
+            <div class="etc_items_bottom_box">
+                <div class="etc_items_bottom">
+                    <div class="etc_bottom_type">油漆工</div>
+                    <div class="etc_bottom_name">王凯</div>
+                </div>
+                <div class="bt_box_bottom">
+                    <div class="bt_item_bottom">
+                        <div class="bt">进行中</div>
+                    </div>
+                    <div class="bt_item_bottom">
+                        <div class="bt">关注</div>
+                    </div>
+                    <div class="bt_item_bottom">
+                        <div class="bt">移除</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <CNotice></CNotice>
     </div>
 </template>
 
 <script>
+import CNotice from './common/Notice.vue'
 export default {
   	name: 'project_detail',
   	data () {
     	return {
 
         }
+    },
+    components: {
+        CNotice,
     }
 }
 
@@ -39,6 +86,9 @@ export default {
 .project_intro {
     text-align: left;
     background: rgb(250,250,250);
+    display: inline-block;
+    border-radius: 8px;
+    width: 100%;
 }
 .intro_title {
     font-size: 16px;
@@ -58,13 +108,22 @@ export default {
 .intro_etc {
     padding: 12px;
     font-size: 0;
+    background: #fff;
+    margin-bottom: 16px;
 }
 .etc_items {
     width: 70%;
 }
 .etc_item,
 .etc_items,
-.bt_box {
+.intro_title_b,
+.b_bt_box,
+.bt_box,
+.etc_bottom_type,
+.etc_bottom_name,
+.bt_box_bottom,
+.etc_items_bottom,
+.bt_item_bottom {
     display: inline-block;
     vertical-align: middle;
 }
@@ -89,5 +148,60 @@ export default {
     background-color: rgb(134,210,198);
     color: #fff;
     cursor: pointer;
+}
+.project_intro_bottom {
+    margin-top: 20px;
+}
+.bottom_title {
+    font-size: 0;
+    padding-right: 12px;
+}
+.intro_title_b {
+    width: 70%;
+}
+.b_bt_box {
+    width: 30%;
+    text-align: center;
+}
+.etc_items_bottom {
+    width: 35%;
+}
+.etc_items_bottom_box {
+    width: 100%;
+    font-size: 0;
+    background: #fff;
+    padding: 10px 0;
+    border-bottom: 1px solid rgb(227,227,227);
+}
+.etc_bottom_type,
+.etc_bottom_name {
+    width: 50%;
+}
+.etc_bottom_type {
+    font-size: 16px;
+    padding-left: 12px;
+    font-weight: bold;
+}
+.etc_bottom_name {
+    font-size: 14px;
+    text-align: center;
+}
+.bt_box_bottom {
+    width: 65%;
+}
+.bt_item_bottom {
+    width: 33.3%;
+    text-align: center;
+}
+.etc_items_bottom_box:last-child {
+    border-bottom: 0;
+    padding-bottom: 6vh;
+}
+.project_intro_bottom {
+    padding-bottom: 16px;
+    border-radius: 8px;
+}
+.bt_item_bottom .bt {
+    min-width: 64px;
 }
 </style>
