@@ -33,7 +33,7 @@ export default new Router({
       },
     {
       path:'/project_detail',
-      name:'project_detail',
+      name:'projectDetail',
       component: ProjectDetail,
     },
     {
@@ -57,8 +57,8 @@ export default new Router({
       component: WorkerDetail
     },
     {
-      path: '/myproject',
-      name: 'myproject',
+      path: '/myProject',
+      name: 'myProject',
       component: Myproject
     },
     {
