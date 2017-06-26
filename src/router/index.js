@@ -8,6 +8,7 @@ import WorkerDetail from '@/components/WorkerDetail'
 import Newslist from '@/components/Newslist'
 import NewsDetail from "@/components/NewsDetail"
 import Myproject from "@/components/Myproject"
+import Person from "@/components/Person"
 
 Vue.use(Router)
 
@@ -52,6 +53,11 @@ export default new Router({
       path: '/myproject',
       name: 'myproject',
       component: Myproject
+    },
+    {
+      path: '/person',
+      name: 'person',
+      component:Person
     },
     {
       path: '*',
