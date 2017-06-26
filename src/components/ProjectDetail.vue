@@ -56,16 +56,21 @@
                 </div>
             </div>
         </div>
+        <CNotice></CNotice>
     </div>
 </template>
 
 <script>
+import CNotice from './common/Notice.vue'
 export default {
   	name: 'project_detail',
   	data () {
     	return {
 
         }
+    },
+    components: {
+        CNotice,
     }
 }
 
@@ -159,7 +164,7 @@ export default {
     text-align: center;
 }
 .etc_items_bottom {
-    width: 39%;
+    width: 35%;
 }
 .etc_items_bottom_box {
     width: 100%;
@@ -179,9 +184,10 @@ export default {
 }
 .etc_bottom_name {
     font-size: 14px;
+    text-align: center;
 }
 .bt_box_bottom {
-    width: 61%;
+    width: 65%;
 }
 .bt_item_bottom {
     width: 33.3%;
@@ -194,5 +200,8 @@ export default {
 .project_intro_bottom {
     padding-bottom: 16px;
     border-radius: 8px;
+}
+.bt_item_bottom .bt {
+    min-width: 64px;
 }
 </style>
