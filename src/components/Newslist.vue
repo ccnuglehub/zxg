@@ -2,7 +2,7 @@
 
             <!-- <div  v-bind:style="test" v-bind:class="{demoCarousel:true}"></div> -->
     <Carousel autoplay >
-        <Carousel-item v-for="(item ,index) in newslist">
+        <Carousel-item :key="index" v-for="(item ,index) in newslist">
             <div class="demo-carousel">
                 <img style="height:45vh" :src="test(item)">
             </div>
