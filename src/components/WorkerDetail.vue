@@ -104,7 +104,8 @@ export default {
     color: rgb(255,152,0);
 }
 .worker_info {
-    padding:  2.3vh 9vw;
+
+    padding: 2.3vh 9vw;
     font-size: 16px;
     text-align: left;
     background: #fff;

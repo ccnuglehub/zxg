@@ -6,6 +6,9 @@ import Work from '@/components/Work'
 import AddProject from '@/components/AddProject'
 import WorkerDetail from '@/components/WorkerDetail'
 import Newslist from '@/components/Newslist'
+import NewsDetail from "@/components/NewsDetail"
+import Myproject from "@/components/Myproject"
+import Person from "@/components/Person"
 import ProjectDetail from '@/components/ProjectDetail'
 
 Vue.use(Router)
@@ -23,8 +26,14 @@ export default new Router({
       component: Newslist,
     },
     {
+
+      path:"/newsDetail",
+      name:"newsDetail",
+      component:NewsDetail
+      },
+    {
       path:'/project_detail',
-      name:'project_detail',
+      name:'projectDetail',
       component: ProjectDetail,
     },
     {
@@ -46,6 +55,16 @@ export default new Router({
       path: '/worker_detail',
       name: 'worker_detail',
       component: WorkerDetail
+    },
+    {
+      path: '/myProject',
+      name: 'myProject',
+      component: Myproject
+    },
+    {
+      path: '/person',
+      name: 'person',
+      component:Person
     },
     {
       path: '*',

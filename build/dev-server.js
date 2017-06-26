@@ -26,7 +26,13 @@ var app = express()
 var appData = require('../data.json');
 var dataLogin = appData.dataLogin;
 var dataRegister = appData.dataRegister;
+
+var dataNewslist = appData.dataNewsList;
+var dataBanner = appData.dataBanner;
+// console.log(dataNewslist)
+
 var dataNewslist = appData.dataBanner;
+
 
 //路由
 var apiRoutes = express.Router();
@@ -52,6 +58,15 @@ apiRoutes.post('/newslist',function(req,res){
     data:dataNewslist
   })
 })
+
+apiRoutes.post('/banner',function(req,res){
+  res.json({
+    msg:'',
+    status:'0',
+    data:dataBanner
+  })
+})
+
 
 app.use('/zxg/weixin/index',apiRoutes);
 
