@@ -25,4 +25,13 @@ body {
   text-align: center;
   color: #2c3e50;
 }
+.ivu-select-single .ivu-select-selection {
+    border: 0;
+}
+.ivu-select-visible .ivu-select-selection {
+  box-shadow: 0 0 0;
+}
+.ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value {
+  font-size: 15px;
+}
 </style>
