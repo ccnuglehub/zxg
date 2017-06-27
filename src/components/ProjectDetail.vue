@@ -10,7 +10,7 @@
                     <div class="etc_item etc_name">马云</div>
                 </div>
                 <div class="bt_box">
-                    <div class="bt">完成项目</div>
+                    <div @click="showCompleteNotice" class="bt">完成项目</div>
                 </div>
             </div>
         </div>
@@ -28,13 +28,13 @@
                 </div>
                 <div class="bt_box_bottom">
                     <div class="bt_item_bottom">
-                        <div class="bt">进行中</div>
+                        <div @click="showEnotce" class="bt">待评价</div>
                     </div>
                     <div class="bt_item_bottom">
                         <div class="bt">关注</div>
                     </div>
                     <div class="bt_item_bottom">
-                        <div class="bt">移除</div>
+                        <div @click="showDeleteNotice" class="bt">移除</div>
                     </div>
                 </div>
             </div>
@@ -51,12 +51,20 @@
                         <div class="bt">关注</div>
                     </div>
                     <div class="bt_item_bottom">
-                        <div class="bt">移除</div>
+                        <div @click="showDeleteNotice" class="bt">移除</div>
                     </div>
                 </div>
             </div>
         </div>
-        <CNotice></CNotice>
+        <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
+        <div v-if="evaluate_flag" class="evaluate">
+            <textarea class="e_txt" placeholder="请对工人的工作进行简短的评价"></textarea>
+            <div class="e_title">请对工人的工作进行评分</div>
+            <Rate allow-half v-model="valueHalf"></Rate>
+            <div class="e_bt_box">
+                <div @click="Epost" class="bt">确认评价</div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -66,11 +74,70 @@ export default {
   	name: 'project_detail',
   	data () {
     	return {
-
+            valueHalf: 4.5,
+            cnotice_flag: false,
+            evaluate_flag: false,
+            msg: '您确认完成该项目？',
+            mFn: () => {
+                console.log('需要一个回调函数')
+            }
         }
     },
     components: {
         CNotice,
+    },
+    methods: {
+        closeD(){
+            this.cnotice_flag = false
+        },
+        completeProject(){
+            this.$http.post('url', data,
+                {emulateJSON: true}).then((response) => {
+                    if(true) {
+                        
+                    } else {
+
+                    }
+                }, (response) => {
+                      // error callback 
+            })
+        },
+        deleteWorker(){
+            this.$http.post('url', data,
+                {emulateJSON: true}).then((response) => {
+                    if(true) {
+                        
+                    } else {
+
+                    }
+                }, (response) => {
+                      // error callback 
+            })
+        },
+        Epost(){
+            this.$http.post('url', data,
+                {emulateJSON: true}).then((response) => {
+                    if(true) {
+                        
+                    } else {
+
+                    }
+                }, (response) => {
+                      // error callback 
+            })
+        },
+        showCompleteNotice(){
+            this.cnotice_flag = true
+            this.mFn = this.completeProject
+        },
+        showDeleteNotice(){
+            this.msg = '您确定移除该工人？'
+            this.cnotice_flag = true
+            this.mFn = this.deleteWorker
+        },
+        showEnotce(){
+            this.evaluate_flag = true
+        }
     }
 }
 
@@ -102,6 +169,7 @@ export default {
     text-indent: 2em;
     font-size: 15px;
     line-height: 23px;
+    min-height: 23.2vh;
     padding: 12px;
     border-bottom: 1px solid rgb(227,227,227);
 }
@@ -203,5 +271,39 @@ export default {
 }
 .bt_item_bottom .bt {
     min-width: 64px;
+}
+.evaluate {
+    width: 69vw;
+    font-size: 0;
+    padding-top: 15px;
+    position: absolute;
+    top: 28vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgb(241,241,241);
+    border-radius: 8px;
+}
+.e_txt {
+    width: 62.6vw;
+    font-size: 14px;
+    padding: 6px;
+    min-height: 10.5vh;
+    border-radius: 6px;
+    outline: none;
+    border: 1px solid rgb(187,187,187);
+}
+.e_title {
+    width: 62.6vw;
+    display: inline-block;
+    text-align: left;
+    padding-left: 10px;
+    font-size: 14px;
+    padding-top: 8px;
+    margin-top: 10px;
+    border-top: 1px solid rgb(187,187,187);
+}
+.e_bt_box {
+    width: 100%;
+    padding-bottom: 10px;
 }
 </style>

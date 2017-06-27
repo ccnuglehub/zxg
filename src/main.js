@@ -7,11 +7,14 @@ import store from './store'
 import VueResource from 'vue-resource'
 import iView from 'iview'
 import '../static/styles/iview.css'
+import '../static/styles/mintui.css'
 
+import MintUI from 'mint-ui'
 
 Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.use(iView)
+Vue.use(MintUI)
 
 /* eslint-disable no-new */
 new Vue({

@@ -10,6 +10,7 @@ import NewsDetail from "@/components/NewsDetail"
 import Myproject from "@/components/Myproject"
 import Person from "@/components/Person"
 import ProjectDetail from '@/components/ProjectDetail'
+import QrCode from '@/components/QrCode'
 
 Vue.use(Router)
 
@@ -65,6 +66,11 @@ export default new Router({
       path: '/person',
       name: 'person',
       component:Person
+    },
+    {
+      path: '/qr_code',
+      name: 'qr_code',
+      component:QrCode
     },
     {
       path: '*',

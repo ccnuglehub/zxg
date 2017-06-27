@@ -19,8 +19,8 @@
                 <div class="edit_area"></div>
             </div>
         </div>
-        <div class="bt_box">发布</div>
-        <CNotice :msg="msg"></CNotice>
+        <div @click="showNotice" class="bt_box">发布</div>
+        <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="postProject" :msg="msg"></CNotice>
 	</div>
 </template>
 
@@ -31,6 +31,7 @@ export default {
   	data () {
     	return {
             msg: '您确认发布新的项目？',
+            cnotice_flag: false,
       		cityList: [
                 {
                     value: 'beijing',
@@ -61,7 +62,22 @@ export default {
 		}
   	},
 	methods: {
-		
+		showNotice(){
+            this.add_project_flag = true
+        },
+        postProject(){
+            this.$http.post('url', data,
+                {emulateJSON: true}).then((response) => {
+                    if(true) {
+                        this.$router.push({ name: 'project_detail', params: { obj: {} }})
+                    }
+                }, (response) => {
+                      // error callback 
+            })
+        },
+        closeD(){
+            this.add_project_flag = false
+        }
 	},
     components: {
         CNotice,

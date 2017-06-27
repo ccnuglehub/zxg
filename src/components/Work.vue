@@ -2,10 +2,15 @@
 	<div class="work">
 		<div class="top_menue">
 		    <div class="top_menue_item">
+                <Icon type="ios-location"></Icon>
+                全部地区
             </div>
             <div class="top_menue_item">
+                <Icon type="ios-person"></Icon>
+                工友类别
             </div>
             <div class="top_menue_item">
+                <Icon type="shuffle"></Icon>
             </div>
             <div class="top_menue_item">
             </div>
@@ -63,8 +68,9 @@ export default {
 <style scoped>
 .top_menue_item {
     display: inline-block;
-    background: red;
+    vertical-align: top;
     height: 100%;
+    font-size: 14px;
     width: 25%;
 }
 .top_menue {
