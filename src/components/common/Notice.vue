@@ -1,19 +1,19 @@
 <template>
-    <div class="log_cont">
+    <div @click="nclick" class="log_cont">
         <Icon class="bt_close" type="close-circled"></Icon>
         <div class="log_txt">{{ msg }}</div>
-        <div class="bt_ok">确认</div>
+        <div @click="mclick" class="bt_ok">确认</div>
     </div>
 </template>
 <script>
 export default {
-    props: ['msg'],
+    props: ['msg','mclick','nclick'],
   	name: 'notice',
   	data () {
     	return {
 
         }
-    }
+    },
 }
 </script>
 <style scoped>
