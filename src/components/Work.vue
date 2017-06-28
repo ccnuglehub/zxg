@@ -1,18 +1,21 @@
 <template>
 	<div class="work">
 		<div class="top_menue">
-		    <div class="top_menue_item">
-                <Icon type="ios-location"></Icon>
-                全部地区
+		    <div @click="openLocaPicker" class="top_menue_item">
+                <Icon class="m_logo" type="ios-location"></Icon>
+                <span class="m_txt">全部地区</span>
             </div>
             <div class="top_menue_item">
-                <Icon type="ios-person"></Icon>
-                工友类别
+                <Icon class="m_logo" type="person"></Icon>
+                <span class="m_txt">工友类别</span>
             </div>
             <div class="top_menue_item">
-                <Icon type="shuffle"></Icon>
+                <Icon class="m_logo" type="shuffle"></Icon>
+                <span class="m_txt">智能排序</span>
             </div>
-            <div class="top_menue_item">
+            <div @click="openPicker" class="top_menue_item">
+                <Icon class="m_logo" type="ios-clock"></Icon>
+                <span class="m_txt">可接单时间</span>
             </div>
 		</div>
         <div class="item_list">
@@ -47,6 +50,16 @@
                 </div>
             </div>
         </div>
+        <mt-datetime-picker
+            ref="picker"
+            type="time"
+            v-model="pickerValue">
+        </mt-datetime-picker>
+        <div @click="closeLocaPicker" v-if="loca_wrap_flag" class="picker_wrap">
+            <transition name="slide-fade">
+                <mt-picker v-if="loca_flag" class="b_picker" :slots="slots" @change="onValuesChange"></mt-picker>
+            </transition>
+        </div>
 	</div>
 </template>
 
@@ -55,11 +68,39 @@ export default {
   	name: 'work',
   	data () {
     	return {
-      		valueHalf: 4
+      		valueHalf: 4,
+            pickerValue:'',
+            loca_flag: false,
+            loca_wrap_flag: false,
+            slots: [
+                {
+                flex: 1,
+                values: ['北京', '上海', '广州', '深圳', '天津', '武汉'],
+                    className: 'slot1',
+                    textAlign: 'center'
+                }
+            ]
 		}
   	},
 	methods: {
-		
+        openPicker() {
+            this.$refs.picker.open();
+        },
+        openLocaPicker() {
+            this.loca_wrap_flag = true
+            this.loca_flag = true
+        },
+        closeLocaPicker(){
+            this.loca_flag = false
+            var self = this
+            setTimeout(() => {
+                self.loca_wrap_flag = false
+            },100)
+        },
+        onValuesChange(picker, values) {
+            // this.loca_flag = false
+            console.log(values)
+        }
 	}
 }
 </script>
@@ -70,12 +111,17 @@ export default {
     display: inline-block;
     vertical-align: top;
     height: 100%;
-    font-size: 14px;
+    font-size: 0;
     width: 25%;
+    border-right: 1px solid rgba(187,187,187,.6);
+}
+.top_menue_item:last-child {
+    border: 0;
 }
 .top_menue {
     font-size: 0;
     height: 36px;
+    border-bottom: 1px solid rgba(187,187,187,.6);
 }
 .item_list {
      height: 100vh;
@@ -122,5 +168,53 @@ export default {
 }
 .authed {
     color: rgb(255,152,0);
+}
+.m_txt,
+.m_logo {
+    font-size: 14px;
+    line-height: 36px;
+    vertical-align: middle;
+}
+.m_logo {
+    padding-right: 1vw;
+}
+.b_picker {
+    position: absolute;
+    width: 100vw;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+}
+.picker_wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(0,0,0,.4);
+}
+.slide-fade-enter-active {
+    animation: up .3s;
+}
+.slide-fade-enter, .slide-fade-leave-active {
+    animation: down .8s;
+}
+@keyframes down {
+    from {
+        bottom: 0;
+    }
+    to {
+        bottom: -100%;
+    }
+}
+@keyframes up {
+    from {
+        bottom: -100%;
+    }
+    to {
+        bottom: 0;
+    }
 }
 </style>
