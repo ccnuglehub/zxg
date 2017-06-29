@@ -11,6 +11,11 @@ import Myproject from "@/components/Myproject"
 import Person from "@/components/Person"
 import ProjectDetail from '@/components/ProjectDetail'
 import QrCode from '@/components/QrCode'
+import Menue from '@/components/common/Menue'
+import Header from '@/components/common/Header'
+import AddInfo from '@/components/AddInfo'
+import Identification from '@/components/Identification'
+import Focus from '@/components/Focus'
 
 Vue.use(Router)
 
@@ -71,6 +76,31 @@ export default new Router({
       path: '/qr_code',
       name: 'qr_code',
       component:QrCode
+    },
+    {
+      path: '/menue',
+      name: 'menue',
+      component:Menue
+    },
+    {
+      path: '/header',
+      name: 'header',
+      component:Header
+    },
+    {
+      path: '/add_info',
+      name: 'add_info',
+      component:AddInfo
+    },
+    {
+      path: '/identification',
+      name: 'identification',
+      component:Identification
+    },
+    {
+      path: '/focus',
+      name: 'focus',
+      component:Focus
     },
     {
       path: '*',

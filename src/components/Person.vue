@@ -7,7 +7,7 @@
 		<div class="abstract">
 			<div class="personal_abstract">个人简介:</div>
 			<div class="personal_detail">
-				<span class="name">商总监</span>
+				<!--<span class="name">商总监</span>-->
 				<span class="type">油漆工</span>
 			</div>
 			<div class="personal_number">13036134446</div>
@@ -71,7 +71,8 @@
 	background: url(../assets/personBackground.jpg);
 	height: 21.8vh;
 	width: 100vw;
-	background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;
+	background-repeat:no-repeat; 
+	background-size: 100% 180%;
 }
 .person_head{
 	height: 14.8vh;
