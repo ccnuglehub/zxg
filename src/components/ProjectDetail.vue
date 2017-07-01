@@ -1,75 +1,79 @@
 <template>
     <div class="project_detail">
-        <div class="project_intro">
-            <div class="intro_title">项目简介</div>
-            <div class="intro_txt">如果你到现在都还没听说过 Vue.js,你心里可能在想:前端的幺蛾子就是多</div>
-            <div class="intro_etc">
-                <div class="etc_items">
-                    <div class="etc_item">江岸区</div>
-                    <div class="etc_item">2017.06.12</div>
-                    <div class="etc_item etc_name">马云</div>
-                </div>
-                <div class="bt_box">
-                    <div @click="showCompleteNotice" class="bt">完成项目</div>
-                </div>
-            </div>
-        </div>
-        <div class="project_intro project_intro_bottom">
-            <div class="bottom_title">
-                <div class="intro_title intro_title_b">工人信息</div>
-                <div class="b_bt_box">
-                    <div class="bt">添加工人</div>
-                </div>
-            </div>
-            <div class="etc_items_bottom_box">
-                <div class="etc_items_bottom">
-                    <div class="etc_bottom_type">油漆工</div>
-                    <div class="etc_bottom_name">王凯</div>
-                </div>
-                <div class="bt_box_bottom">
-                    <div class="bt_item_bottom">
-                        <div @click="showEnotce" class="bt">待评价</div>
+        <Chead></Chead>
+        <div class="project_details">
+            <div class="project_intro">
+                <div class="intro_title">项目简介</div>
+                <div class="intro_txt">如果你到现在都还没听说过 Vue.js,你心里可能在想:前端的幺蛾子就是多</div>
+                <div class="intro_etc">
+                    <div class="etc_items">
+                        <div class="etc_item">江岸区</div>
+                        <div class="etc_item">2017.06.12</div>
+                        <div class="etc_item etc_name">马云</div>
                     </div>
-                    <div class="bt_item_bottom">
-                        <div class="bt">关注</div>
-                    </div>
-                    <div class="bt_item_bottom">
-                        <div @click="showDeleteNotice" class="bt">移除</div>
+                    <div class="bt_box">
+                        <div @click="showCompleteNotice" class="bt">完成项目</div>
                     </div>
                 </div>
             </div>
-            <div class="etc_items_bottom_box">
-                <div class="etc_items_bottom">
-                    <div class="etc_bottom_type">油漆工</div>
-                    <div class="etc_bottom_name">王凯</div>
+            <div class="project_intro project_intro_bottom">
+                <div class="bottom_title">
+                    <div class="intro_title intro_title_b">工人信息</div>
+                    <div class="b_bt_box">
+                        <div class="bt">添加工人</div>
+                    </div>
                 </div>
-                <div class="bt_box_bottom">
-                    <div class="bt_item_bottom">
-                        <div class="bt">进行中</div>
+                <div class="etc_items_bottom_box">
+                    <div class="etc_items_bottom">
+                        <div class="etc_bottom_type">油漆工</div>
+                        <div class="etc_bottom_name">王凯</div>
                     </div>
-                    <div class="bt_item_bottom">
-                        <div class="bt">关注</div>
+                    <div class="bt_box_bottom">
+                        <div class="bt_item_bottom">
+                            <div @click="showEnotce" class="bt">待评价</div>
+                        </div>
+                        <div class="bt_item_bottom">
+                            <div class="bt">关注</div>
+                        </div>
+                        <div class="bt_item_bottom">
+                            <div @click="showDeleteNotice" class="bt">移除</div>
+                        </div>
                     </div>
-                    <div class="bt_item_bottom">
-                        <div @click="showDeleteNotice" class="bt">移除</div>
+                </div>
+                <div class="etc_items_bottom_box">
+                    <div class="etc_items_bottom">
+                        <div class="etc_bottom_type">油漆工</div>
+                        <div class="etc_bottom_name">王凯</div>
+                    </div>
+                    <div class="bt_box_bottom">
+                        <div class="bt_item_bottom">
+                            <div class="bt">进行中</div>
+                        </div>
+                        <div class="bt_item_bottom">
+                            <div class="bt">关注</div>
+                        </div>
+                        <div class="bt_item_bottom">
+                            <div @click="showDeleteNotice" class="bt">移除</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
-        <div v-if="evaluate_flag" class="evaluate">
-            <textarea class="e_txt" placeholder="请对工人的工作进行简短的评价"></textarea>
-            <div class="e_title">请对工人的工作进行评分</div>
-            <Rate allow-half v-model="valueHalf"></Rate>
-            <div class="e_bt_box">
-                <div @click="Epost" class="bt">确认评价</div>
+            <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
+            <div v-if="evaluate_flag" class="evaluate">
+                <textarea class="e_txt" placeholder="请对工人的工作进行简短的评价"></textarea>
+                <div class="e_title">请对工人的工作进行评分</div>
+                <Rate allow-half v-model="valueHalf"></Rate>
+                <div class="e_bt_box">
+                    <div @click="Epost" class="bt">确认评价</div>
+                </div>
             </div>
-        </div>
+         </div>
     </div>
 </template>
 
 <script>
 import CNotice from './common/Notice.vue'
+import Chead from './common/Header.vue'
 export default {
   	name: 'project_detail',
   	data () {
@@ -85,6 +89,7 @@ export default {
     },
     components: {
         CNotice,
+        Chead,
     },
     methods: {
         closeD(){
@@ -147,10 +152,15 @@ export default {
 .project_detail {
     width: 100%;
     height: 100%;
+}
+.project_details {
+    width: 100%;
+    height: 100%;
     background: rgb(239,239,239);
-    padding: 3.75vh 3.2vw 0;
+    padding: 0 3.2vw;
 }
 .project_intro {
+    margin-top: 3.75vh;
     text-align: left;
     background: rgb(250,250,250);
     display: inline-block;

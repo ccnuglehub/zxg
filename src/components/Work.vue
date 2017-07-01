@@ -1,5 +1,6 @@
 <template>
 	<div class="work">
+        <Chead></Chead>
 		<div class="top_menue">
 		    <div @click="openLocaPicker" class="top_menue_item">
                 <Icon class="m_logo" type="ios-location"></Icon>
@@ -50,6 +51,7 @@
                 </div>
             </div>
         </div>
+        <Menue></Menue>
         <mt-datetime-picker
             ref="picker"
             type="time"
@@ -64,6 +66,8 @@
 </template>
 
 <script>
+import Chead from './common/Header.vue'
+import Menue from './common/Menue.vue'
 export default {
   	name: 'work',
   	data () {
@@ -101,7 +105,11 @@ export default {
             // this.loca_flag = false
             console.log(values)
         }
-	}
+	},
+    components: {
+        Chead,
+        Menue,
+    }
 }
 </script>
 

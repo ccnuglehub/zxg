@@ -1,31 +1,37 @@
 <template>
-	<div class="app_project">
-	    <div class="edit_cont">
-            <div class="edit_box">
-                <div class="edit_box_top">
-                    <div class="p_name">
-                        <label class="p_lable p_lable_top">项目名称</label>
-                        <input class="p_input" placeholder="请输入项目名称">
+    <div class="wrap">
+        <Chead></Chead>
+        <div class="app_project">
+            <div class="edit_cont">
+                <div class="edit_box">
+                    <div class="edit_box_top">
+                        <div class="p_name">
+                            <label class="p_lable p_lable_top">项目名称</label>
+                            <input class="p_input" placeholder="请输入项目名称">
+                        </div>
+                        <div class="p_local">
+                            <label class="p_lable p_lable_bottom">项目地点</label>
+                            <Select v-model="model1" style="width:100px">
+                                <Option v-for="item in cityList" :value="item.value" :key="item">{{ item.label }}</Option>
+                            </Select>
+                            <img class="qr_logo" src="../assets/qr_code.png">
+                        </div>
+                        <textarea class="p_txt" placeholder="请输入你的项目简介"></textarea>
                     </div>
-                    <div class="p_local">
-                        <label class="p_lable p_lable_bottom">项目地点</label>
-                        <Select v-model="model1" style="width:100px">
-                            <Option v-for="item in cityList" :value="item.value" :key="item">{{ item.label }}</Option>
-                        </Select>
-                        <img class="qr_logo" src="../assets/qr_code.png">
-                    </div>
-                    <textarea class="p_txt" placeholder="请输入你的项目简介"></textarea>
+                    <div class="edit_area"></div>
                 </div>
-                <div class="edit_area"></div>
             </div>
+            <div @click="showNotice" class="bt_box">发布</div>
+            <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="postProject" :msg="msg"></CNotice>
         </div>
-        <div @click="showNotice" class="bt_box">发布</div>
-        <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="postProject" :msg="msg"></CNotice>
-	</div>
+        <Menue></Menue>
+    </div>
 </template>
 
 <script>
 import CNotice from './common/Notice.vue'
+import Chead from './common/Header.vue'
+import Menue from './common/Menue.vue'
 export default {
   	name: 'app_project',
   	data () {
@@ -81,12 +87,18 @@ export default {
 	},
     components: {
         CNotice,
+        Chead,
+        Menue
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.wrap {
+    width: 100%;
+    min-height: 100%;
+}
 .app_project {
     width: 100%;
     min-height: 85vh;
