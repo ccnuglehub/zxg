@@ -42,4 +42,8 @@ body {
 .add_info .ivu-form-label-left .ivu-form-item-label {
     font-size: 14px;
 }
+.news_detail img {
+	width: 100%;
+    display: block;
+}
 </style>

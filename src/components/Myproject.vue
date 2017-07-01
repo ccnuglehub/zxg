@@ -1,9 +1,10 @@
 <template>
 	<div class="container">
+		<Chead :msg="top_title"></Chead>
 		<div class="list_container">
 			<div class="switch">
-				<div class="switch_item">进行中</div>
-				<div class="switch_item">已完成</div>
+				<div class="switch_item switch_item_left">进行中</div>
+				<div class="switch_item switch_item_right">已完成</div>
 			</div>
 			<div class="itemlist">
 				<div class="process" v-text='process?"进行中":"已完成"' :style="getStyle(process)"></div>
@@ -17,39 +18,44 @@
 				</div>
 			</div>
 		</div>
+		<Menue></Menue>
 	</div>
 </template>
 
 <script>
-	export default{
-		data(){
-			return{
-				process:false,
-				project_name:"青青美炉石面板",
-				project_address:"江岸区",
-				project_people:"5",
-				project_time:"2017.6.26"
-			}
-		},
-		created(){
+import Chead from './common/Header.vue'
+import Menue from './common/Menue.vue'
+export default{
+	data(){
+		return{
+			top_title: "我的项目",
+			process:false,
+			project_name:"青青美炉石面板",
+			project_address:"江岸区",
+			project_people:"5",
+			project_time:"2017.6.26"
+		}
+	},
+	methods:{
+		//改变完成字体颜色
+		getStyle(process){
+			if(process){
+				return{
+					color:"rgb(141,212,201)",
 
-		},
-		methods:{
-			//改变完成字体颜色
-			getStyle(process){
-				if(process){
-					return{
-						color:"rgb(141,212,201)",
-
-					}
-				}else{
-					return{
-						color:"red"
-					}
+				}
+			}else{
+				return{
+					color:"red"
 				}
 			}
 		}
+	},
+	components: {
+		Chead,
+		Menue,
 	}
+}
 </script>
 
 <style scoped>
@@ -58,7 +64,7 @@
 	background: rgb(237,237,237);
 }
 .list_container{
-	height: 76vh;
+	height: 85vh;
 	margin:0 2.5vw;
 	overflow-y: scroll;
 
@@ -125,5 +131,19 @@
 	display: inline-block;
 	line-height: 30px;
 	width: 130px;
+	background: #fff;
+}
+.switch_item {
+	margin-top: 15px;
+	border: 1px solid rgb(179,179,179);
+}
+.switch_item_left {
+	border-right: 0;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+.switch_item_right {
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="wrap">
-        <Chead></Chead>
-        <div class="app_project">
+        <Chead :msg="top_title"></Chead>
+        <div class="add_project">
             <div class="edit_cont">
                 <div class="edit_box">
                     <div class="edit_box_top">
@@ -33,9 +33,10 @@ import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 export default {
-  	name: 'app_project',
+  	name: 'add_project',
   	data () {
     	return {
+            top_title: '项目发布',
             msg: '您确认发布新的项目？',
             cnotice_flag: false,
       		cityList: [
@@ -99,11 +100,11 @@ export default {
     width: 100%;
     min-height: 100%;
 }
-.app_project {
+.add_project {
     width: 100%;
     min-height: 85vh;
     background: rgb(239,239,239);
-    padding-top: 27px;
+    padding-top: 22px;
     padding-right: 12px;
     padding-left: 12px;
 }

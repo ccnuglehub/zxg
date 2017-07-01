@@ -63,8 +63,8 @@ export default new Router({
       component: WorkerDetail
     },
     {
-      path: '/myProject',
-      name: 'myProject',
+      path: '/my_project',
+      name: 'my_project',
       component: Myproject
     },
     {
