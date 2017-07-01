@@ -1,6 +1,6 @@
 <template>
     <div class="project_detail">
-        <Chead></Chead>
+        <Chead :msg="top_title" :icon="true"></Chead>
         <div class="project_details">
             <div class="project_intro">
                 <div class="intro_title">项目简介</div>
@@ -78,6 +78,7 @@ export default {
   	name: 'project_detail',
   	data () {
     	return {
+            top_title: '项目详情',
             valueHalf: 4.5,
             cnotice_flag: false,
             evaluate_flag: false,

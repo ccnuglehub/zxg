@@ -1,6 +1,6 @@
 <template>
 	<div class="work">
-        <Chead></Chead>
+        <Chead :msg="top_title"></Chead>
 		<div class="top_menue">
 		    <div @click="openLocaPicker" class="top_menue_item">
                 <Icon class="m_logo" type="ios-location"></Icon>
@@ -72,6 +72,7 @@ export default {
   	name: 'work',
   	data () {
     	return {
+            top_title: '找工人',
       		valueHalf: 4,
             pickerValue:'',
             loca_flag: false,

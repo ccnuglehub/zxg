@@ -1,6 +1,6 @@
-//个人中心组件
 <template>
 	<div class="container">
+		<Chead :msg="top_title"></Chead>
 		<div class="background">
 			<img class="person_head" src="../assets/people.png">
 		</div>
@@ -47,19 +47,27 @@
 
 			<div class="icon"><span><Icon type="chevron-right" size="16px"></Icon></span></div>
 		</div>
+		<Menue></Menue>
 	</div>
 </template>
 <script>
-	export default{
-		data(){
-			return{
-				dot:true,
-			}
-		},
-		methods:{
-
+import Chead from './common/Header.vue'
+import Menue from './common/Menue.vue'
+export default{
+	data(){
+		return{
+			top_title: '个人中心',
+			dot:true,
 		}
+	},
+	methods:{
+
+	},
+	components: {
+		Chead,
+		Menue,
 	}
+}
 </script>
 
 <style scoped>
@@ -84,22 +92,21 @@
 	background: rgb(134,210,198);
 	margin-bottom: 2.5vh;
 	color: #fff;
-	padding: 2.3vh 9.8vw;
+	padding: 0 9.8vw;
 	font-size: 14px;
 	text-align: left;
 
 }
-.personal_abstract{
-	
+.personal_abstract,
+.personal_number,
+.personal_detail {
+	font-weight: bold;
+	line-height: 34px;
 }
+.personal_abstract,
+.personal_number,
 .name{
 	padding-right: 13.5vw;
-}
-.type{
-
-}
-.personal_number{
-
 }
 .item{
 	padding: 2.3vh 9.8vw;
@@ -124,10 +131,10 @@
     clear: both;
 }
  .demo-badge{
-        height: 3.4vh;
-        background: #eee;
-        border-radius: 3px;
-        display: inline-block;
-        size: 10px;
-    }
+	height: 3.4vh;
+	background: #eee;
+	border-radius: 3px;
+	display: inline-block;
+	size: 10px;
+}
 </style>

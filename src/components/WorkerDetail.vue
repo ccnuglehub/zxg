@@ -1,5 +1,6 @@
 <template>
 	<div class="worker_detail">
+        <Chead :msg="top_title" :icon="true"></Chead>
         <div class="item_list_item">
             <img class="work_photo" src="../assets/people.png">
             <div class="work_info lb_item">
@@ -45,16 +46,18 @@
 </template>
 
 <script>
+import Chead from './common/Header.vue'
 export default {
   	name: 'worker_detail',
   	data () {
     	return {
+            top_title: '工人详情',
       		valueHalf: 4
 		}
   	},
-	methods: {
-		
-	}
+    components: {
+        Chead,
+    }
 }
 </script>
 

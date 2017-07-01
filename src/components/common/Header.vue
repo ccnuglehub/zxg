@@ -1,20 +1,20 @@
 <template>
     <div class="header">
-        <div class="icon_cont">
+        <div v-if="icon" @click="back" class="icon_cont">
             <Icon class="icon" type="ios-arrow-back"></Icon>
         </div>
-        <div class="title">项目详情</div>
+        <div class="title">{{ msg }}</div>
     </div>
 </template>
 <script>
 export default {
-    
+    props:['msg','icon'],
   	name: 'header',
-  	data () {
-    	return {
-            msg: '项目详情'
+    methods: {
+        back(){
+            this.$router.go(-1)
         }
-    },
+    }
 }
 </script>
 <style scoped>
@@ -22,12 +22,12 @@ export default {
     width: 100vw;
     font-size: 14px;
     position: relative;
+    background: rgb(247,247,247);
 }
 .title {
     font-size: 18px;
     color: #101010;
     line-height: 45px;
-    border-bottom: 1px solid rgb(187,187,187);
 }
 .icon_cont {
     position: absolute;
@@ -37,6 +37,6 @@ export default {
     transform: translateY(-50%);
 }
 .icon {
-    font-size: 28px;
+    font-size: 24px;
 }
 </style>
