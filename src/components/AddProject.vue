@@ -21,7 +21,7 @@
                     <div class="edit_area"></div>
                 </div>
             </div>
-            <div @click="showNotice" class="bt_box">发布</div>
+            <div v-tap="{ methods: showNotice }" class="bt_box">发布</div>
             <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="postProject" :msg="msg"></CNotice>
         </div>
         <Menue></Menue>
@@ -70,20 +70,23 @@ export default {
   	},
 	methods: {
 		showNotice(){
-            this.add_project_flag = true
+            this.cnotice_flag = true
         },
         postProject(){
-            this.$http.post('url', data,
-                {emulateJSON: true}).then((response) => {
-                    if(true) {
-                        this.$router.push({ name: 'project_detail', params: { obj: {} }})
-                    }
-                }, (response) => {
-                      // error callback 
-            })
+            // this.$http.post('url', data,
+            //     {emulateJSON: true}).then((response) => {
+            //         if(true) {
+            //             this.cnotice_flag = false
+            //             this.$router.push({ name: 'project_detail', params: { obj: {} }})
+            //         }
+            //     }, (response) => {
+            //           // error callback 
+            // })
+            this.cnotice_flag = false
+            this.$router.push({ name: 'project_detail', params: { obj: {} }})
         },
         closeD(){
-            this.add_project_flag = false
+            this.cnotice_flag = false
         }
 	},
     components: {
@@ -102,7 +105,7 @@ export default {
 }
 .add_project {
     width: 100%;
-    min-height: 85vh;
+    min-height: 100vh;
     background: rgb(239,239,239);
     padding-top: 22px;
     padding-right: 12px;

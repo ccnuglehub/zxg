@@ -3,8 +3,8 @@
 		<Chead :msg="top_title"></Chead>
 		<div class="list_container">
 			<div class="switch">
-				<div class="switch_item switch_item_left">进行中</div>
-				<div class="switch_item switch_item_right">已完成</div>
+				<div v-tap="{ methods: getProgress }" class="switch_item switch_item_left">进行中</div>
+				<div v-tap="{ methods: getFinished }" class="switch_item switch_item_right">已完成</div>
 			</div>
 			<div class="itemlist">
 				<div class="process" v-text='process?"进行中":"已完成"' :style="getStyle(process)"></div>
@@ -49,8 +49,22 @@ export default{
 					color:"red"
 				}
 			}
+		},
+		getProgress(){
+
+		},
+		getFinished(){
+			
 		}
 	},
+	created(){
+        // this.$http.post('url', data,
+        //     {emulateJSON: true}).then((response) => {
+                
+        //     }, (response) => {
+        //             // error callback 
+        // })
+    },
 	components: {
 		Chead,
 		Menue,

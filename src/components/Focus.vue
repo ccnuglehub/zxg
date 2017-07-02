@@ -19,13 +19,21 @@ export default {
             top_title: '我的关注'
         }
     },
+    created(){
+        // this.$http.post('url', data,
+        //     {emulateJSON: true}).then((response) => {
+                
+        //     }, (response) => {
+        //             // error callback 
+        // })
+    },
     components: {
         Chead,
     }
 }
 </script>
 
-<style>
+<style scoped>
 .wrap {
     width: 100%;
     height: 100%;

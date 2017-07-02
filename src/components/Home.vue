@@ -5,13 +5,13 @@
             <Carousel autoplay>
             <Carousel-item :key="index" v-for="(item ,index) in banner" >
                 <div class="demo-carousel">
-                    <img class="banner" :src="newsBanner(item)" @click.stop="toBannerDetail(index)">
+                    <img class="banner" :src="newsBanner(item)" v-tap="{ methods: toBannerDetail }">
                 </div>
             </Carousel-item>
             </Carousel>
         </div>        
         <div class="newslist">
-            <div :key="index" v-for="(listitem ,index) in newslist" @click.stop="toListDetail(index)" class="newslist_item">
+            <div :key="index" v-for="(listitem ,index) in newslist" v-tap="{ methods: toListDetail, index: index }" class="newslist_item">
                 <img class="newslist_img" :src="newsImage(listitem)"></img>
                 <div class="newslist_content">
                     <div class="newslist_content_header">装修材料怎么选才好</div>
@@ -105,22 +105,18 @@ import Menue from './common/Menue.vue'
     position: relative;
     width: 100vw;
     height: auto;
-    height: 65vh;
     overflow-y: scroll;
     background: #fff;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
 }
 .newslist::-webkit-scrollbar {
     display: none;
 }
 .newslist_item {
     font-size: 0;
-    border-top:1px solid rgb(221,221,221);
+    border-bottom:1px solid rgb(221,221,221);
     height: 15.2vh;
     padding:0.7vh 2.8vw;
-}
-.newslist_item:first-child {
-    border-top: 0;
 }
 .newslist_img{
     height: 12.1vh;
