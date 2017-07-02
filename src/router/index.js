@@ -2,10 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
-import Work from '@/components/Work'
+import FindWorker from '@/components/FindWorker'
 import AddProject from '@/components/AddProject'
 import WorkerDetail from '@/components/WorkerDetail'
-import Newslist from '@/components/Newslist'
+import Home from '@/components/Home'
 import NewsDetail from "@/components/NewsDetail"
 import Myproject from "@/components/Myproject"
 import Person from "@/components/Person"
@@ -27,9 +27,9 @@ export default new Router({
       component: Login
     },
     {
-      path:'/newslist',
-      name:'newslist',
-      component: Newslist,
+      path:'/home',
+      name:'home',
+      component: Home,
     },
     {
 
@@ -39,7 +39,7 @@ export default new Router({
       },
     {
       path:'/project_detail',
-      name:'projectDetail',
+      name:'project_detail',
       component: ProjectDetail,
     },
     {
@@ -48,9 +48,9 @@ export default new Router({
       component: Register
     },
     {
-      path: '/work',
-      name: 'work',
-      component: Work
+      path: '/find_worker',
+      name: 'find_worker',
+      component: FindWorker
     },
     {
       path: '/add_project',

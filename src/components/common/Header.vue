@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <div v-if="icon" @click="back" class="icon_cont">
+        <div v-if="icon" v-tap="{ methods: back }" class="icon_cont">
             <Icon class="icon" type="ios-arrow-back"></Icon>
         </div>
         <div class="title">{{ msg }}</div>

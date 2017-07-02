@@ -14,7 +14,7 @@
 						<span slot="prepend"><Icon type="ios-telephone"></Icon></span>
 					</Input>
 				</div>
-				<Button @click="sendMcode" class="m_bt" type="success" long>发送验证码</Button>
+				<Button v-tap="{ methods: sendMcode }" class="m_bt" type="success" long>发送验证码</Button>
 			</div>
 			<div class="input error"><span v-show="!phone_flag">电话号码格式不正确</span></div>
 		</div>
@@ -36,7 +36,7 @@
 				<Option v-for="item in user_local_list" :value="item.value" :key="item">{{ item.value }}</Option>
 			</Select>
 		</div>
-		<Button @click="register" class="register_bt" type="success" long>注册</Button>
+		<Button v-tap="{ methods: register }" class="register_bt" type="success" long>注册</Button>
 	</div>
 </template>
 

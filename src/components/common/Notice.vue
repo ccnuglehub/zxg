@@ -1,8 +1,8 @@
 <template>
-    <div @click="nclick" class="log_cont">
+    <div v-tap="{ methods: nclick }" class="log_cont">
         <Icon class="bt_close" type="close-circled"></Icon>
         <div class="log_txt">{{ msg }}</div>
-        <div @click="mclick" class="bt_ok">确认</div>
+        <div v-tap="{ methods: mclick }" class="bt_ok">确认</div>
     </div>
 </template>
 <script>

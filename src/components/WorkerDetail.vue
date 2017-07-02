@@ -151,6 +151,7 @@ export default {
 .evaluate_time {
     width: 26vw;
     text-align: right;
+    padding-right: 1vw;
 }
 .evaluate_etc_bottom {
     font-size: 0;

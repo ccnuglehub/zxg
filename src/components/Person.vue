@@ -12,44 +12,43 @@
 			</div>
 			<div class="personal_number">13036134446</div>
 		</div>
-		<div class="item">
+		<div v-tap="{ methods: goInfo }" class="item">
 			<div class="item_left">
-				<span><Icon type="soup-can" size="16px"></Icon></span>
-				<span>完善个人信息</span>
+				<Icon class="vertical_item" type="soup-can" size="16"></Icon>
+				<span class="vertical_item">完善个人信息</span>
 			</div>
 			<div class="icon">
-				<span ><Icon type="chevron-right" size="16px"></Icon></span>
+				<Icon type="chevron-right" size="16"></Icon>
 			</div>
 		</div>
-		<div class="item">
+		<div v-tap="{ methods: goIdent }" class="item">
 			<div class="item_left">
-				<span><Icon type="card" size="16px"></Icon></span>
-				<span>进行实名认证</span>
+				<Icon type="card" class="vertical_item" size="16"></Icon>
+				<span class="vertical_item">进行实名认证</span>
 			</div>
 			<div class="icon">
-				<span ><Icon type="chevron-right" size="16px"></Icon></span>
+				<Icon type="chevron-right" size="16"></Icon>
 			</div>
 		</div>
-		<div class="item">
+		<div v-tap="{ methods: goFocus }" class="item">
 			<div class="item_left">
-				<span><Icon type="heart" size="16px"></Icon></span>
-				<span>我的关注</span>
-				<span>
-					 <!-- <Badge count="3">
-				        <a href="#" class="demo-badge"></a>
-				    </Badge> -->
-				    <Badge dot v-if="dot">
-				        <a href="#" class="demo-badge"></a>
-				    </Badge>
-				</span>
+				<Icon class="vertical_item" type="heart" size="16"></Icon>
+				<span class="vertical_item">我的关注</span>
+				<!-- <Badge count="3">
+					<a href="#" class="demo-badge"></a>
+				</Badge> -->
+				<Badge dot v-if="dot">
+					<a href="#" class="demo-badge"></a>
+				</Badge>
 			</div>
-			
-
-			<div class="icon"><span><Icon type="chevron-right" size="16px"></Icon></span></div>
+			<div class="icon">
+				<Icon type="chevron-right" size="16"></Icon>
+		    </div>
 		</div>
 		<Menue></Menue>
 	</div>
 </template>
+
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
@@ -61,8 +60,24 @@ export default{
 		}
 	},
 	methods:{
-
+		goInfo(){
+			this.$router.push('add_info')
+		},
+		goIdent(){
+			this.$router.push('identification')
+		},
+		goFocus(){
+			this.$router.push('focus')
+		},
 	},
+	created(){
+        // this.$http.post('url', data,
+        //     {emulateJSON: true}).then((response) => {
+                
+        //     }, (response) => {
+        //             // error callback 
+        // })
+    },
 	components: {
 		Chead,
 		Menue,
@@ -118,12 +133,15 @@ export default{
 }
 .item_left{
 	float: left;
-	/*border:solid gray 1px;*/
+	vertical-align: middle;
+}
+.vertical_item {
+	vertical-align: middle;
 }
 .icon{
 	/*float: right;*/
 	text-align: right;
-	/*padding: 8.2vh;*/
+	vertical-align: middle;
 }
 .icon:after{
 	content: '';

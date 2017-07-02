@@ -1,6 +1,6 @@
 <template>
     <div class="qr_code">
-        <Chead :msg="top_title"></Chead>
+        <Chead :msg="top_title" :icon="true"></Chead>
         <img class="qr_cont" src="../assets/logo.png">
     </div>
 </template>
