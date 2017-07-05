@@ -11,15 +11,19 @@ import '../static/styles/mintui.css'
 
 import MintUI from 'mint-ui'
 
+
+
 Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.use(iView)
 Vue.use(MintUI)
+// vue.use(VueQArt)
 
 /* eslint-disable no-new */
 new Vue({
 	el: '#app',
 	store,
 	router,
+	// components: {VueQArt},
 	render: h => h(App),
 })
