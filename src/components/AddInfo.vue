@@ -1,5 +1,6 @@
 <template>
     <div id="add_info" class="add_info">
+        <Chead :msg="top_title" :icon="true"></Chead>
         <div class="info_wrap">
             <div class="title">个人信息</div>
             <div class="edit_area">
@@ -21,12 +22,16 @@
 </template>
 
 <script>
+import Chead from './common/Header.vue'
 export default {
     name: 'add_info',
     data(){
         return {
-
+            top_title: '完善个人信息'
         }
+    },
+    components: {
+        Chead,
     }
 }
 </script>

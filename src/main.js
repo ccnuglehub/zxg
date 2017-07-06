@@ -8,6 +8,7 @@ import VueResource from 'vue-resource'
 import iView from 'iview'
 import '../static/styles/iview.css'
 import '../static/styles/mintui.css'
+import vueTap from 'v-tap';
 
 import MintUI from 'mint-ui'
 
@@ -18,6 +19,8 @@ Vue.use(VueResource)
 Vue.use(iView)
 Vue.use(MintUI)
 // vue.use(VueQArt)
+Vue.use(vueTap)
+
 
 /* eslint-disable no-new */
 new Vue({

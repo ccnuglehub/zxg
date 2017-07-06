@@ -1,6 +1,6 @@
-//个人中心组件
 <template>
 	<div class="container">
+		<Chead :msg="top_title"></Chead>
 		<div class="background">
 			<img class="person_head" src="../assets/people.png">
 		</div>
@@ -12,54 +12,77 @@
 			</div>
 			<div class="personal_number">13036134446</div>
 		</div>
-		<div class="item">
+		<div v-tap="{ methods: goInfo }" class="item">
 			<div class="item_left">
-				<span><Icon type="soup-can" size="16px"></Icon></span>
-				<span>完善个人信息</span>
+				<Icon class="vertical_item" type="soup-can" size="16"></Icon>
+				<span class="vertical_item">完善个人信息</span>
 			</div>
 			<div class="icon">
-				<span ><Icon type="chevron-right" size="16px"></Icon></span>
+				<Icon type="chevron-right" size="16"></Icon>
 			</div>
 		</div>
-		<div class="item">
+		<div v-tap="{ methods: goIdent }" class="item">
 			<div class="item_left">
-				<span><Icon type="card" size="16px"></Icon></span>
-				<span>进行实名认证</span>
+				<Icon type="card" class="vertical_item" size="16"></Icon>
+				<span class="vertical_item">进行实名认证</span>
 			</div>
 			<div class="icon">
-				<span ><Icon type="chevron-right" size="16px"></Icon></span>
+				<Icon type="chevron-right" size="16"></Icon>
 			</div>
 		</div>
-		<div class="item">
+		<div v-tap="{ methods: goFocus }" class="item">
 			<div class="item_left">
-				<span><Icon type="heart" size="16px"></Icon></span>
-				<span>我的关注</span>
-				<span>
-					 <!-- <Badge count="3">
-				        <a href="#" class="demo-badge"></a>
-				    </Badge> -->
-				    <Badge dot v-if="dot">
-				        <a href="#" class="demo-badge"></a>
-				    </Badge>
-				</span>
+				<Icon class="vertical_item" type="heart" size="16"></Icon>
+				<span class="vertical_item">我的关注</span>
+				<!-- <Badge count="3">
+					<a href="#" class="demo-badge"></a>
+				</Badge> -->
+				<Badge dot v-if="dot">
+					<a href="#" class="demo-badge"></a>
+				</Badge>
 			</div>
-			
-
-			<div class="icon"><span><Icon type="chevron-right" size="16px"></Icon></span></div>
+			<div class="icon">
+				<Icon type="chevron-right" size="16"></Icon>
+		    </div>
 		</div>
+		<Menue></Menue>
 	</div>
 </template>
-<script>
-	export default{
-		data(){
-			return{
-				dot:true,
-			}
-		},
-		methods:{
 
+<script>
+import Chead from './common/Header.vue'
+import Menue from './common/Menue.vue'
+export default{
+	data(){
+		return{
+			top_title: '个人中心',
+			dot:true,
 		}
+	},
+	methods:{
+		goInfo(){
+			this.$router.push('add_info')
+		},
+		goIdent(){
+			this.$router.push('identification')
+		},
+		goFocus(){
+			this.$router.push('focus')
+		},
+	},
+	created(){
+        // this.$http.post('url', data,
+        //     {emulateJSON: true}).then((response) => {
+                
+        //     }, (response) => {
+        //             // error callback 
+        // })
+    },
+	components: {
+		Chead,
+		Menue,
 	}
+}
 </script>
 
 <style scoped>
@@ -84,22 +107,21 @@
 	background: rgb(134,210,198);
 	margin-bottom: 2.5vh;
 	color: #fff;
-	padding: 2.3vh 9.8vw;
+	padding: 0 9.8vw;
 	font-size: 14px;
 	text-align: left;
 
 }
-.personal_abstract{
-	
+.personal_abstract,
+.personal_number,
+.personal_detail {
+	font-weight: bold;
+	line-height: 34px;
 }
+.personal_abstract,
+.personal_number,
 .name{
 	padding-right: 13.5vw;
-}
-.type{
-
-}
-.personal_number{
-
 }
 .item{
 	padding: 2.3vh 9.8vw;
@@ -111,12 +133,15 @@
 }
 .item_left{
 	float: left;
-	/*border:solid gray 1px;*/
+	vertical-align: middle;
+}
+.vertical_item {
+	vertical-align: middle;
 }
 .icon{
 	/*float: right;*/
 	text-align: right;
-	/*padding: 8.2vh;*/
+	vertical-align: middle;
 }
 .icon:after{
 	content: '';
@@ -124,10 +149,10 @@
     clear: both;
 }
  .demo-badge{
-        height: 3.4vh;
-        background: #eee;
-        border-radius: 3px;
-        display: inline-block;
-        size: 10px;
-    }
+	height: 3.4vh;
+	background: #eee;
+	border-radius: 3px;
+	display: inline-block;
+	size: 10px;
+}
 </style>

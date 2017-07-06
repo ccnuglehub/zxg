@@ -9,6 +9,7 @@
 </template>
 
 <script>
+
   import VueQArt from './vue-qart.vue'
   export default {
     components: {
@@ -27,13 +28,14 @@
         },
         downloadButton: false
       }
-    }
-  }
 </script>
 
 <style>
 .qr_code {
     font-size: 0;
+    background: rgb(238,238,238);
+    width: 100%;
+    height: 100vh;
 }
 .qr_cont {
     width: 64%;

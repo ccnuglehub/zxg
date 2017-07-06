@@ -1,7 +1,8 @@
 <template>
 	<div class="work">
+        <Chead :msg="top_title"></Chead>
 		<div class="top_menue">
-		    <div @click="openLocaPicker" class="top_menue_item">
+		    <div v-tap="{ methods: openLocaPicker }" class="top_menue_item">
                 <Icon class="m_logo" type="ios-location"></Icon>
                 <span class="m_txt">全部地区</span>
             </div>
@@ -13,13 +14,13 @@
                 <Icon class="m_logo" type="shuffle"></Icon>
                 <span class="m_txt">智能排序</span>
             </div>
-            <div @click="openPicker" class="top_menue_item">
+            <div v-tap="{ methods: openPicker }" class="top_menue_item">
                 <Icon class="m_logo" type="ios-clock"></Icon>
                 <span class="m_txt">可接单时间</span>
             </div>
 		</div>
         <div class="item_list">
-            <div class="item_list_item">
+            <div v-tap="{ methods: goWorkerDetail }" class="item_list_item">
                 <img class="work_photo" src="../assets/people.png">
                 <div class="work_info lb_item">
                     <div class="work_info_top">
@@ -50,12 +51,13 @@
                 </div>
             </div>
         </div>
+        <Menue></Menue>
         <mt-datetime-picker
             ref="picker"
             type="time"
             v-model="pickerValue">
         </mt-datetime-picker>
-        <div @click="closeLocaPicker" v-if="loca_wrap_flag" class="picker_wrap">
+        <div v-tap="{ methods: closeLocaPicker }" v-if="loca_wrap_flag" class="picker_wrap">
             <transition name="slide-fade">
                 <mt-picker v-if="loca_flag" class="b_picker" :slots="slots" @change="onValuesChange"></mt-picker>
             </transition>
@@ -64,10 +66,13 @@
 </template>
 
 <script>
+import Chead from './common/Header.vue'
+import Menue from './common/Menue.vue'
 export default {
   	name: 'work',
   	data () {
     	return {
+            top_title: '找工人',
       		valueHalf: 4,
             pickerValue:'',
             loca_flag: false,
@@ -100,8 +105,23 @@ export default {
         onValuesChange(picker, values) {
             // this.loca_flag = false
             console.log(values)
+        },
+        goWorkerDetail(){
+            this.$router.push('worker_detail')
         }
-	}
+	},
+    created(){
+        // this.$http.post('url', data,
+        //     {emulateJSON: true}).then((response) => {
+
+        //     }, (response) => {
+        //             // error callback 
+        // })
+    },
+    components: {
+        Chead,
+        Menue,
+    }
 }
 </script>
 
@@ -121,10 +141,11 @@ export default {
 .top_menue {
     font-size: 0;
     height: 36px;
+    border-top: 1px solid rgba(187,187,187,.6);
     border-bottom: 1px solid rgba(187,187,187,.6);
 }
 .item_list {
-     height: 100vh;
+     height: 88vh;
      background:#eee;
      padding-top: 1px;
      font-size: 0;

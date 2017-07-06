@@ -1,48 +1,53 @@
 <template>
-    <div class="identification">
-        <div class="title">请上传清晰的本人大头照及身份证照</div>
-        <div class="demo-upload-list" :key="item" v-for="item in uploadList">
-            <template v-if="item.status === 'finished'">
-                <img class="preview_img" :src="item.url">
-                <div class="demo-upload-list-cover">
-                    <Icon class="icon" type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-                    <Icon class="icon" type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-                </div>
-            </template>
-            <template v-else>
-                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-            </template>
-        </div>
-        <Upload
-            v-if="flag"
-            ref="upload"
-            :show-upload-list="false"
-            :default-file-list="defaultList"
-            :on-success="handleSuccess"
-            :format="['jpg','jpeg','png']"
-            :max-size="2048"
-            :on-format-error="handleFormatError"
-            :on-exceeded-size="handleMaxSize"
-            :before-upload="handleBeforeUpload"
-            multiple
-            type="drag"
-            action="//jsonplaceholder.typicode.com/posts/"
-            style="display: inline-block;width:58px;">
-            <div style="width: 58px;height:58px;line-height: 58px;">
-                <Icon type="camera" size="20"></Icon>
+    <div class="wrap">
+        <Chead :msg="top_title" :icon="true"></Chead>
+        <div class="identification">
+            <div class="title">请上传清晰的本人大头照及身份证照</div>
+            <div class="demo-upload-list" :key="item" v-for="item in uploadList">
+                <template v-if="item.status === 'finished'">
+                    <img class="preview_img" :src="item.url">
+                    <div class="demo-upload-list-cover">
+                        <Icon class="icon" type="ios-eye-outline" v-tap="{ methods: handleView(item.name) }"></Icon>
+                        <Icon class="icon" type="ios-trash-outline" v-tap="{ methods: handleRemove(item) }"></Icon>
+                    </div>
+                </template>
+                <template v-else>
+                    <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+                </template>
             </div>
-        </Upload>
-        <Modal title="查看图片" v-model="visible">
-            <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
-        </Modal>
-        <div class="bt">确认上传</div>
-    </div>
+            <Upload
+                v-if="flag"
+                ref="upload"
+                :show-upload-list="false"
+                :default-file-list="defaultList"
+                :on-success="handleSuccess"
+                :format="['jpg','jpeg','png']"
+                :max-size="2048"
+                :on-format-error="handleFormatError"
+                :on-exceeded-size="handleMaxSize"
+                :before-upload="handleBeforeUpload"
+                multiple
+                type="drag"
+                action="//jsonplaceholder.typicode.com/posts/"
+                style="display: inline-block;width:58px;">
+                <div style="width: 58px;height:58px;line-height: 58px;">
+                    <Icon type="camera" size="20"></Icon>
+                </div>
+            </Upload>
+            <Modal title="查看图片" v-model="visible">
+                <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
+            </Modal>
+            <div class="bt">确认上传</div>
+        </div>
+    </div>    
 </template>
 
 <script>
+import Chead from './common/Header.vue'
 export default {
     data () {
             return {
+                top_title: '实名认证',
                 defaultList: [
                     {
                         'name': 'a42bdcc1178e62b4694c830f028db5c0',
@@ -101,11 +106,18 @@ export default {
         },
         mounted () {
             this.uploadList = this.$refs.upload.fileList;
+        },
+        components: {
+            Chead,
         }
     }
 </script>
 
-<style>
+<style scoped>
+.wrap {
+    width: 100%;
+    height: 100%;
+}
 .identification {
     height: 100vh;
     width: 100vw;
