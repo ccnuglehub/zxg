@@ -12,16 +12,21 @@ import vueTap from 'v-tap';
 
 import MintUI from 'mint-ui'
 
+
+
 Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.use(iView)
 Vue.use(MintUI)
+// vue.use(VueQArt)
 Vue.use(vueTap)
+
 
 /* eslint-disable no-new */
 new Vue({
 	el: '#app',
 	store,
 	router,
-	render: h => h(App)
+	// components: {VueQArt},
+	render: h => h(App),
 })

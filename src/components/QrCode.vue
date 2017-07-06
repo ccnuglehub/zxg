@@ -1,23 +1,33 @@
 <template>
-    <div class="qr_code">
-        <Chead :msg="top_title" :icon="true"></Chead>
-        <img class="qr_cont" src="../assets/logo.png">
+    <div id="app">
+        <!-- <img src="logo.png"> -->
+        <h1>{{ msg }}</h1>
+        <!--<div v-vue-q-art="config"></div>-->
+        <vue-q-art :config="config" :downloadButton="downloadButton"></vue-q-art>
+        change qrcode url: <input type="text" v-model="config.value">
     </div>
 </template>
 
 <script>
-import Chead from './common/Header.vue'
-export default {
-    name: 'qr_code',
-    data(){
-        return {
-            top_title: '请扫二维码',
-        }
-    },
+
+  import VueQArt from './vue-qart.vue'
+  export default {
     components: {
-        Chead
-    }
-}
+      VueQArt
+    },
+    name: 'app',
+    data () {
+      return {
+        msg: 'the Vue 2.x directive for QArt.js',
+        config: {
+          value: 'https://www.baidu.com',
+          imagePath: '../../static/logo.png',
+          // imagePath:'../assets/logo.png',
+          filter: 'color',
+          size: 500
+        },
+        downloadButton: false
+      }
 </script>
 
 <style>
