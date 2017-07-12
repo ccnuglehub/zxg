@@ -105,10 +105,12 @@ export default {
 			if(!this.phone_flag) {
 				return
 			}
-			this.$http.post('url', data,
-                {emulateJSON: true}).then((response) => {
-                  
-                }, (response) => {
+			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=register&f=get_auth_code', {
+				user_tel: this.user_tel
+			},
+			{emulateJSON: true}).then((response) => {
+				console.log(response)
+			}, (response) => {
                       // error callback 
             })
 		},
@@ -119,11 +121,17 @@ export default {
 			if(this.checkEmpty(this.user_name) || this.checkEmpty(this.user_tel)) {
 				return
 			}
-			this.$http.post('url', data,
-                {emulateJSON: true}).then((response) => {
-                  
-                }, (response) => {
-                      // error callback 
+			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=register&f=add_user', {
+				user_name: this.user_name,
+				user_tel: this.user_tel,
+				user_type: this.user_type,
+				auth_code: this.auth_code,
+				user_local: this.user_local,
+			},
+			{emulateJSON: true}).then((response) => {
+				console.log(response)
+			}, (response) => {
+					// error callback 
             })
 		}
 	}

@@ -55,6 +55,18 @@ export default {
       		valueHalf: 4
 		}
   	},
+    created(){
+        this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=rate_detail',
+        {
+            account: "0",
+            user_id: ""
+        },
+        {emulateJSON: true}).then((response) => {
+            console.log(response)
+        }, (response) => {
+                // error callback 
+        })
+    },
     components: {
         Chead,
     }

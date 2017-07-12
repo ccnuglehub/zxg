@@ -6,7 +6,7 @@
 				<div v-tap="{ methods: getProgress }" class="switch_item switch_item_left">进行中</div>
 				<div v-tap="{ methods: getFinished }" class="switch_item switch_item_right">已完成</div>
 			</div>
-			<div class="itemlist">
+			<div v-tap="{ methods: goDetail }" class="itemlist">
 				<div class="process" v-text='process?"进行中":"已完成"' :style="getStyle(process)"></div>
 				<div class="project_abstract">
 					<span class="project_name">{{project_name}}</span>
@@ -51,19 +51,50 @@ export default{
 			}
 		},
 		getProgress(){
-
+			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=project_list',
+			{
+				acount: "0",
+				openid: "",
+				project_status: "0"
+			}
+			,
+			{emulateJSON: true}).then((response) => {
+				console.log(response)
+			}, (response) => {
+						// error callback 
+			})
 		},
 		getFinished(){
-			
+			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=project_list',
+			{
+				acount: "0",
+				openid: "",
+				project_status: "1"
+			}
+			,
+			{emulateJSON: true}).then((response) => {
+				console.log(response)
+			}, (response) => {
+						// error callback 
+			})
+		},
+		goDetail(){
+			this.$router.push('project_detail')
 		}
 	},
 	created(){
-        // this.$http.post('url', data,
-        //     {emulateJSON: true}).then((response) => {
-                
-        //     }, (response) => {
-        //             // error callback 
-        // })
+        this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=project_list',
+		{
+			acount: "0",
+			openid: "",
+			project_status: "0"
+		}
+		,
+		{emulateJSON: true}).then((response) => {
+			console.log(response)
+		}, (response) => {
+                    // error callback 
+        })
     },
 	components: {
 		Chead,

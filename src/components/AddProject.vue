@@ -7,16 +7,16 @@
                     <div class="edit_box_top">
                         <div class="p_name">
                             <label class="p_lable p_lable_top">项目名称</label>
-                            <input class="p_input" placeholder="请输入项目名称">
+                            <input v-model="form_data.project_name" class="p_input" placeholder="请输入项目名称">
                         </div>
                         <div class="p_local">
                             <label class="p_lable p_lable_bottom">项目地点</label>
-                            <Select v-model="model1" style="width:100px">
+                            <Select v-model="form_data.project_address_detail" style="width:100px">
                                 <Option v-for="item in cityList" :value="item.value" :key="item">{{ item.label }}</Option>
                             </Select>
                             <img class="qr_logo" src="../assets/qr_code.png">
                         </div>
-                        <textarea class="p_txt" placeholder="请输入你的项目简介"></textarea>
+                        <textarea v-model="form_data.project_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
                     </div>
                     <div class="edit_area"></div>
                 </div>
@@ -65,7 +65,13 @@ export default {
                     label: '重庆市'
                 }
             ],
-            model1: '',
+            form_data: {
+                project_name: "",
+                openid: "",
+                project_address_section: "项目所在区",
+                project_address_detail: "项目具体地址",
+                project_description: ""
+            }
 		}
   	},
 	methods: {
@@ -73,15 +79,16 @@ export default {
             this.cnotice_flag = true
         },
         postProject(){
-            // this.$http.post('url', data,
-            //     {emulateJSON: true}).then((response) => {
-            //         if(true) {
-            //             this.cnotice_flag = false
-            //             this.$router.push({ name: 'project_detail', params: { obj: {} }})
-            //         }
-            //     }, (response) => {
-            //           // error callback 
-            // })
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=add_project',
+            form_data,
+            {emulateJSON: true}).then((response) => {
+                if(true) {
+                    this.cnotice_flag = false
+                    this.$router.push({ name: 'project_detail', params: { obj: {} }})
+                }
+            }, (response) => {
+                      // error callback 
+            })
             this.cnotice_flag = false
             this.$router.push({ name: 'project_detail', params: { obj: {} }})
         },

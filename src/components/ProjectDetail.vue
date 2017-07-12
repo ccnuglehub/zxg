@@ -33,7 +33,7 @@
                             <div v-tap="{ methods: showEnotce }" class="bt">待评价</div>
                         </div>
                         <div class="bt_item_bottom">
-                            <div class="bt">关注</div>
+                            <div v-tap="{ methods: focus }" class="bt">关注</div>
                         </div>
                         <div class="bt_item_bottom">
                             <div v-tap="{ methods: showDeleteNotice }" class="bt">移除</div>
@@ -47,10 +47,10 @@
                     </div>
                     <div class="bt_box_bottom">
                         <div class="bt_item_bottom">
-                            <div class="bt">进行中</div>
+                            <div v-tap="{ methods: changToComplete }" class="bt">进行中</div>
                         </div>
                         <div class="bt_item_bottom">
-                            <div class="bt">关注</div>
+                            <div v-tap="{ methods: focus }" class="bt">关注</div>
                         </div>
                         <div class="bt_item_bottom">
                             <div v-tap="{ methods: showDeleteNotice }" class="bt">移除</div>
@@ -64,9 +64,9 @@
                     <div class="bt_close_box" v-tap="{ methods: closeEnotce }">
                         <Icon class="bt_close" type="close-circled"></Icon>
                     </div>
-                    <textarea class="e_txt" placeholder="请对工人的工作进行简短的评价"></textarea>
+                    <textarea v-model="form_rate.rate_content" class="e_txt" placeholder="请对工人的工作进行简短的评价"></textarea>
                     <div class="e_title">请对工人的工作进行评分</div>
-                    <Rate allow-half v-model="valueHalf"></Rate>
+                    <Rate allow-half v-model="form_rate.rate"></Rate>
                     <div class="e_bt_box">
                         <div v-tap="{ methods: Epost }" class="bt">确认评价</div>
                     </div>
@@ -90,6 +90,14 @@ export default {
             msg: '您确认完成该项目？',
             mFn: () => {
                 console.log('需要一个回调函数')
+            },
+            form_rate: {
+                rated_user_id: "",
+                rate_name: "",
+                rate: "",
+                rate_content: "",
+                rate_project_name: "",
+                p2w_id: ""
             }
         }
     },
@@ -102,42 +110,66 @@ export default {
             this.cnotice_flag = false
         },
         completeProject(){
-            this.$http.post('url', data,
-                {emulateJSON: true}).then((response) => {
-                    if(true) {
-                        
-                    } else {
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=project_complete',
+            {
+                project_id: ""
+            }
+            ,
+            {emulateJSON: true}).then((response) => {
+                if(true) {
+                    
+                } else {
 
-                    }
-                }, (response) => {
-                      // error callback 
+                }
+            }, (response) => {
+                    // error callback 
             })
         },
         deleteWorker(){
-            this.$http.post('url', data,
-                {emulateJSON: true}).then((response) => {
-                    if(true) {
-                        
-                    } else {
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=delete_worker',
+            {
+                p2w_id: ""
+            }
+            ,
+            {emulateJSON: true}).then((response) => {
+                if(true) {
+                    
+                } else {
 
-                    }
-                }, (response) => {
-                      // error callback 
+                }
+            }, (response) => {
+                    // error callback 
             })
         },
         Epost(){
-            this.$http.post('url', data,
-                {emulateJSON: true}).then((response) => {
-                    if(true) {
-                        
-                    } else {
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=worker_rate',
+            form_rate
+            ,
+            {emulateJSON: true}).then((response) => {
+                if(true) {
+                    
+                } else {
 
-                    }
-                }, (response) => {
-                      // error callback 
+                }
+                console.log(response)
+            }, (response) => {
+                    // error callback 
+            })
+        },
+        changToComplete(){
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=worker_project_status',
+            {
+                p2w_status: 0,
+	            p2w_id: ""
+            },
+            {emulateJSON: true}).then((response) => {
+                console.log(response)
+            }, (response) => {
+                        // error callback 
             })
         },
         showCompleteNotice(){
+            this.msg = '您确认完成该项目？'
             this.cnotice_flag = true
             this.mFn = this.completeProject
         },
@@ -155,6 +187,18 @@ export default {
         },
         addWork(){
             this.$router.push('qr_code')
+        },
+        focus(){
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=focus&f=focus_worker',
+            {
+                focus_user_id: "",
+                focused_user_id: ""
+            },
+            {emulateJSON: true}).then((response) => {
+                console.log(response)
+            }, (response) => {
+                        // error callback 
+            })
         }
     }
 }

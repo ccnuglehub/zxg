@@ -20,12 +20,14 @@ export default {
         }
     },
     created(){
-        // this.$http.post('url', data,
-        //     {emulateJSON: true}).then((response) => {
-                
-        //     }, (response) => {
-        //             // error callback 
-        // })
+        this.$http.post('http://101.201.68.200/zxg/weixin/index?c=focus&f=focus_list', {
+	        open_id: ""
+        },
+        {emulateJSON: true}).then((response) => {
+            console.log(response)
+        }, (response) => {
+                    // error callback 
+        })
     },
     components: {
         Chead,

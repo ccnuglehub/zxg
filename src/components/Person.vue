@@ -107,8 +107,8 @@ export default{
 	background: rgb(134,210,198);
 	margin-bottom: 2.5vh;
 	color: #fff;
-	padding: 0 9.8vw;
-	font-size: 14px;
+	padding: 0 0 0 4.8vw;
+	font-size: 16px;
 	text-align: left;
 
 }
