@@ -28,7 +28,7 @@
                 :before-upload="handleBeforeUpload"
                 multiple
                 type="drag"
-                action="//jsonplaceholder.typicode.com/posts/"
+                action="http://101.201.68.200/zxg/weixin/index?c=register&f=identity"
                 style="display: inline-block;width:58px;">
                 <div style="width: 58px;height:58px;line-height: 58px;">
                     <Icon type="camera" size="20"></Icon>
@@ -81,7 +81,7 @@ export default {
             },
             handleFormatError (file) {
                 this.$Notice.warning({
-                            title: '文件格式不正确',
+                    title: '文件格式不正确',
                     desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
                 });
             },

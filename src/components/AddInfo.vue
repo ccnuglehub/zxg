@@ -6,15 +6,15 @@
             <div class="edit_area">
                 <Form class="info_form" label-position="left" :label-width="80">
                     <Form-item label="姓名">
-                        <Input class="info_input" type="text"></Input>
+                        <Input v-model="form_data.user_name" class="info_input" type="text"></Input>
                     </Form-item>
                     <Form-item label="地址">
-                        <Input class="info_input" type="text"></Input>
+                        <Input v-model="form_data.user_address" class="info_input" type="text"></Input>
                     </Form-item>
                     <Form-item label="个人简介">
-                        <Input class="info_input" type="textarea"></Input>
+                        <Input v-model="form_data.worker_description" class="info_input" type="textarea"></Input>
                     </Form-item>
-                    <div class="bt">提交</div>
+                    <div v-tap="{ methods: addInfo }" class="bt">提交</div>
                 </Form>
             </div>
         </div>
@@ -27,7 +27,23 @@ export default {
     name: 'add_info',
     data(){
         return {
-            top_title: '完善个人信息'
+            top_title: '完善个人信息',
+            form_data: {
+                user_name: "",
+                user_address: "",
+                worker_description: "",
+            }
+        }
+    },
+    methods: {
+        addInfo(){
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=register&f=update_user', 
+            this.form_data,
+			{emulateJSON: true}).then((response) => {
+				console.log(response)
+			}, (response) => {
+                      // error callback 
+            })
         }
     },
     components: {

@@ -6,11 +6,11 @@
                 <Icon class="m_logo" type="ios-location"></Icon>
                 <span class="m_txt">全部地区</span>
             </div>
-            <div class="top_menue_item">
+            <div v-tap="{ methods: openTypePicker }" class="top_menue_item">
                 <Icon class="m_logo" type="person"></Icon>
                 <span class="m_txt">工友类别</span>
             </div>
-            <div class="top_menue_item">
+            <div v-tap="{ methods: slotByRate }" class="top_menue_item">
                 <Icon class="m_logo" type="shuffle"></Icon>
                 <span class="m_txt">智能排序</span>
             </div>
@@ -55,11 +55,17 @@
         <mt-datetime-picker
             ref="picker"
             type="time"
-            v-model="pickerValue">
+            v-model="time"
+            @confirm="handleConfirm">
         </mt-datetime-picker>
         <div v-tap="{ methods: closeLocaPicker }" v-if="loca_wrap_flag" class="picker_wrap">
             <transition name="slide-fade">
-                <mt-picker v-if="loca_flag" class="b_picker" :slots="slots" @change="onValuesChange"></mt-picker>
+                <mt-picker v-if="loca_flag" class="b_picker" :slots="local_slots" @change="onLocaValuesChange"></mt-picker>
+            </transition>
+        </div>
+        <div v-tap="{ methods: closeTypePicker }" v-if="type_wrap_flag" class="picker_wrap">
+            <transition name="slide-fade">
+                <mt-picker v-if="type_flag" class="b_picker" :slots="type_slots" @change="onTypeValuesChange"></mt-picker>
             </transition>
         </div>
 	</div>
@@ -74,22 +80,46 @@ export default {
     	return {
             top_title: '找工人',
       		valueHalf: 4,
-            pickerValue:'',
+            time:'',
+            local: '',
+            type: '',
             loca_flag: false,
             loca_wrap_flag: false,
-            slots: [
+            type_flag: false,
+            type_wrap_flag: false,
+            local_slots: [
                 {
                 flex: 1,
                 values: ['北京', '上海', '广州', '深圳', '天津', '武汉'],
-                    className: 'slot1',
+                    className: 'local_slots',
                     textAlign: 'center'
                 }
-            ]
+            ],
+            type_slots: [
+                {
+                flex: 1,
+                values: ['油漆工', '泥瓦工', '水电工', '木工',],
+                    className: 'type_slots',
+                    textAlign: 'center'
+                }
+            ],
 		}
   	},
 	methods: {
         openPicker() {
             this.$refs.picker.open();
+        },
+        handleConfirm(value ){
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=time_list',
+            {
+                account: "0",
+                time: value
+            },
+            {emulateJSON: true}).then((response) => {
+
+            }, (response) => {
+                    // error callback 
+            })
         },
         openLocaPicker() {
             this.loca_wrap_flag = true
@@ -101,10 +131,56 @@ export default {
             setTimeout(() => {
                 self.loca_wrap_flag = false
             },100)
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=address_list',
+            {
+                account: "0",
+                address: this.local[0]
+            },
+            {emulateJSON: true}).then((response) => {
+
+            }, (response) => {
+                    // error callback 
+            })
         },
-        onValuesChange(picker, values) {
+        openTypePicker() {
+            this.type_wrap_flag = true
+            this.type_flag = true
+        },
+        closeTypePicker(){
+            this.type_flag = false
+            var self = this
+            setTimeout(() => {
+                self.type_wrap_flag = false
+            },100)
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=type_list',
+            {
+                account: "0",
+                type: this.type[0]
+            },
+            {emulateJSON: true}).then((response) => {
+
+            }, (response) => {
+                    // error callback 
+            })
+        },
+        onLocaValuesChange(picker, values) {
             // this.loca_flag = false
-            console.log(values)
+            this.local = picker.getValues()
+        },
+        onTypeValuesChange(picker, values) {
+            // this.loca_flag = false
+            this.type = picker.getValues()
+        },
+        slotByRate(){
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=rate_list',
+            {
+                account: "0"
+            },
+            {emulateJSON: true}).then((response) => {
+
+            }, (response) => {
+                    // error callback 
+            })
         },
         goWorkerDetail(){
             this.$router.push('worker_detail')
