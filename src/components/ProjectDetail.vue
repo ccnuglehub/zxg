@@ -79,6 +79,7 @@
 <script>
 import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
+import {API_ROUTER_CONFIG,API_ASSETS_CONFIG,HOST_CONFIG} from '@/api/config/api_config'
 export default {
   	name: 'project_detail',
   	data () {
@@ -110,7 +111,7 @@ export default {
             this.cnotice_flag = false
         },
         completeProject(){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=project_complete',
+            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_complete',
             {
                 project_id: ""
             }
@@ -126,7 +127,7 @@ export default {
             })
         },
         deleteWorker(){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=delete_worker',
+            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=delete_worker',
             {
                 p2w_id: ""
             }
@@ -142,7 +143,7 @@ export default {
             })
         },
         Epost(){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=worker_rate',
+            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=worker_rate',
             form_rate
             ,
             {emulateJSON: true}).then((response) => {
@@ -157,7 +158,7 @@ export default {
             })
         },
         changToComplete(){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=worker_project_status',
+            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=worker_project_status',
             {
                 p2w_status: 0,
 	            p2w_id: ""
@@ -189,7 +190,7 @@ export default {
             this.$router.push('qr_code')
         },
         focus(){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=focus&f=focus_worker',
+            this.$http.post(HOST_CONFIG.serverIp+'?c=focus&f=focus_worker',
             {
                 focus_user_id: "",
                 focused_user_id: ""

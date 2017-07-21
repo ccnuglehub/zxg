@@ -28,6 +28,8 @@
         },
         downloadButton: false
       }
+    }
+  }
 </script>
 
 <style>

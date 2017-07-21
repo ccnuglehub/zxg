@@ -4,15 +4,17 @@ const key_config ={
 }
 
 const host_config ={
-	serverIp:"http://localhost:8080"
+	// serverIp:"http://localhost:8080"
+	serverIp:"http://101.201.68.200/zxg/weixin/index",
+	// serverMain:"",
 }
 
 const api_router_config = {
-	login:"/zxg/weixin/index/login",
-	register:"/zxg/weixin/index/register",
-	newslist:"/zxg/weixin/index/newslist",
-	banner:"/zxg/weixin/index/banner",
-	newslist:"/zxg/weixin/index/newslist"
+	login:host_config.serverIp+"/login",
+	register:host_config.serverIp+"/register",
+	newslist:host_config.serverIp+"/newslist",
+	banner:host_config.serverIp+"?c=news&f=banner",
+	newslist:host_config.serverIp+"?c=news&f=newslist"
 }
 
 const api_assets_config = {

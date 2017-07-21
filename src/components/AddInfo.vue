@@ -23,6 +23,7 @@
 
 <script>
 import Chead from './common/Header.vue'
+import {HOST_CONFIG} from '@/api/config/api_config'
 export default {
     name: 'add_info',
     data(){
@@ -37,7 +38,7 @@ export default {
     },
     methods: {
         addInfo(){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=register&f=update_user', 
+            this.$http.post(HOST_CONFIG.serverIp+'?c=register&f=update_user', 
             this.form_data,
 			{emulateJSON: true}).then((response) => {
 				console.log(response)
