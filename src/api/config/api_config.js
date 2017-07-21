@@ -7,19 +7,19 @@ const host_config ={
 	// serverIp:"http://localhost:8080"
 	serverIp:"http://101.201.68.200/zxg/weixin/index",
 	// serverMain:"",
+	imageIp:"http://101.201.68.200/zxg/data/upload/"
 }
 
 const api_router_config = {
 	login:host_config.serverIp+"/login",
 	register:host_config.serverIp+"/register",
-	newslist:host_config.serverIp+"/newslist",
 	banner:host_config.serverIp+"?c=news&f=banner",
-	newslist:host_config.serverIp+"?c=news&f=newslist"
+	newslist:host_config.serverIp+"?c=news&f=news_list&account=0"
 }
 
 const api_assets_config = {
-	banner:"/zxg/src/assets/banner",
-	newslist:"/zxg/src/assets/newslist"
+	// banner:"/zxg/src/assets/banner",
+	// newslist:"/zxg/src/assets/newslist"
 }
 
 export const KEY_CONFIG=key_config;
