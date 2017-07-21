@@ -59,7 +59,7 @@ export default {
         this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=rate_detail',
         {
             account: "0",
-            user_id: ""
+            user_id: "2adsfad1231"
         },
         {emulateJSON: true}).then((response) => {
             console.log(response)
