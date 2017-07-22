@@ -4,15 +4,16 @@
         <div class="project_details">
             <div class="project_intro">
                 <div class="intro_title">项目简介</div>
-                <div class="intro_txt">如果你到现在都还没听说过 Vue.js,你心里可能在想:前端的幺蛾子就是多</div>
+                <div class="intro_txt">{{ detail.project_description || detail.project_decription }}</div>
                 <div class="intro_etc">
                     <div class="etc_items">
-                        <div class="etc_item">江岸区</div>
-                        <div class="etc_item">2017.06.12</div>
-                        <div class="etc_item etc_name">马云</div>
+                        <div class="etc_item">{{ detail.project_address_section }}</div>
+                        <div class="etc_item">{{ changeDate(detail.project_start_time) }}</div>
+                        <div class="etc_item etc_name"></div>
                     </div>
                     <div class="bt_box">
-                        <div v-tap="{ methods: showCompleteNotice }" class="bt">完成项目</div>
+                        <div v-if="!from_add_project" v-tap="{ methods: showCompleteNotice }" class="bt">完成项目</div>
+                        <div v-else class="bt bt_grey">完成项目</div>
                     </div>
                 </div>
             </div>
@@ -23,24 +24,27 @@
                         <div class="bt">添加工人</div>
                     </div>
                 </div>
-                <div class="etc_items_bottom_box">
+                <div v-for="(item, index) in work_list" :key="index" class="etc_items_bottom_box">
                     <div class="etc_items_bottom">
-                        <div class="etc_bottom_type">油漆工</div>
-                        <div class="etc_bottom_name">王凯</div>
+                        <div class="etc_bottom_type">{{ changeType(item.user_type) }}</div>
+                        <div class="etc_bottom_name">{{ item.user_name }}</div>
                     </div>
                     <div class="bt_box_bottom">
                         <div class="bt_item_bottom">
-                            <div v-tap="{ methods: showEnotce }" class="bt">待评价</div>
+                            <div v-if="item.p2w_status == 0" class="bt">{{ item.p2w_status | getStatus }}</div>
+                            <div v-if="item.p2w_status == 1" v-tap="{ methods: showEnotce }" class="bt">{{ item.p2w_status | getStatus }}</div>
+                            <div v-if="item.p2w_status == 2" class="bt bt_grey">{{ item.p2w_status | getStatus }}</div>
                         </div>
                         <div class="bt_item_bottom">
-                            <div v-tap="{ methods: focus }" class="bt">关注</div>
+                            <div v-if="item.focus_status == 0" v-tap="{ methods: focus, params: item }" class="bt">关注</div>
+                            <div v-if="item.focus_status == 1" class="bt bt_grey">已关注</div>
                         </div>
                         <div class="bt_item_bottom">
-                            <div v-tap="{ methods: showDeleteNotice }" class="bt">移除</div>
+                            <div v-tap="{ methods: showDeleteNotice, params: item }" class="bt">移除</div>
                         </div>
                     </div>
                 </div>
-                <div class="etc_items_bottom_box">
+                <!-- <div class="etc_items_bottom_box">
                     <div class="etc_items_bottom">
                         <div class="etc_bottom_type">油漆工</div>
                         <div class="etc_bottom_name">王凯</div>
@@ -56,7 +60,7 @@
                             <div v-tap="{ methods: showDeleteNotice }" class="bt">移除</div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
             <div class="evaluate_wrap" v-if="evaluate_flag">
@@ -80,11 +84,17 @@
 import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import {API_ROUTER_CONFIG,API_ASSETS_CONFIG,HOST_CONFIG} from '@/api/config/api_config'
+import { changeDate, changeType } from '../util/util.js'
+
 export default {
   	name: 'project_detail',
   	data () {
     	return {
+            from_add_project: false,
+            detail: {},
             top_title: '项目详情',
+            work_list: [],
+            p2w_id: '',
             valueHalf: 4.5,
             cnotice_flag: false,
             evaluate_flag: false,
@@ -102,18 +112,44 @@ export default {
             }
         }
     },
+    filters: {
+        getStatus: function(status){
+            if(status == 0) {
+                return '进行中'
+            }
+            if(status == 1) {
+                return '待评价'
+            }
+            if(status == 2) {
+                return '已评价'
+            }
+        }
+    },
     components: {
         CNotice,
         Chead,
     },
+    created(){
+        if(this.$route.params.obj) {
+            this.detail = this.$route.params.obj
+            this.from_add_project = true
+            this.detail.project_start_time =new Date().getTime()
+        }
+        if(this.$route.params.item) {
+            this.detail = this.$route.params.item
+            this.getWorker(this.detail.project_id)
+        }
+    },
     methods: {
+        changeDate,
+        changeType,
         closeD(){
             this.cnotice_flag = false
         },
-        completeProject(){
+        completeProject(project_id){
             this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_complete',
             {
-                project_id: ""
+                project_id: this.detail.project_id
             }
             ,
             {emulateJSON: true}).then((response) => {
@@ -126,18 +162,29 @@ export default {
                     // error callback 
             })
         },
-        deleteWorker(){
-            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=delete_worker',
+        getWorker(project_id){
+            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=projec_worker_list',
             {
-                p2w_id: ""
+                p2w_project_id: project_id,
+                open_id: '1adf123adaf'
             }
             ,
             {emulateJSON: true}).then((response) => {
-                if(true) {
-                    
-                } else {
-
-                }
+                this.work_list = response.body.data
+                console.log(this.work_list)
+            }, (response) => {
+                    // error callback 
+            })
+        },
+        deleteWorker(){
+            var id = this.p2w_id
+            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=delete_worker',
+            {
+                p2w_id: id
+            }
+            ,
+            {emulateJSON: true}).then((response) => {
+                console.log(response)
             }, (response) => {
                     // error callback 
             })
@@ -174,9 +221,10 @@ export default {
             this.cnotice_flag = true
             this.mFn = this.completeProject
         },
-        showDeleteNotice(){
+        showDeleteNotice(item){
             this.msg = '您确定移除该工人？'
             this.cnotice_flag = true
+            this.p2w_id = item.params.p2w_id
             this.mFn = this.deleteWorker
         },
         showEnotce(){
@@ -189,13 +237,14 @@ export default {
         addWork(){
             this.$router.push('qr_code')
         },
-        focus(){
+        focus(item){
             this.$http.post(HOST_CONFIG.serverIp+'?c=focus&f=focus_worker',
             {
-                focus_user_id: "",
-                focused_user_id: ""
+                focus_user_id: "1adf123adaf",
+                focused_user_id: item.params.p2w_worker_id
             },
             {emulateJSON: true}).then((response) => {
+                item.focus_status = 1
                 console.log(response)
             }, (response) => {
                         // error callback 
@@ -234,7 +283,7 @@ export default {
 }
 .intro_txt {
     background: #fff;
-    text-indent: 2em;
+    /* text-indent: 2em; */
     font-size: 15px;
     line-height: 23px;
     min-height: 23.2vh;
@@ -284,6 +333,9 @@ export default {
     background-color: rgb(134,210,198);
     color: #fff;
     cursor: pointer;
+}
+.bt_grey {
+    background-color: #d1d6df;
 }
 .project_intro_bottom {
     margin-top: 20px;

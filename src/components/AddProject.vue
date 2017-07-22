@@ -16,7 +16,7 @@
                             </Select>
                             <img class="qr_logo" src="../assets/qr_code.png">
                         </div>
-                        <textarea v-model="form_data.project_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
+                        <textarea v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
                     </div>
                     <div class="edit_area"></div>
                 </div>
@@ -32,6 +32,8 @@
 import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
+import {HOST_CONFIG} from '@/api/config/api_config'
+
 export default {
   	name: 'add_project',
   	data () {
@@ -41,36 +43,48 @@ export default {
             cnotice_flag: false,
       		cityList: [
                 {
-                    value: 'beijing',
-                    label: '北京市'
+                    value: 'jiangan',
+                    label: '江岸区'
                 },
                 {
-                    value: 'shanghai',
-                    label: '上海市'
+                    value: 'jianghan',
+                    label: '江汉区'
                 },
                 {
-                    value: 'shenzhen',
-                    label: '深圳市'
+                    value: 'qiaokou',
+                    label: '硚口区'
                 },
                 {
-                    value: 'hangzhou',
-                    label: '杭州市'
+                    value: 'huangpi',
+                    label: '黄陂区'
                 },
                 {
-                    value: 'nanjing',
-                    label: '南京市'
+                    value: 'dongxihu',
+                    label: '东西湖区'
                 },
                 {
-                    value: 'chongqing',
-                    label: '重庆市'
+                    value: 'hongshan',
+                    label: '洪山区'
+                },
+                {
+                    value: 'wuchang',
+                    label: '武昌区'
+                },
+                {
+                    value: 'jiangxia',
+                    label: '江夏区'
+                },
+                {
+                    value: 'hanyang',
+                    label: '汉阳区'
                 }
             ],
             form_data: {
-                project_name: "",
-                openid: "",
-                project_address_section: "项目所在区",
-                project_address_detail: "项目具体地址",
-                project_description: ""
+                project_name: "测试",
+                openid: "1adf123adaf",
+                project_address_section: "洪山区",
+                project_address_detail: "武汉市洪山区",
+                projec_description: "测试"
             }
 		}
   	},
@@ -79,19 +93,19 @@ export default {
             this.cnotice_flag = true
         },
         postProject(){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=add_project',
-            {},
+            console.log(this.form_data)
+            this.$http.post(HOST_CONFIG.serverIp + '?c=project&f=add_project',
+            this.form_data,
             {emulateJSON: true}).then((response) => {
-                console.log(response)
-                // if(true) {
-                //     this.cnotice_flag = false
-                //     this.$router.push({ name: 'project_detail', params: { obj: {} }})
-                // }
+                if(response.body.status == 1) {
+                    this.cnotice_flag = false
+                    this.$router.push({ name: 'project_detail', params: { obj: this.form_data }})
+                }
             }, (response) => {
                       // error callback 
             })
-            this.cnotice_flag = false
-            this.$router.push({ name: 'project_detail', params: { obj: {} }})
+            // this.cnotice_flag = false
+            // this.$router.push({ name: 'project_detail', params: { obj: {} }})
         },
         closeD(){
             this.cnotice_flag = false
