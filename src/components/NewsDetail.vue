@@ -3,10 +3,10 @@
 		<Chead :msg="top_title" :icon="true"></Chead>
 		<div class="news_detail">
 			<div class="detail_header">
-				<div class="detail_title"> 装修材料怎么选择？挑选装修材料的注意事项有哪些</div>
+				<div class="detail_title"> {{title}}</div>
 				<div class="detail_meta">
-					<span class="detail_meta_item detail_creator">韩寒</span>
-					<span class="detail_meta_item detail_time">2020.07.1</span>
+					<span class="detail_meta_item detail_creator">{{auther}}</span>
+					<span class="detail_meta_item detail_time">{{time}}</span>
 				</div>
 			</div>
 			<div class="detail_content" v-html="detail"></div>
@@ -16,20 +16,25 @@
 
 <script>
 import Chead from './common/Header.vue'
+import {changeDate} from '@/util/util'
 export default{
 	data(){
 		return{
 			top_title: '详情',
 			laoding:"",
 			err:"",
-			data:"",
-			detail:""
+			title:"",
+			detail:"",
+			auther:"",
+			time:""
 		}
 	},
 	methods:{
 		getDetail(){
-			this.data = this.$route.params.data;
+			this.title = this.$route.params.title;
 			this.detail = this.$route.params.detail;
+			this.auther = this.$route.params.auther;
+			this.time = this.$route.params.time && changeDate(this.$route.params.time);
 			// console.log(this.$route.params.data)
 		}
 		
@@ -64,14 +69,17 @@ export default{
 	font-size: 18px;
 	font-weight: bold;
 	text-indent: 0;
+	text-align: center;
 }
 .detail_meta{
 	text-align: right;
 	padding-right: 10px;
+	font-size: 14px;
 }
 .detail_content{
 	overflow-y: scroll;
 	padding-bottom: 100px;
+	font-size: 14px;
 }
 .detail_creator {
 	margin-right: 16px;
