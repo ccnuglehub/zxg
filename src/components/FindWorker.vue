@@ -20,36 +20,22 @@
             </div>
 		</div>
         <div class="item_list">
-            <div v-tap="{ methods: goWorkerDetail }" class="item_list_item">
-                <img class="work_photo" src="../assets/people.png">
+            <div v-tap="{ methods: goWorkerDetail, index: index }" class="item_list_item" :key="workerlist" v-for="(worker ,index) in workers">
+                <img class="work_photo" :src="workerAvatar(worker.user_avatar)">
                 <div class="work_info lb_item">
                     <div class="work_info_top">
-                        <div class="lb_item worker_type">油漆工</div>
-                        <div class="lb_item worker_name">王凯</div>
-                        <div class="lb_item worker_auth authed">已实名认证</div>
+                        <div class="lb_item worker_type">{{workerType(worker.user_type)}}</div>
+                        <div class="lb_item worker_name">{{worker.user_name}}</div>
+                        <div class="lb_item worker_auth" :class="{ unauthed: !identify(worker.user_is_identify), authed:identify(worker.user_is_identify)}">{{workerIdentify(worker.user_is_identify)}}</div>
                     </div>
-                    <Rate allow-half v-model="valueHalf"></Rate>
+                    <Rate allow-half v-model="worker.worker_average_rate"></Rate>
                     <div class="work_info_bottom">
-                        <div class="lb_item worker_region">江汉区</div>
-                        <div class="lb_item">已接单：149</div>
+                        <div class="lb_item worker_region">{{worker.user_address}}</div>
+                        <div class="lb_item">已接单：{{worker.worker_orders_count}}</div>
                     </div>
                 </div>
             </div>
-            <div class="item_list_item">
-                <img class="work_photo" src="../assets/people.png">
-                <div class="work_info lb_item">
-                    <div class="work_info_top">
-                        <div class="lb_item worker_type">油漆工</div>
-                        <div class="lb_item worker_name">王凯</div>
-                        <div class="lb_item worker_auth authed">已实名认证</div>
-                    </div>
-                    <Rate allow-half v-model="valueHalf"></Rate>
-                    <div class="work_info_bottom">
-                        <div class="lb_item worker_region">江汉区</div>
-                        <div class="lb_item">已接单：149</div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
         <Menue></Menue>
         <mt-datetime-picker
@@ -74,6 +60,7 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
+import {HOST_CONFIG} from '@/api/config/api_config'
 export default {
   	name: 'work',
   	data () {
@@ -103,20 +90,26 @@ export default {
                     textAlign: 'center'
                 }
             ],
+            workers:""
 		}
   	},
 	methods: {
         openPicker() {
             this.$refs.picker.open();
         },
+        //按时间
         handleConfirm(value ){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=time_list',
+            // alert(1)
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=time_list',
             {
                 account: "0",
                 time: value
             },
             {emulateJSON: true}).then((response) => {
-
+                if(response.status == "200"){
+                    console.log(response.body.data.length)
+                    this.workers = response.body.data
+                }
             }, (response) => {
                     // error callback 
             })
@@ -131,7 +124,7 @@ export default {
             setTimeout(() => {
                 self.loca_wrap_flag = false
             },100)
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=address_list',
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=address_list',
             {
                 account: "0",
                 address: this.local[0]
@@ -146,13 +139,14 @@ export default {
             this.type_wrap_flag = true
             this.type_flag = true
         },
+        //按类型
         closeTypePicker(){
             this.type_flag = false
             var self = this
             setTimeout(() => {
                 self.type_wrap_flag = false
             },100)
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=type_list',
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=type_list',
             {
                 account: "0",
                 type: this.type[0]
@@ -172,18 +166,67 @@ export default {
             this.type = picker.getValues()
         },
         slotByRate(){
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=rate_list',
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
             {
                 account: "0"
             },
             {emulateJSON: true}).then((response) => {
+                if(response.status == 200){
+                    // console.log(response.body)
+                    this.workers = response.body.data;
 
+                }
             }, (response) => {
                     // error callback 
             })
         },
-        goWorkerDetail(){
-            this.$router.push('worker_detail')
+        goWorkerDetail(obj){
+            var index = obj.index;
+            this.$router.push({url:'worker_detail',params:{worker : this.workers && this.workers[index]}})
+        },
+        workerAvatar(url){
+            // console.log(url)
+            return HOST_CONFIG.imageIp+url;
+        },
+        workerType(type){
+            // console.log(typeof type)
+            //4油漆工 5泥瓦工 6水电工 7木工
+            switch(type){
+                case "4":
+                    return "油漆工";
+                    break;
+                case "5":
+                    return "泥瓦工";
+                    break;
+                case "6":
+                    return "水电工";
+                    break;
+                case "7":
+                    return "木工";
+                    break;
+            }
+        },
+        workerIdentify(user_is_identify){
+            //0未实名认证 1审核通过 2上传等待审核 3审核未通过
+            switch(user_is_identify){
+                case "0":
+                    return "未实名认证";
+                    break;
+                case "1":
+                    return "审核通过";
+                    break;
+                case "2":
+                    return "等待审核";
+                    break;
+                case "3":
+                    return "审核未通过";
+                    break;
+            }
+        },
+        identify(user_is_identify){
+            if(user_is_identify == "1")
+                return true;
+            else return false;
         }
 	},
     created(){
@@ -200,7 +243,12 @@ export default {
     }
 }
 </script>
-
+.authed {
+    color:rgb(76,175,80);
+}
+.unauthed {
+    color: rgb(255,152,0);
+}
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .top_menue_item {
@@ -221,10 +269,11 @@ export default {
     border-bottom: 1px solid rgba(187,187,187,.6);
 }
 .item_list {
-     height: 88vh;
+     min-height: 88vh;
      background:#eee;
      padding-top: 1px;
      font-size: 0;
+     padding-bottom: 60px;
 }
 .item_list_item {
     margin: 13px 13px;
@@ -234,24 +283,25 @@ export default {
 }
 .work_photo {
     width: 26%;
+    height: 66px;
     vertical-align: middle;
 }
 .work_info {
     width: 74%;
-    padding-left: 16px;
+    padding-left: 10px;
     font-size: 14px;
 }
 .worker_type {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
-    margin-right: 22px;
+    margin-right: 10px;
 }
 .worker_name {
-    margin-right: 13%;
+    margin-right: 7%;
 }
 .worker_auth {
     font-size: 12px;
-    padding: 2px 6px;
+    padding: 2px;
     border: 1px solid rgba(0,0,0,.1);
     border-radius: 5px;
     color: rgb(182,178,182);
@@ -264,11 +314,14 @@ export default {
     margin-right: 28px;
 }
 .authed {
+    color:rgb(76,175,80);
+}
+.unauthed {
     color: rgb(255,152,0);
 }
 .m_txt,
 .m_logo {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 36px;
     vertical-align: middle;
 }
@@ -314,4 +367,5 @@ export default {
         bottom: 0;
     }
 }
+
 </style>

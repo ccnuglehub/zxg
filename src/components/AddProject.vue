@@ -80,12 +80,13 @@ export default {
         },
         postProject(){
             this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=add_project',
-            form_data,
+            {},
             {emulateJSON: true}).then((response) => {
-                if(true) {
-                    this.cnotice_flag = false
-                    this.$router.push({ name: 'project_detail', params: { obj: {} }})
-                }
+                console.log(response)
+                // if(true) {
+                //     this.cnotice_flag = false
+                //     this.$router.push({ name: 'project_detail', params: { obj: {} }})
+                // }
             }, (response) => {
                       // error callback 
             })
