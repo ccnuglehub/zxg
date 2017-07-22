@@ -30,6 +30,7 @@ export default {
         return {
             top_title: '完善个人信息',
             form_data: {
+                open_id: '2adsfad1231',
                 user_name: "",
                 user_address: "",
                 worker_description: "",
@@ -38,6 +39,7 @@ export default {
     },
     methods: {
         addInfo(){
+            console.log(this.form_data)
             this.$http.post(HOST_CONFIG.serverIp+'?c=register&f=update_user', 
             this.form_data,
 			{emulateJSON: true}).then((response) => {

@@ -46,4 +46,10 @@ body {
 	width: 100%;
     display: block;
 }
+
+.txt_ell {
+    white-space:nowrap !important;  /*强制文字不换行(标准浏览器)*/
+    overflow:hidden;
+    text-overflow:ellipsis;  /*截断*/
+}
 </style>

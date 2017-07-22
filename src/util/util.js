@@ -18,6 +18,7 @@ const checkEmpty = val => {
     }
     return false
 }
+
 //把时间从秒转换为年月日
 const changeDate = val => {
     if(val){
@@ -26,16 +27,35 @@ const changeDate = val => {
         // console.log(typeof val)
 
         var date = new Date(val),Y,M,D;
-        Y = date.getFullYear() + '-';
-        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        Y = date.getFullYear() + '.';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
         D = date.getDate() + ' ';
         return Y+M+D
     }else{
         var date = new Date();
         Y = date.getFullYear() + '-';
-        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
         D = date.getDate() + ' ';
         return Y+M+D
+    }
+}
+
+const changeType = val => {
+    // console.log(typeof type)
+    //4油漆工 5泥瓦工 6水电工 7木工
+    switch(val){
+        case "4":
+            return "油漆工";
+            break;
+        case "5":
+            return "泥瓦工";
+            break;
+        case "6":
+            return "水电工";
+            break;
+        case "7":
+            return "木工";
+            break;
     }
 }
 
@@ -43,5 +63,6 @@ export {
 	checkPhone,
     checkName,
     checkEmpty,
-    changeDate
+    changeDate,
+    changeType
 }

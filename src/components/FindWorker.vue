@@ -367,5 +367,4 @@ export default {
         bottom: 0;
     }
 }
-
 </style>

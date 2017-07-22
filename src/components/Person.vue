@@ -103,12 +103,11 @@ export default{
 	margin-top: 4vh;
 }
 .abstract{
-	height: 15.8vh;
 	background: rgb(134,210,198);
 	margin-bottom: 2.5vh;
 	color: #fff;
-	padding: 0 0 0 4.8vw;
-	font-size: 16px;
+	padding: 5px 0 5px 9.2vw;
+	font-size: 14px;
 	text-align: left;
 
 }
@@ -116,7 +115,7 @@ export default{
 .personal_number,
 .personal_detail {
 	font-weight: bold;
-	line-height: 34px;
+	line-height: 28px;
 }
 .personal_abstract,
 .personal_number,
@@ -148,7 +147,7 @@ export default{
     display: block;
     clear: both;
 }
- .demo-badge{
+.demo-badge{
 	height: 3.4vh;
 	background: #eee;
 	border-radius: 3px;
