@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 import VueResource from 'vue-resource'
+import infiniteScroll from 'vue-infinite-scroll'
+
 import iView from 'iview'
 import '../static/styles/iview.css'
 import '../static/styles/mintui.css'
@@ -18,6 +20,7 @@ Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.use(iView)
 Vue.use(MintUI)
+Vue.use(infiniteScroll)
 // vue.use(VueQArt)
 Vue.use(vueTap)
 
