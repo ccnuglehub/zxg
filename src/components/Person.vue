@@ -5,7 +5,9 @@
 			<img class="person_head" src="../assets/people.png">
 		</div>
 		<div class="abstract">
-			<div class="personal_abstract">个人简介:</div>
+			<div class="personal_abstract">个人简介:
+				<span class="description txt_ell">{{ person_data.worker_description }}</span>
+			</div>
 			<div class="personal_detail">
 				<!--<span class="name">商总监</span>-->
 				<span class="type">油漆工</span>
@@ -52,12 +54,20 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
+import { mapState } from 'vuex'
+// import { mapState, mapActions, mapGetters } from 'vuex'
 export default{
 	data(){
 		return{
 			top_title: '个人中心',
 			dot:true,
+			person_data: {}
 		}
+	},
+	computed: {
+		...mapState([
+			'xmjl_info',
+		])
 	},
 	methods:{
 		goInfo(){
@@ -71,6 +81,9 @@ export default{
 		},
 	},
 	created(){
+		if(this.xmjl_info) {
+			this.person_data.worker_description = this.xmjl_info.worker_description
+		}
         // this.$http.post('url', data,
         //     {emulateJSON: true}).then((response) => {
                 
@@ -153,5 +166,10 @@ export default{
 	border-radius: 3px;
 	display: inline-block;
 	size: 10px;
+}
+.description {
+	padding-left: 2px;
+	font-weight: normal;
+	font-size: 13px;
 }
 </style>

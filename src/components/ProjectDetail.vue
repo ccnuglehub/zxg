@@ -4,7 +4,7 @@
         <div class="project_details">
             <div class="project_intro">
                 <div class="intro_title">项目简介</div>
-                <div class="intro_txt">{{ detail.project_description || detail.project_decription }}</div>
+                <div class="intro_txt">{{ detail.project_description || detail.project_decription || detail.projec_description }}</div>
                 <div class="intro_etc">
                     <div class="etc_items">
                         <div class="etc_item">{{ detail.project_address_section }}</div>
@@ -85,7 +85,7 @@ import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import {API_ROUTER_CONFIG,API_ASSETS_CONFIG,HOST_CONFIG} from '@/api/config/api_config'
 import { changeDate, changeType } from '../util/util.js'
-
+// import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   	name: 'project_detail',
   	data () {
@@ -130,6 +130,7 @@ export default {
         Chead,
     },
     created(){
+        //如果是项目发布后跳转
         if(this.$route.params.obj) {
             this.detail = this.$route.params.obj
             this.from_add_project = true
