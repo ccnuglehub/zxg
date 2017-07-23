@@ -34,6 +34,7 @@ import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import {HOST_CONFIG} from '@/api/config/api_config'
 
+// import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   	name: 'add_project',
   	data () {

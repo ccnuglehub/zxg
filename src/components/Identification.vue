@@ -44,6 +44,7 @@
 
 <script>
 import Chead from './common/Header.vue'
+// import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     data () {
             return {
@@ -60,7 +61,14 @@ export default {
                 ],
                 imgName: '',
                 visible: false,
-                uploadList: [],
+                uploadList: [{
+                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
+                        'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
+                    },
+                    {
+                        'name': 'bc7521e033abdd1e92222d733590f104',
+                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                    }],
                 flag: true
             }
         },

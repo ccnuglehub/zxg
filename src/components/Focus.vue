@@ -2,7 +2,7 @@
     <div class="wrap">
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="focus">
-            <div v-for="(item,index) in focus_list" :key="index" class="item_list">
+            <div v-tap="{ methods: goWorkerDetail, params: item }" v-for="(item,index) in focus_list" :key="index" class="item_list">
                 <div class="type item">{{ changeType(item.user_type) }}</div>
                 <div class="name item">{{ item.user_name }}</div>
                 <div class="free_time item txt_ell">{{  new Date().getMonth() + 1 + '月' + ( parseInt(new Date().getDate()) + parseInt(item.worker_accept_time)) + '日后可接单' }}</div>
@@ -14,6 +14,8 @@
 <script>
 import Chead from './common/Header.vue'
 import { changeType } from '../util/util.js'
+// import { mapState, mapActions, mapGetters } from 'vuex'
+
 export default {
     data(){
         return {
@@ -35,7 +37,10 @@ export default {
         Chead,
     },
     methods: {
-        changeType
+        changeType,
+        goWorkerDetail(arg){
+            this.$router.push({ name: 'worker_detail', params: { focus_worker: arg.params }})
+        }
     }
 }
 </script>

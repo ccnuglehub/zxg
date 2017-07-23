@@ -24,6 +24,7 @@
 <script>
 import Chead from './common/Header.vue'
 import {HOST_CONFIG} from '@/api/config/api_config'
+import { mapActions } from 'vuex'
 export default {
     name: 'add_info',
     data(){
@@ -38,12 +39,18 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+			'changeXmjlInfo',
+		]),
         addInfo(){
             console.log(this.form_data)
             this.$http.post(HOST_CONFIG.serverIp+'?c=register&f=update_user', 
             this.form_data,
 			{emulateJSON: true}).then((response) => {
-				console.log(response)
+				if(response.body.status == 1) {
+                    this.changeXmjlInfo(this.form_data)
+                    this.$router.go(-1)
+                }
 			}, (response) => {
                       // error callback 
             })
