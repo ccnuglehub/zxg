@@ -14,13 +14,13 @@
                 <Icon class="m_logo" type="shuffle"></Icon>
                 <span class="m_txt">智能排序</span>
             </div>
-            <div v-tap="{ methods: openPicker }" class="top_menue_item">
+            <div v-tap="{ methods: openTimePicker }" class="top_menue_item">
                 <Icon class="m_logo" type="ios-clock"></Icon>
                 <span class="m_txt">可接单时间</span>
             </div>
 		</div>
         <div class="item_list">
-            <div v-tap="{ methods: goWorkerDetail, index: index }" class="item_list_item" :key="workerlist" v-for="(worker ,index) in workers">
+            <div v-tap="{ methods: goWorkerDetail, index: index }" class="item_list_item" :key="worker" v-for="(worker ,index) in workers">
                 <img class="work_photo" :src="workerAvatar(worker.user_avatar)">
                 <div class="work_info lb_item">
                     <div class="work_info_top">
@@ -38,12 +38,17 @@
             
         </div>
         <Menue></Menue>
-        <mt-datetime-picker
+<!--         <mt-datetime-picker
             ref="picker"
             type="time"
             v-model="time"
             @confirm="handleConfirm">
-        </mt-datetime-picker>
+        </mt-datetime-picker> -->
+         <div v-tap="{ methods: closeTimePicker }" v-if="time_wrap_flag" class="picker_wrap">
+            <transition name="slide-fade">
+                <mt-picker v-if="time_flag" class="b_picker" :slots="time_slots" @change="onTimeValueChange"></mt-picker>
+            </transition>
+        </div>
         <div v-tap="{ methods: closeLocaPicker }" v-if="loca_wrap_flag" class="picker_wrap">
             <transition name="slide-fade">
                 <mt-picker v-if="loca_flag" class="b_picker" :slots="local_slots" @change="onLocaValuesChange"></mt-picker>
@@ -74,10 +79,13 @@ export default {
             loca_wrap_flag: false,
             type_flag: false,
             type_wrap_flag: false,
+            time_flag:false,
+            time_wrap_flag:false,
             local_slots: [
                 {
                 flex: 1,
-                values: ['北京', '上海', '广州', '深圳', '天津', '武汉'],
+                //
+                values: ['江岸区', '江汉区', '硚口区', '汉阳区', '武昌区', '青山区','洪山区','蔡甸区','江夏区','黄陂区','新洲区'],
                     className: 'local_slots',
                     textAlign: 'center'
                 }
@@ -90,30 +98,19 @@ export default {
                     textAlign: 'center'
                 }
             ],
+            time_slots:[
+                {
+                    flex: 1,
+                    values: ['1天后', '2天后', '3天后', '4天后','5天后','6天后','7天后','8天后'],
+                    className: 'type_slots',
+                    textAlign: 'center',
+                    visibleItemCount: 4,
+                }
+            ],
             workers:""
 		}
   	},
 	methods: {
-        openPicker() {
-            this.$refs.picker.open();
-        },
-        //按时间
-        handleConfirm(value ){
-            // alert(1)
-            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=time_list',
-            {
-                account: "0",
-                time: value
-            },
-            {emulateJSON: true}).then((response) => {
-                if(response.status == "200"){
-                    console.log(response.body.data.length)
-                    this.workers = response.body.data
-                }
-            }, (response) => {
-                    // error callback 
-            })
-        },
         openLocaPicker() {
             this.loca_wrap_flag = true
             this.loca_flag = true
@@ -124,6 +121,7 @@ export default {
             setTimeout(() => {
                 self.loca_wrap_flag = false
             },100)
+            console.log(this.local)//
             this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=address_list',
             {
                 account: "0",
@@ -131,6 +129,30 @@ export default {
             },
             {emulateJSON: true}).then((response) => {
 
+            }, (response) => {
+                    // error callback 
+            })
+        },
+        openTimePicker(){
+            this.time_wrap_flag = true
+            this.time_flag = true
+        },
+        closeTimePicker(){
+            this.time_flag = false
+            setTimeout(()=>{
+                this.time_wrap_flag = false
+            },200)
+            // this.changeAcceptDuty(this.time[0])
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=time_list',
+            {
+                account: "0",
+                time: this.changeAcceptDuty(this.time[0]),
+            },
+            {emulateJSON: true}).then((response) => {
+                if(response.status == "200"){
+                    // console.log(response.body.data.length)
+                    this.workers = response.body.data
+                }
             }, (response) => {
                     // error callback 
             })
@@ -165,6 +187,9 @@ export default {
             // this.loca_flag = false
             this.type = picker.getValues()
         },
+        onTimeValueChange(picker,values) {
+            this.time = picker.getValues()
+        },
         slotByRate(){
             this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
             {
@@ -188,6 +213,7 @@ export default {
             // console.log(url)
             return HOST_CONFIG.imageIp+url;
         },
+        //工具函数
         workerType(type){
             // console.log(typeof type)
             //4油漆工 5泥瓦工 6水电工 7木工
@@ -206,6 +232,7 @@ export default {
                     break;
             }
         },
+        //工具函数
         workerIdentify(user_is_identify){
             //0未实名认证 1审核通过 2上传等待审核 3审核未通过
             switch(user_is_identify){
@@ -223,6 +250,13 @@ export default {
                     break;
             }
         },
+        //获取第几天接单的数字
+        changeAcceptDuty(str){
+            // console.log("".split.call(str,""))
+            let time = "".split.call(str,"")
+            return [].shift.call(time) 
+        },
+        //改变是否认证过的颜色
         identify(user_is_identify){
             if(user_is_identify == "1")
                 return true;
@@ -243,12 +277,6 @@ export default {
     }
 }
 </script>
-.authed {
-    color:rgb(76,175,80);
-}
-.unauthed {
-    color: rgb(255,152,0);
-}
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .top_menue_item {
