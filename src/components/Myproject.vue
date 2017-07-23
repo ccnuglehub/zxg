@@ -1,10 +1,10 @@
 <template>
-	<div class="container">
+	<div v-infinite-scroll="onScroll" infinite-scroll-disabled="true" infinite-scroll-distance="22" class="container">
 		<Chead :msg="top_title"></Chead>
 		<div class="list_container">
 			<div class="switch">
-				<div v-tap="{ methods: getProgress }" class="switch_item switch_item_left">进行中</div>
-				<div v-tap="{ methods: getFinished }" class="switch_item switch_item_right">已完成</div>
+				<div v-tap="{ methods: getProgressInit }" class="switch_item switch_item_left">进行中</div>
+				<div v-tap="{ methods: getFinishedInit }" class="switch_item switch_item_right">已完成</div>
 			</div>
 			<div v-for="(item,index) in projects" :key="index" v-tap="{ methods: goDetail, params: item }" class="itemlist">
 				<div class="process" v-text='process?"进行中":"已完成"' :style="getStyle(process)"></div>
@@ -32,11 +32,16 @@ export default{
 		return{
 			top_title: "我的项目",
 			process: false,
-			projects: {}
+			projects: [],
+			page: 0,
+			getDataFn(){
+				console.log('这是一个函数！')
+			},
+			get_data_flag: true
 		}
 	},
 	methods:{
-		//改变完成字体颜色
+		//改变完成字体颜色 
 		getStyle(process){
 			if(process){
 				return{
@@ -49,54 +54,64 @@ export default{
 				}
 			}
 		},
+		getProgressInit(){
+			this.page = 0
+			this.getDataFn = this.getProgress
+			this.getProgress()
+		},
 		getProgress(){
 			this.process = true
+			this.get_data_flag =false
 			this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
 			{
-				acount: "0",
+				account: this.page,
 				openid: "2adsfad1231",
 				project_status: "0"
-			}
-			,
+			},
 			{emulateJSON: true}).then((response) => {
-				this.projects = response.body.data
+				this.projects = this.projects.concat(response.body.data)
+				this.get_data_flag = true
+				console.log(this.projects)
 			}, (response) => {
 						// error callback 
 			})
 		},
+		getFinishedInit(){
+			this.page = 0
+			this.getDataFn = this.getFinished
+			this.getFinished()
+		},
 		getFinished(){
+			this.get_data_flag =false
 			this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
 			{
-				account: "0",
+				account: this.page,
 				openid: "2adsfad1231",
 				project_status: "1"
 			}
 			,
 			{emulateJSON: true}).then((response) => {
 				this.process = false
-				this.projects = response.body.data
+				this.projects = this.projects.concat(response.body.data)
+				this.get_data_flag = true
+				console.log(response)
 			}, (response) => {
 						// error callback 
 			})
 		},
 		goDetail(item){
 			this.$router.push({ name: 'project_detail', params: { item: item.params }})
+		},
+		onScroll(){
+			if(this.get_data_flag) {
+				this.page++
+				this.getDataFn()
+			}
 		}
 	},
 	created(){
-		this.process = true
-        this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
-		{
-			acount: "0",
-			openid: "2adsfad1231",
-			project_status: "0"
-		}
-		,
-		{emulateJSON: true}).then((response) => {
-			this.projects = response.body.data
-		}, (response) => {
-                    // error callback 
-        })
+		this.getDataFn = this.getProgress
+		this.getProgress()
     },
 	components: {
 		Chead,
@@ -111,8 +126,9 @@ export default{
 	background: rgb(237,237,237);
 }
 .list_container{
-	height: 85vh;
+	min-height: 100vh;
 	margin:0 2.5vw;
+	margin-bottom: 60px;
 	overflow-y: scroll;
 
 }

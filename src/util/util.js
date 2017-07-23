@@ -58,6 +58,7 @@ const changeType = val => {
             break;
     }
 }
+
 const changeType2Number = val => {
      switch(val){
         case "油漆工":
@@ -73,7 +74,7 @@ const changeType2Number = val => {
             return "7";
             break;
     }
-}
+
 
 const changeRate2Number = val =>{
     if(val instanceof Array){
@@ -90,5 +91,4 @@ export {
     changeDate,
     changeType,
     changeType2Number,
-    changeRate2Number
 }
