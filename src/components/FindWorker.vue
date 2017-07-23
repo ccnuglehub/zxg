@@ -24,11 +24,12 @@
                 <img class="work_photo" :src="workerAvatar(worker.user_avatar)">
                 <div class="work_info lb_item">
                     <div class="work_info_top">
-                        <div class="lb_item worker_type">{{workerType(worker.user_type)}}</div>
+                        <div class="lb_item worker_type">{{workerType2Word(worker.user_type)}}</div>
                         <div class="lb_item worker_name">{{worker.user_name}}</div>
                         <div class="lb_item worker_auth" :class="{ unauthed: !identify(worker.user_is_identify), authed:identify(worker.user_is_identify)}">{{workerIdentify(worker.user_is_identify)}}</div>
                     </div>
-                    <Rate allow-half v-model="worker.worker_average_rate"></Rate>
+                    <!-- str2Num(worker.worker_average_rate) -->
+                    <Rate allow-half disabled v-model.number="worker.worker_average_rate"></Rate>
                     <div class="work_info_bottom">
                         <div class="lb_item worker_region">{{worker.user_address}}</div>
                         <div class="lb_item">已接单：{{worker.worker_orders_count}}</div>
@@ -66,12 +67,14 @@
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import {HOST_CONFIG} from '@/api/config/api_config'
+import {changeType2Number,changeRate2Number} from '@/util/util'
 export default {
   	name: 'work',
   	data () {
     	return {
             top_title: '找工人',
       		valueHalf: 4,
+            rateValue: 3,
             time:'',
             local: '',
             type: '',
@@ -87,7 +90,8 @@ export default {
                 //
                 values: ['江岸区', '江汉区', '硚口区', '汉阳区', '武昌区', '青山区','洪山区','蔡甸区','江夏区','黄陂区','新洲区'],
                     className: 'local_slots',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    visibleItemCount: 4
                 }
             ],
             type_slots: [
@@ -119,16 +123,19 @@ export default {
             this.loca_flag = false
             var self = this
             setTimeout(() => {
-                self.loca_wrap_flag = false
-            },100)
-            console.log(this.local)//
+                this.loca_wrap_flag = false
+            },200)
+            // console.log(this.local)//
+            // alert(1)
             this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=address_list',
             {
                 account: "0",
                 address: this.local[0]
             },
             {emulateJSON: true}).then((response) => {
-
+                if(response.status == 200){
+                    this.workers  = changeRate2Number(response.body.data)
+                }
             }, (response) => {
                     // error callback 
             })
@@ -151,7 +158,7 @@ export default {
             {emulateJSON: true}).then((response) => {
                 if(response.status == "200"){
                     // console.log(response.body.data.length)
-                    this.workers = response.body.data
+                    this.workers = changeRate2Number(response.body.data)
                 }
             }, (response) => {
                     // error callback 
@@ -166,15 +173,17 @@ export default {
             this.type_flag = false
             var self = this
             setTimeout(() => {
-                self.type_wrap_flag = false
+                this.type_wrap_flag = false
             },100)
             this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=type_list',
             {
                 account: "0",
-                type: this.type[0]
+                user_type: changeType2Number(this.type[0])
             },
             {emulateJSON: true}).then((response) => {
-
+                if(response.status == 200){
+                    this.workers = changeRate2Number(response.body.data)
+                }
             }, (response) => {
                     // error callback 
             })
@@ -198,7 +207,7 @@ export default {
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
                     // console.log(response.body)
-                    this.workers = response.body.data;
+                    this.workers = changeRate2Number(response.body.data)
 
                 }
             }, (response) => {
@@ -214,7 +223,7 @@ export default {
             return HOST_CONFIG.imageIp+url;
         },
         //工具函数
-        workerType(type){
+        workerType2Word(type){
             // console.log(typeof type)
             //4油漆工 5泥瓦工 6水电工 7木工
             switch(type){
@@ -232,6 +241,7 @@ export default {
                     break;
             }
         },
+
         //工具函数
         workerIdentify(user_is_identify){
             //0未实名认证 1审核通过 2上传等待审核 3审核未通过
@@ -261,16 +271,43 @@ export default {
             if(user_is_identify == "1")
                 return true;
             else return false;
-        }
+        },
+
+        
 	},
     created(){
-        // this.$http.post('url', data,
-        //     {emulateJSON: true}).then((response) => {
+        this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
+            {
+                account: "0"
+            },
+            {emulateJSON: true}).then((response) => {
+                if(response.status == 200){
+                    // console.log(response.body)
+                    this.workers = changeRate2Number(response.body.data)
 
-        //     }, (response) => {
-        //             // error callback 
-        // })
+                }
+            }, (response) => {
+                    // error callback 
+            })
     },
+    computed:{
+        str2Num(value) {
+          // if(typeof value == "string"){
+          //   return isNaN(parseFloat(value)) ? 3 : parseFloat(value)
+          // }else if( typeof value == "number"){
+          //   if(value >0 && value <=5){
+          //       return value
+          //   }else{
+          //     return 3
+          //   }
+          // }
+          return 1
+        },
+
+    },
+    filters: {
+        
+      },
     components: {
         Chead,
         Menue,

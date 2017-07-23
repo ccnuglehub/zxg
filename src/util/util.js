@@ -58,11 +58,37 @@ const changeType = val => {
             break;
     }
 }
+const changeType2Number = val => {
+     switch(val){
+        case "油漆工":
+            return "4";
+            break;
+        case "泥瓦工":
+            return "5";
+            break;
+        case "水电工":
+            return "6";
+            break;
+        case "木工":
+            return "7";
+            break;
+    }
+}
 
+const changeRate2Number = val =>{
+    if(val instanceof Array){
+        for(let i =0,length = val.length;i < length;i++){
+            val[i].worker_average_rate = parseFloat(val[i].worker_average_rate)
+        }
+        return val
+    }
+}
 export {
 	checkPhone,
     checkName,
     checkEmpty,
     changeDate,
-    changeType
+    changeType,
+    changeType2Number,
+    changeRate2Number
 }
