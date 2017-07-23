@@ -5,7 +5,9 @@
 			<img class="person_head" src="../assets/people.png">
 		</div>
 		<div class="abstract">
-			<div class="personal_abstract">个人简介:</div>
+			<div class="personal_abstract">个人简介:
+				<span class="description txt_ell">{{ person_data.worker_description }}</span>
+			</div>
 			<div class="personal_detail">
 				<!--<span class="name">商总监</span>-->
 				<span class="type">油漆工</span>
@@ -52,12 +54,20 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
+import { mapState } from 'vuex'
+// import { mapState, mapActions, mapGetters } from 'vuex'
 export default{
 	data(){
 		return{
 			top_title: '个人中心',
 			dot:true,
+			person_data: {}
 		}
+	},
+	computed: {
+		...mapState([
+			'xmjl_info',
+		])
 	},
 	methods:{
 		goInfo(){
@@ -71,6 +81,9 @@ export default{
 		},
 	},
 	created(){
+		if(this.xmjl_info) {
+			this.person_data.worker_description = this.xmjl_info.worker_description
+		}
         // this.$http.post('url', data,
         //     {emulateJSON: true}).then((response) => {
                 
@@ -103,12 +116,11 @@ export default{
 	margin-top: 4vh;
 }
 .abstract{
-	height: 15.8vh;
 	background: rgb(134,210,198);
 	margin-bottom: 2.5vh;
 	color: #fff;
-	padding: 0 0 0 4.8vw;
-	font-size: 16px;
+	padding: 5px 0 5px 9.2vw;
+	font-size: 14px;
 	text-align: left;
 
 }
@@ -116,7 +128,7 @@ export default{
 .personal_number,
 .personal_detail {
 	font-weight: bold;
-	line-height: 34px;
+	line-height: 28px;
 }
 .personal_abstract,
 .personal_number,
@@ -148,11 +160,16 @@ export default{
     display: block;
     clear: both;
 }
- .demo-badge{
+.demo-badge{
 	height: 3.4vh;
 	background: #eee;
 	border-radius: 3px;
 	display: inline-block;
 	size: 10px;
+}
+.description {
+	padding-left: 2px;
+	font-weight: normal;
+	font-size: 13px;
 }
 </style>

@@ -6,15 +6,15 @@
 				<div v-tap="{ methods: getProgress }" class="switch_item switch_item_left">进行中</div>
 				<div v-tap="{ methods: getFinished }" class="switch_item switch_item_right">已完成</div>
 			</div>
-			<div v-tap="{ methods: goDetail }" class="itemlist">
+			<div v-for="(item,index) in projects" :key="index" v-tap="{ methods: goDetail, params: item }" class="itemlist">
 				<div class="process" v-text='process?"进行中":"已完成"' :style="getStyle(process)"></div>
 				<div class="project_abstract">
-					<span class="project_name">{{project_name}}</span>
-					<span class="project_address">{{project_address}}</span>
+					<span class="project_name">{{ item.project_name }}</span>
+					<span class="project_address">{{ item.project_address }}</span>
 				</div>
 				<div class="project_meta">
-					<span class="project_people">{{project_people}}位工友参与</span>
-					<span class="project_time">{{project_time}}</span>
+					<span class="project_people">{{ item.project_people }}位工友参与</span>
+					<span class="project_time">{{ item.project_time }}</span>
 				</div>
 			</div>
 		</div>
@@ -25,15 +25,14 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
+import {HOST_CONFIG} from '@/api/config/api_config'
+// import { mapState, mapActions, mapGetters } from 'vuex'
 export default{
 	data(){
 		return{
 			top_title: "我的项目",
-			process:false,
-			project_name:"青青美炉石面板",
-			project_address:"江岸区",
-			project_people:"5",
-			project_time:"2017.6.26"
+			process: false,
+			projects: {}
 		}
 	},
 	methods:{
@@ -51,47 +50,50 @@ export default{
 			}
 		},
 		getProgress(){
-			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=project_list',
+			this.process = true
+			this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
 			{
 				acount: "0",
-				openid: "",
+				openid: "2adsfad1231",
 				project_status: "0"
 			}
 			,
 			{emulateJSON: true}).then((response) => {
-				console.log(response)
+				this.projects = response.body.data
 			}, (response) => {
 						// error callback 
 			})
 		},
 		getFinished(){
-			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=project_list',
+			this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
 			{
-				acount: "0",
-				openid: "",
+				account: "0",
+				openid: "2adsfad1231",
 				project_status: "1"
 			}
 			,
 			{emulateJSON: true}).then((response) => {
-				console.log(response)
+				this.process = false
+				this.projects = response.body.data
 			}, (response) => {
 						// error callback 
 			})
 		},
-		goDetail(){
-			this.$router.push('project_detail')
+		goDetail(item){
+			this.$router.push({ name: 'project_detail', params: { item: item.params }})
 		}
 	},
 	created(){
-        this.$http.post('http://101.201.68.200/zxg/weixin/index?c=project&f=project_list',
+		this.process = true
+        this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
 		{
 			acount: "0",
-			openid: "",
+			openid: "2adsfad1231",
 			project_status: "0"
 		}
 		,
 		{emulateJSON: true}).then((response) => {
-			console.log(response)
+			this.projects = response.body.data
 		}, (response) => {
                     // error callback 
         })

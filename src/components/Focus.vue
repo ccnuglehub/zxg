@@ -2,10 +2,10 @@
     <div class="wrap">
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="focus">
-            <div class="item_list">
-                <div class="type item">油漆工</div>
-                <div class="name item">李东波</div>
-                <div class="free_time item">5月5日后可接单</div>
+            <div v-tap="{ methods: goWorkerDetail, params: item }" v-for="(item,index) in focus_list" :key="index" class="item_list">
+                <div class="type item">{{ changeType(item.user_type) }}</div>
+                <div class="name item">{{ item.user_name }}</div>
+                <div class="free_time item txt_ell">{{  new Date().getMonth() + 1 + '月' + ( parseInt(new Date().getDate()) + parseInt(item.worker_accept_time)) + '日后可接单' }}</div>
             </div>
         </div>
     </div>
@@ -13,24 +13,34 @@
 
 <script>
 import Chead from './common/Header.vue'
+import { changeType } from '../util/util.js'
+// import { mapState, mapActions, mapGetters } from 'vuex'
+
 export default {
     data(){
         return {
-            top_title: '我的关注'
+            top_title: '我的关注',
+            focus_list: []
         }
     },
     created(){
         this.$http.post('http://101.201.68.200/zxg/weixin/index?c=focus&f=focus_list', {
-	        open_id: ""
+	        open_id: "2adsfad1231"
         },
         {emulateJSON: true}).then((response) => {
-            console.log(response)
+            this.focus_list = response.body.data
         }, (response) => {
                     // error callback 
         })
     },
     components: {
         Chead,
+    },
+    methods: {
+        changeType,
+        goWorkerDetail(arg){
+            this.$router.push({ name: 'worker_detail', params: { focus_worker: arg.params }})
+        }
     }
 }
 </script>
@@ -45,7 +55,7 @@ export default {
     width: 100vw;
     font-size: 0;
     text-align: left;
-    padding-left: 16vw;
+    padding-left: 10vw;
     background-image:
     linear-gradient(rgb(221,221,221) 1px, transparent 0); 
     background-size: 55px 55px;
@@ -54,7 +64,7 @@ export default {
     color: rgb(8, 194, 165);
 }
 .item {
-    font-size: 18px;
+    font-size: 16px;
     display: inline-block;
     vertical-align: middle;
 }
@@ -65,8 +75,11 @@ export default {
 .type {
     width: 65px;
 }
+.free_time {
+    width: 145px;
+}
 .name {
-    width: 80px;
+    width: 66px;
 }
 .item_list {
     line-height: 55px;

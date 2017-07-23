@@ -2,31 +2,47 @@
 	<div class="worker_detail">
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="item_list_item">
-            <img class="work_photo" src="../assets/people.png">
+            <img class="work_photo" :src="worker_detail.user_avatar">
             <div class="work_info lb_item">
                 <div class="work_info_top">
-                    <div class="lb_item worker_type">油漆工</div>
-                    <div class="lb_item worker_name">王凯</div>
+                    <div class="lb_item worker_type">{{ changeType(worker_detail.user_type) }}</div>
+                    <div class="lb_item worker_name">{{ worker_detail.user_name }}</div>
                 </div>
-                <Rate allow-half v-model="valueHalf"></Rate>
+                <Rate allow-half v-model="worker_detail.worker_average_rate"></Rate>
                 <div class="work_info_bottom">
-                    <div class="lb_item worker_auth">已实名认证</div>
-                    <div class="lb_item">已接单：149</div>
+                    <div class="lb_item worker_auth">{{ worker_detail.user_is_identify == 1 ? '已实名认证' : '未实名认证'}}</div>
+                    <div class="lb_item">已接单：{{ worker_detail.worker_orders_count }}</div>
                 </div>
             </div>
         </div>
         <div class="worker_info">
             <div class="worker_info_item">
-                地址：
+                地址：{{ worker_detail.user_address }}
             </div>
             <div class="worker_info_item">
-                电话：
+                电话：{{ worker_detail.user_tel }}
             </div>
-            <div class="worker_info_item">
-                个人简介：
+            <div class="worker_info_item description">
+                个人简介：{{ worker_detail.worker_description }}
             </div>
         </div>
-        <div class="evaluate_list">
+         <div v-for="(item, index) in worker_comments" class="evaluate_list">
+            <h1 class="evaluate_title">客户评价</h1>
+            <div class="evaluate_item">
+                <div class="evaluate_cont">{{ item.rate_content }}</div>
+                <div class="evaluate_etc">
+                    <div class="evaluate_etc_top">
+                        <div class="evaluate_from fsz">项目经理：{{ item.rate_name }}</div>
+                        <div class="evaluate_score fsz">评分：{{ item.rate }}</div>
+                    </div>
+                    <div class="evaluate_etc_bottom">
+                        <div class="evaluate_xm fsz txt_ell">项目名称：{{ item.rate_project_name }}</div>
+                        <div class="evaluate_time fsz txt_ell">{{ item.rate_time }}</div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <!-- <div class="evaluate_list">
             <h1 class="evaluate_title">客户评价</h1>
             <div class="evaluate_item">
                 <div class="evaluate_cont">设置属性 autoplay 可以自动轮播，同时可以设置属性 autoplay-speed 改变自动播放的速度.</div>
@@ -36,36 +52,51 @@
                         <div class="evaluate_score fsz">评分：5</div>
                     </div>
                     <div class="evaluate_etc_bottom">
-                        <div class="evaluate_xm fsz">项目名称：青青美炉装饰面板，轻质隔墙装修</div>
-                        <div class="evaluate_time fsz">2017.3.25 15:30</div>
+                        <div class="evaluate_xm fsz txt_ell">项目名称：青青美炉装饰面板，轻质隔墙装修</div>
+                        <div class="evaluate_time fsz txt_ell">2017.3.25 15:30</div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 	</div>
 </template>
 
 <script>
 import Chead from './common/Header.vue'
+import { changeType } from '../util/util.js'
+import { HOST_CONFIG } from '@/api/config/api_config'
+
 export default {
   	name: 'worker_detail',
   	data () {
     	return {
             top_title: '工人详情',
-      		valueHalf: 4
+            valueHalf: 4,
+            worker_detail: {},
+            worker_comments:[]
 		}
   	},
     created(){
-        this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=rate_detail',
-        {
-            account: "0",
-            user_id: "2adsfad1231"
-        },
-        {emulateJSON: true}).then((response) => {
-            console.log(response)
-        }, (response) => {
-                // error callback 
-        })
+        if(this.$route.params.focus_worker) {
+            this.worker_detail = this.$route.params.focus_worker
+            this.worker_detail.worker_average_rate = parseInt(this.worker_detail.worker_average_rate)
+        }
+        this.getComments(this.worker_detail.user_id)
+    },
+    methods: {
+        changeType,
+        getComments(user_id){
+            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=rate_detail',
+            {
+                account: "0",
+                user_id: user_id
+            },
+            {emulateJSON: true}).then((response) => {
+                this.worker_comments = this.response.body.data
+            }, (response) => {
+                    // error callback 
+            })
+        }
     },
     components: {
         Chead,
@@ -167,6 +198,9 @@ export default {
 }
 .evaluate_etc_bottom {
     font-size: 0;
+}
+.description {
+    line-height: 1.2em;
 }
 </style>
 
