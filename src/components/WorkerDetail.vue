@@ -1,5 +1,5 @@
 <template>
-	<div class="worker_detail">
+	<div v-infinite-scroll="onScroll" infinite-scroll-disabled="true" infinite-scroll-distance="22" class="worker_detail">
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="item_list_item">
             <img class="work_photo" :src="worker_detail.user_avatar">
@@ -26,7 +26,7 @@
                 个人简介：{{ worker_detail.worker_description }}
             </div>
         </div>
-         <div v-for="(item, index) in worker_comments" class="evaluate_list">
+         <div v-for="(item, index) in worker_comments" :key="index" class="evaluate_list">
             <h1 class="evaluate_title">客户评价</h1>
             <div class="evaluate_item">
                 <div class="evaluate_cont">{{ item.rate_content }}</div>
@@ -71,12 +71,14 @@ export default {
   	data () {
     	return {
             top_title: '工人详情',
-            valueHalf: 4,
-            worker_detail: {},
-            worker_comments:[]
+            worker_detail: {}, 
+            worker_comments:[],
+            page: 0,
+            get_data_flag: true
 		}
   	},
     created(){
+        this.page = 0
         if(this.$route.params.focus_worker) {
             this.worker_detail = this.$route.params.focus_worker
             this.worker_detail.worker_average_rate = parseInt(this.worker_detail.worker_average_rate)
@@ -86,16 +88,24 @@ export default {
     methods: {
         changeType,
         getComments(user_id){
+            this.get_data_flag = false
             this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=rate_detail',
             {
-                account: "0",
+                account: this.page,
                 user_id: user_id
             },
             {emulateJSON: true}).then((response) => {
-                this.worker_comments = this.response.body.data
+                this.worker_comments = response.body.data
+                this.get_data_flag = true
             }, (response) => {
                     // error callback 
             })
+        },
+        onScroll(){
+            if(this.get_data_flag) {
+                this.page++
+                this.getComments(this.worker_detail.user_id)
+            }
         }
     },
     components: {
@@ -107,7 +117,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .worker_detail {
-     height: 100vh;
+     min-height: 100vh;
+     margin-bottom: 50px;
      background:#fff;
      padding-top: 1px;
      font-size: 0;

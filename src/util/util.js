@@ -58,11 +58,23 @@ const changeType = val => {
             break;
     }
 }
+const getScrollPosition = val => {
+    const scroll_height = document.body.scrollTop
+    const doc_height = document.body.scrollHeight
+    console.log(scroll_height)
+    // if (height == doc_height && this.fetch_flag == true) {
+    // 	// doSomething
+    // }
+    // if (scroll_height == 0 && this.fetch_flag == true) {
+    // 	// doSomething
+    // }
+}
 
 export {
 	checkPhone,
     checkName,
     checkEmpty,
     changeDate,
-    changeType
+    changeType,
+    getScrollPosition
 }
