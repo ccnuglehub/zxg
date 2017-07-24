@@ -74,12 +74,14 @@ const changeType2Number = val => {
             return "7";
             break;
     }
+
 }
 // const timer = (val, fn) => {
 //     if()
 //     var clock = setTimeout(fn, val)
 //     return clock
 // }
+
 
 const changeRate2Number = val =>{
     if(val instanceof Array){
@@ -96,5 +98,7 @@ export {
     changeDate,
     changeType,
     changeType2Number,
+
     changeRate2Number
+
 }
