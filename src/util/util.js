@@ -75,6 +75,11 @@ const changeType2Number = val => {
             break;
     }
 }
+// const timer = (val, fn) => {
+//     if()
+//     var clock = setTimeout(fn, val)
+//     return clock
+// }
 
 const changeRate2Number = val =>{
     if(val instanceof Array){

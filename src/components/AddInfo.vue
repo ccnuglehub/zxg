@@ -24,7 +24,7 @@
 <script>
 import Chead from './common/Header.vue'
 import {HOST_CONFIG} from '@/api/config/api_config'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
     name: 'add_info',
     data(){
@@ -37,6 +37,14 @@ export default {
                 worker_description: "",
             }
         }
+    },
+    computed: {
+        ...mapState([
+            'xmjl_info'
+        ])
+    },
+    created(){
+        this.form_data.open_id = this.xmjl_info.open_id
     },
     methods: {
         ...mapActions([

@@ -85,7 +85,7 @@ import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import {API_ROUTER_CONFIG,API_ASSETS_CONFIG,HOST_CONFIG} from '@/api/config/api_config'
 import { changeDate, changeType } from '../util/util.js'
-// import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   	name: 'project_detail',
   	data () {
@@ -95,6 +95,7 @@ export default {
             top_title: '项目详情',
             work_list: [],
             p2w_id: '',
+            open_id: '',
             valueHalf: 4.5,
             cnotice_flag: false,
             evaluate_flag: false,
@@ -112,6 +113,11 @@ export default {
             }
         }
     },
+    computed: {
+        ...mapState([
+            'xmjl_info'
+        ])
+    },
     filters: {
         getStatus: function(status){
             if(status == 0) {
@@ -124,6 +130,9 @@ export default {
                 return '已评价'
             }
         }
+    },
+    created(){
+        this.open_id = this.xmjl_info.open_id
     },
     components: {
         CNotice,
@@ -167,7 +176,7 @@ export default {
             this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=projec_worker_list',
             {
                 p2w_project_id: project_id,
-                open_id: '1adf123adaf'
+                open_id: this.open_id
             }
             ,
             {emulateJSON: true}).then((response) => {
