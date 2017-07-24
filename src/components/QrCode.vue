@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="qrcode">
         <!-- <img src="logo.png"> -->
         <h1>{{ msg }}</h1>
         <!--<div v-vue-q-art="config"></div>-->
@@ -15,15 +15,15 @@
     components: {
       VueQArt
     },
-    name: 'app',
+    name: 'qrcode',
     data () {
       return {
-        msg: 'the Vue 2.x directive for QArt.js',
+        msg: '请扫码添加工人进项目组',
         config: {
-          value: 'https://www.baidu.com',
+          value: 'https://sina.com.cn',
           imagePath: '../../static/logo.png',
           // imagePath:'../assets/logo.png',
-          filter: 'color',
+          // filter: 'color',
           size: 500
         },
         downloadButton: false
