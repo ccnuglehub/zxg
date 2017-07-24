@@ -64,7 +64,7 @@
 <script>
 import Chead from './common/Header.vue'
 import { changeType } from '../util/util.js'
-import { HOST_CONFIG } from '@/api/config/api_config'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 
 export default {
   	name: 'worker_detail',
@@ -89,7 +89,7 @@ export default {
         changeType,
         getComments(user_id){
             this.get_data_flag = false
-            this.$http.post('http://101.201.68.200/zxg/weixin/index?c=worker&f=rate_detail',
+            this.$http.post( API_ROUTER_CONFIG.rate_detail,
             {
                 account: this.page,
                 user_id: user_id
@@ -117,8 +117,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .worker_detail {
-     min-height: 100vh;
-     margin-bottom: 50px;
+     min-height: calc(100vh - 45px);
      background:#fff;
      padding-top: 1px;
      font-size: 0;

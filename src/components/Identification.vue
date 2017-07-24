@@ -45,6 +45,7 @@
 <script>
 import Chead from './common/Header.vue'
 // import { mapState, mapActions, mapGetters } from 'vuex'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 export default {
     data () {
             return {
@@ -124,10 +125,9 @@ export default {
 <style scoped>
 .wrap {
     width: 100%;
-    height: 100%;
 }
 .identification {
-    height: 100vh;
+    min-height: calc(100vh - 45px);
     width: 100vw;
     padding: 0 12px;
 }

@@ -98,7 +98,5 @@ export {
     changeDate,
     changeType,
     changeType2Number,
-
     changeRate2Number
-
 }

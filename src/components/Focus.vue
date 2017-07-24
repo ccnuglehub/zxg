@@ -15,6 +15,7 @@
 import Chead from './common/Header.vue'
 import { changeType } from '../util/util.js'
 import { mapState } from 'vuex'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 export default {
     data(){
         return {
@@ -30,7 +31,7 @@ export default {
     },
     created(){
         this.open_id = this.xmjl_info.open_id
-        this.$http.post('http://101.201.68.200/zxg/weixin/index?c=focus&f=focus_list', {
+        this.$http.post( API_ROUTER_CONFIG.focus_list, {
 	        open_id: this.open_id
         },
         {emulateJSON: true}).then((response) => {

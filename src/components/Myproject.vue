@@ -1,11 +1,11 @@
 <template>
 	<div v-infinite-scroll="onScroll" infinite-scroll-disabled="true" infinite-scroll-distance="22" class="container">
 		<Chead :msg="top_title"></Chead>
+		<div class="switch">
+			<div v-tap="{ methods: getProgressInit }" class="switch_item switch_item_left">进行中</div>
+			<div v-tap="{ methods: getFinishedInit }" class="switch_item switch_item_right">已完成</div>
+		</div>
 		<div class="list_container">
-			<div class="switch">
-				<div v-tap="{ methods: getProgressInit }" class="switch_item switch_item_left">进行中</div>
-				<div v-tap="{ methods: getFinishedInit }" class="switch_item switch_item_right">已完成</div>
-			</div>
 			<div v-for="(item,index) in projects" :key="index" v-tap="{ methods: goDetail, params: item }" class="itemlist">
 				<div class="process" v-text='process?"进行中":"已完成"' :style="getStyle(process)"></div>
 				<div class="project_abstract">
@@ -25,7 +25,7 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
-import {HOST_CONFIG} from '@/api/config/api_config'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { mapState } from 'vuex'
 export default {
 	data() {
@@ -68,7 +68,7 @@ export default {
 		getProgress(){
 			this.process = true
 			this.get_data_flag =false
-			this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
+			this.$http.post( API_ROUTER_CONFIG.project_list,
 			{
 				account: this.page,
 				openid: this.openid,
@@ -89,7 +89,7 @@ export default {
 		},
 		getFinished(){
 			this.get_data_flag =false
-			this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
+			this.$http.post( API_ROUTER_CONFIG.project_list,
 			{
 				account: this.page,
 				openid: "2adsfad1231",
@@ -133,11 +133,11 @@ export default {
 	background: rgb(237,237,237);
 }
 .list_container{
-	min-height: 100vh;
+	min-height: 92vh;
 	margin:0 2.5vw;
 	margin-bottom: 60px;
 	overflow-y: scroll;
-
+	padding-top: 47px;
 }
 .itemlist{
 	height: 20.3vh;
@@ -195,6 +195,11 @@ export default {
 .switch {
 	width: 100%;
 	font-size: 0;
+	position: fixed;
+	top: 45px;
+	left: 0;
+	padding-bottom: 6px;
+	background: rgb(237,237,237);
 }
 .switch_item {
 	font-size: 14px;

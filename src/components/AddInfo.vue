@@ -23,7 +23,7 @@
 
 <script>
 import Chead from './common/Header.vue'
-import {HOST_CONFIG} from '@/api/config/api_config'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { mapActions, mapState } from 'vuex'
 export default {
     name: 'add_info',
@@ -52,7 +52,7 @@ export default {
 		]),
         addInfo(){
             console.log(this.form_data)
-            this.$http.post(HOST_CONFIG.serverIp+'?c=register&f=update_user', 
+            this.$http.post( API_ROUTER_CONFIG.update_user, 
             this.form_data,
 			{emulateJSON: true}).then((response) => {
 				if(response.body.status == 1) {
@@ -72,7 +72,7 @@ export default {
 
 <style scoped>
 .add_info {
-    height: 100Vh;
+    min-height: calc(100vh - 45px);
     width: 100vw;
     background: rgb(239,239,239);
     font-size: 14px;
