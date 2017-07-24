@@ -12,7 +12,7 @@
                         <div class="p_local">
                             <label class="p_lable p_lable_bottom">项目地点</label>
                             <Select v-model="form_data.project_address_detail" style="width:100px">
-                                <Option v-for="item in cityList" :value="item.value" :key="item">{{ item.label }}</Option>
+                                <Option v-for="(item, index) in cityList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                             <img class="qr_logo" src="../assets/qr_code.png">
                         </div>
@@ -34,7 +34,7 @@ import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import {HOST_CONFIG} from '@/api/config/api_config'
 
-// import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   	name: 'add_project',
   	data () {
@@ -88,10 +88,17 @@ export default {
                 projec_description: "测试"
             }
 		}
-  	},
+    },
+    computed: {
+        ...mapState([
+            'xmjl_info'
+        ])
+    },
 	methods: {
 		showNotice(){
             this.cnotice_flag = true
+            this.form_data.openid = this.xmjl_info.openid
+            console.log(this.form_data.openid)
         },
         postProject(){
             console.log(this.form_data)
