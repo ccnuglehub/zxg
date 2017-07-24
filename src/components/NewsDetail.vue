@@ -16,8 +16,8 @@
 
 <script>
 import Chead from './common/Header.vue'
-import {changeDate} from '@/util/util'
-export default{
+import { changeDate } from '@/util/util'
+export default {
 	data(){
 		return{
 			top_title: '详情',

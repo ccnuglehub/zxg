@@ -69,6 +69,11 @@ const getScrollPosition = val => {
     // 	// doSomething
     // }
 }
+// const timer = (val, fn) => {
+//     if()
+//     var clock = setTimeout(fn, val)
+//     return clock
+// }
 
 export {
 	checkPhone,

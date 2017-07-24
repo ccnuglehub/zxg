@@ -26,19 +26,25 @@
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import {HOST_CONFIG} from '@/api/config/api_config'
-// import { mapState, mapActions, mapGetters } from 'vuex'
-export default{
-	data(){
+import { mapState } from 'vuex'
+export default {
+	data() {
 		return{
 			top_title: "我的项目",
 			process: false,
 			projects: [],
 			page: 0,
+			openid: '',
 			getDataFn(){
 				console.log('这是一个函数！')
 			},
 			get_data_flag: true
 		}
+	},
+	computed: {
+		...mapState([
+			'xmjl_info'
+		])
 	},
 	methods:{
 		//改变完成字体颜色 
@@ -65,7 +71,7 @@ export default{
 			this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_list',
 			{
 				account: this.page,
-				openid: "2adsfad1231",
+				openid: this.openid,
 				project_status: "0"
 			},
 			{emulateJSON: true}).then((response) => {
@@ -110,6 +116,7 @@ export default{
 		}
 	},
 	created(){
+		this.openid = this.xmjl_info.openid
 		this.getDataFn = this.getProgress
 		this.getProgress()
     },

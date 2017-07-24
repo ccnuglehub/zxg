@@ -14,18 +14,24 @@
 <script>
 import Chead from './common/Header.vue'
 import { changeType } from '../util/util.js'
-// import { mapState, mapActions, mapGetters } from 'vuex'
-
+import { mapState } from 'vuex'
 export default {
     data(){
         return {
             top_title: '我的关注',
-            focus_list: []
+            focus_list: [],
+            open_id: '',
         }
     },
+    computed: {
+        ...mapState([
+            'xmjl_info'
+        ])
+    },
     created(){
+        this.open_id = this.xmjl_info.open_id
         this.$http.post('http://101.201.68.200/zxg/weixin/index?c=focus&f=focus_list', {
-	        open_id: "2adsfad1231"
+	        open_id: this.open_id
         },
         {emulateJSON: true}).then((response) => {
             this.focus_list = response.body.data

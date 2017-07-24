@@ -11,7 +11,7 @@ const host_config ={
 }
 
 const api_router_config = {
-	login:host_config.serverIp+"/login",
+	login:host_config.serverIp+"?c=register&f=login",
 	register:host_config.serverIp+"/register",
 	banner:host_config.serverIp+"?c=news&f=banner",
 	newslist:host_config.serverIp+"?c=news&f=news_list&account=0"
