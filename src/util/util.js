@@ -58,16 +58,23 @@ const changeType = val => {
             break;
     }
 }
-const getScrollPosition = val => {
-    const scroll_height = document.body.scrollTop
-    const doc_height = document.body.scrollHeight
-    console.log(scroll_height)
-    // if (height == doc_height && this.fetch_flag == true) {
-    // 	// doSomething
-    // }
-    // if (scroll_height == 0 && this.fetch_flag == true) {
-    // 	// doSomething
-    // }
+
+const changeType2Number = val => {
+     switch(val){
+        case "油漆工":
+            return "4";
+            break;
+        case "泥瓦工":
+            return "5";
+            break;
+        case "水电工":
+            return "6";
+            break;
+        case "木工":
+            return "7";
+            break;
+    }
+
 }
 // const timer = (val, fn) => {
 //     if()
@@ -75,11 +82,23 @@ const getScrollPosition = val => {
 //     return clock
 // }
 
+
+const changeRate2Number = val =>{
+    if(val instanceof Array){
+        for(let i =0,length = val.length;i < length;i++){
+            val[i].worker_average_rate = parseFloat(val[i].worker_average_rate)
+        }
+        return val
+    }
+}
 export {
 	checkPhone,
     checkName,
     checkEmpty,
     changeDate,
     changeType,
-    getScrollPosition
+    changeType2Number,
+
+    changeRate2Number
+
 }
