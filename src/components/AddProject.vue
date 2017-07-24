@@ -32,7 +32,7 @@
 import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
-import {HOST_CONFIG} from '@/api/config/api_config'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 
 import { mapState } from 'vuex'
 export default {
@@ -102,7 +102,7 @@ export default {
         },
         postProject(){
             console.log(this.form_data)
-            this.$http.post(HOST_CONFIG.serverIp + '?c=project&f=add_project',
+            this.$http.post( API_ROUTER_CONFIG.add_project,
             this.form_data,
             {emulateJSON: true}).then((response) => {
                 if(response.body.status == 1) {
@@ -131,11 +131,12 @@ export default {
 <style scoped>
 .wrap {
     width: 100%;
-    min-height: 100%;
+    min-height: calc(100% - 45px);
+    overflow: scroll;
 }
 .add_project {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100vh; 
     background: rgb(239,239,239);
     padding-top: 22px;
     padding-right: 12px;

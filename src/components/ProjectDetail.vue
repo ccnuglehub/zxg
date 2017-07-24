@@ -83,7 +83,7 @@
 <script>
 import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
-import {API_ROUTER_CONFIG,API_ASSETS_CONFIG,HOST_CONFIG} from '@/api/config/api_config'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { changeDate, changeType } from '../util/util.js'
 import { mapState } from 'vuex'
 export default {
@@ -157,7 +157,7 @@ export default {
             this.cnotice_flag = false
         },
         completeProject(project_id){
-            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=project_complete',
+            this.$http.post( API_ROUTER_CONFIG.project_complete,
             {
                 project_id: this.detail.project_id
             }
@@ -173,7 +173,7 @@ export default {
             })
         },
         getWorker(project_id){
-            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=projec_worker_list',
+            this.$http.post( API_ROUTER_CONFIG.projec_worker_list,
             {
                 p2w_project_id: project_id,
                 open_id: this.open_id
@@ -188,7 +188,7 @@ export default {
         },
         deleteWorker(){
             var id = this.p2w_id
-            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=delete_worker',
+            this.$http.post( API_ROUTER_CONFIG.delete_worker,
             {
                 p2w_id: id
             }
@@ -200,7 +200,7 @@ export default {
             })
         },
         Epost(){
-            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=worker_rate',
+            this.$http.post( API_ROUTER_CONFIG.worker_rate,
             form_rate
             ,
             {emulateJSON: true}).then((response) => {
@@ -215,7 +215,7 @@ export default {
             })
         },
         changToComplete(){
-            this.$http.post(HOST_CONFIG.serverIp+'?c=project&f=worker_project_status',
+            this.$http.post( API_ROUTER_CONFIG.worker_project_status,
             {
                 p2w_status: 0,
 	            p2w_id: ""
@@ -248,7 +248,7 @@ export default {
             this.$router.push('qr_code')
         },
         focus(item){
-            this.$http.post(HOST_CONFIG.serverIp+'?c=focus&f=focus_worker',
+            this.$http.post( API_ROUTER_CONFIG.focus_worker,
             {
                 focus_user_id: "1adf123adaf",
                 focused_user_id: item.params.p2w_worker_id

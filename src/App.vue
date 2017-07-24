@@ -29,6 +29,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    padding-top: 45px;
+    box-sizing: border-box;
 }
 .ivu-select-single .ivu-select-selection {
     border: 0;

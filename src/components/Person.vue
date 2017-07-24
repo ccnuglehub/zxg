@@ -101,7 +101,7 @@ export default{
 <style scoped>
 .container{
 	background-color: rgb(239,239,239);
-	height: 100vh;
+	height: calc(100vh - 45px);
 }
 .background{
 	background: url(../assets/personBackground.jpg);

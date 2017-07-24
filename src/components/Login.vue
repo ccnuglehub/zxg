@@ -21,7 +21,7 @@
     </div>
 </template>
 <script>
-import {API_ROUTER_CONFIG} from '@/api/config/api_config'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { checkPhone, checkEmpty } from '../util/util.js'
 import { mapActions } from 'vuex'
 export default {
@@ -84,7 +84,8 @@ export default {
 			if(!this.phone_flag) {
 				return
 			}
-			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=register&f=get_auth_code', {
+			this.$http.post( API_ROUTER_CONFIG.get_auth_code, 
+			{
 				user_tel: this.user_tel
 			},
 			{emulateJSON: true}).then((response) => {
