@@ -1,6 +1,6 @@
 <template>
     <div v-infinite-scroll="onScroll" infinite-scroll-disabled="true" infinite-scroll-distance="22" class="container">
-        <Chead :msg="top_title"></Chead>      
+        <Chead :msg="top_title" :qr="qr_code"></Chead>      
         <div class="carousel">
             <Carousel autoplay>
             <Carousel-item v-for="(item ,index) in banner" :key="index">
@@ -24,9 +24,11 @@
 </template>
 
 <script>
-import {API_ROUTER_CONFIG,API_ASSETS_CONFIG,HOST_CONFIG} from '@/api/config/api_config'
+import { API_ROUTER_CONFIG, API_ASSETS_CONFIG, HOST_CONFIG } from '@/api/config/api_config'
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
+import { mapState } from 'vuex'
+
 export default {
     data () {
         return {
@@ -34,10 +36,19 @@ export default {
             banner:[],
             newslist:[],
             page: 0,
-            get_data_flag: true
+            get_data_flag: true,
+            qr_code: false,
         }
     },
+    computed: {
+		...mapState([
+			'versions'
+		])
+	},
     created(){
+        if(this.versions.is_worker) {
+            this.qr_code = true
+        }
         this.page = 0
     },
     mounted:function(){

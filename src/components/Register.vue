@@ -36,6 +36,30 @@
 				<Option v-for="(item, index) in user_work_type_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div>
+		 <div v-if="versions.is_worker" class="select_box">
+			<label class="select_lable"></label>
+			<Select class="select">
+				<Option v-for="(item, index) in city_list" :value="item.label" :key="index">{{ item.value }}</Option>
+			</Select>
+		</div> 
+		 <div v-if="versions.is_owner" class="n_input_box">
+			<Input class="input" placeholder="请输入房屋地址">
+				<span slot="prepend"><Icon type="location"></Icon></span>
+			</Input>
+			<div class="input error"></div>
+		</div>
+		 <div v-if="versions.is_wy" class="n_input_box">
+			<Input class="input" placeholder="请输入物业公司名称">
+				<span slot="prepend"><Icon type="ios-home"></Icon></span>
+			</Input>
+			<div class="input error"></div>
+		</div>
+		<div v-if="versions.is_wy" class="n_input_box">
+			<Input class="input" placeholder="请输入小区地址">
+				<span slot="prepend"><Icon type="location"></Icon></span>
+			</Input>
+			<div class="input error"></div>
+		</div>  
 		<Button v-tap="{ methods: register }" class="register_bt" type="success" long>注册</Button>
 	</div>
 </template>
@@ -61,48 +85,16 @@ export default {
 			bt_text: '发送验证码',
 			phone_flag: true,
 			name_flag: true,
-			empty_flag: false,
-			user_type_list: [
-				{
-					id: 1,
-					value: '项目经理'
-				},
-				{
-					id: 2,
-					value: '物业公司'
-				},
-				{
-					id: 3,
-					value: '业主'
-				},
-				{
-					id: 4,
-					value: '工友'
-				}
-			],
-			user_work_type_list: [
-				{
-					id: 1,
-					value: '油漆工'
-				},
-				{
-					id: 2,
-					value: '泥瓦工'
-				},
-				{
-					id: 3,
-					value: '水电工'
-				},
-				{
-					id: 4,
-					value: '木工'
-				}
-			]	
+			empty_flag: false
 		}
 	},
 	computed: {
 		...mapState([
-			'xmjl_info'
+			'xmjl_info',
+			'versions',
+			'user_type_list',
+			'user_work_type_list',
+			'city_list'
 		])
 	},
 	created(){
@@ -182,11 +174,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .register {
-	min-height: 100vh;
+	min-height: calc(100vh - 45px);
+	box-sizing: border-box;
 }
 .app_logo {
-	margin-top: 70px;
-	margin-bottom: 56px;
+	margin-top: 36px;
+	margin-bottom: 42px;
 	width: 71%;
 }
 .input {

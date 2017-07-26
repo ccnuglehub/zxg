@@ -4,12 +4,19 @@
             <Icon class="icon" type="ios-arrow-back"></Icon>
         </div>
         <div class="title">{{ msg }}</div>
+        <img v-if="versions.is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
-    props:['msg','icon'],
-  	name: 'header',
+    props:['msg','icon','qr'],
+    name: 'header',
+    computed: {
+		...mapState([
+			'versions'
+		])
+	},
     methods: {
         back(){
             this.$router.go(-1)
@@ -41,5 +48,12 @@ export default {
 }
 .icon {
     font-size: 24px;
+}
+.qr_logo {
+    width: 24px;
+    position: absolute;
+    top: 50%;
+    right: 3.2vw;
+    transform: translateY(-50%);
 }
 </style>

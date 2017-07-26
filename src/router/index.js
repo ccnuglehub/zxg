@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import Visitor from '@/components/Visitor'
 import FindWorker from '@/components/FindWorker'
 import AddProject from '@/components/AddProject'
 import WorkerDetail from '@/components/WorkerDetail'
@@ -81,6 +82,11 @@ export default new Router({
       path: '/menue',
       name: 'menue',
       component:Menue
+    },
+    {
+      path: '/visitor',
+      name: 'visitor',
+      component: Visitor
     },
     {
       path: '/header',

@@ -5,22 +5,32 @@
             <div class="edit_cont">
                 <div class="edit_box">
                     <div class="edit_box_top">
-                        <div class="p_name">
+                        <div v-if="versions.is_xmjl" class="p_name">
                             <label class="p_lable p_lable_top">项目名称</label>
                             <input v-model="form_data.project_name" class="p_input" placeholder="请输入项目名称">
                         </div>
-                        <div class="p_local">
+                        <div v-if="versions.is_xmjl" class="p_local">
                             <label class="p_lable p_lable_bottom">项目地点</label>
                             <Select v-model="form_data.project_address_detail" style="width:100px">
-                                <Option v-for="(item, index) in cityList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                <Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                             <img class="qr_logo" src="../assets/qr_code.png">
                         </div>
+                         <div v-if="versions.is_worker" class="p_local">
+                            <label class="p_lable p_lable_bottom">可接单时间</label>
+                            <Select v-model="form_data.project_address_detail" style="width:100px">
+                                <Option v-for="(item, index) in time_list" :value="item.value" :key="index">{{ item.label }}</Option>
+                            </Select>
+                        </div> 
                         <textarea v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
                     </div>
                     <div class="edit_area"></div>
                 </div>
             </div>
+            <div v-if="versions.is_worker" class="notice_box">
+                <Icon class="icon" type="volume-high"></Icon>
+                <div class="notice">温馨提示：您未发布接单，请发布新的接单</div>
+            </div> 
             <div v-tap="{ methods: showNotice }" class="bt_box">发布</div>
             <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="postProject" :msg="msg"></CNotice>
         </div>
@@ -42,44 +52,6 @@ export default {
             top_title: '项目发布',
             msg: '您确认发布新的项目？',
             cnotice_flag: false,
-      		cityList: [
-                {
-                    value: 'jiangan',
-                    label: '江岸区'
-                },
-                {
-                    value: 'jianghan',
-                    label: '江汉区'
-                },
-                {
-                    value: 'qiaokou',
-                    label: '硚口区'
-                },
-                {
-                    value: 'huangpi',
-                    label: '黄陂区'
-                },
-                {
-                    value: 'dongxihu',
-                    label: '东西湖区'
-                },
-                {
-                    value: 'hongshan',
-                    label: '洪山区'
-                },
-                {
-                    value: 'wuchang',
-                    label: '武昌区'
-                },
-                {
-                    value: 'jiangxia',
-                    label: '江夏区'
-                },
-                {
-                    value: 'hanyang',
-                    label: '汉阳区'
-                }
-            ],
             form_data: {
                 project_name: "测试",
                 openid: "1adf123adaf",
@@ -91,8 +63,16 @@ export default {
     },
     computed: {
         ...mapState([
-            'xmjl_info'
+            'xmjl_info',
+            'versions',
+            'city_list',
+            'time_list'
         ])
+    },
+    created(){
+        if(this.versions.is_worker) {
+            this.top_title = '接单发布'
+        }
     },
 	methods: {
 		showNotice(){
@@ -131,12 +111,11 @@ export default {
 <style scoped>
 .wrap {
     width: 100%;
-    min-height: calc(100% - 45px);
     overflow: scroll;
 }
 .add_project {
     width: 100%;
-    min-height: 100vh; 
+    min-height: calc(100vh - 60px); 
     background: rgb(239,239,239);
     padding-top: 22px;
     padding-right: 12px;
@@ -179,7 +158,7 @@ export default {
     outline: none;
     resize: none;
     font-size: 14px;
-    height: 45vh;
+    min-height: 36vh;
     box-sizing: border-box;
 }
 .bt_box {
@@ -188,7 +167,7 @@ export default {
     border-radius: 50%;
     font-size: 19px;
     line-height: 70px;
-    margin: 2vh auto;
+    margin: 4vh auto;
     background: rgb(8,194,165);
     color: #fff;
     font-weight: 800;
@@ -215,5 +194,20 @@ export default {
     padding: 4vh 0;
     font-size: 16px;
     border-bottom: 1px solid rgb(207,200,207);
+}
+.notice_box {
+    text-align: left;
+    margin-top: 18px;
+}
+.icon {
+    font-size: 18px;
+    vertical-align: top;
+    margin-right: 4px;
+}
+.notice {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 14px;
+    margin-bottom: 12px;
 }
 </style>

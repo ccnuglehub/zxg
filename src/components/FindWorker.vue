@@ -20,7 +20,7 @@
             </div>
 		</div>
         <div class="item_list">
-            <div v-tap="{ methods: goWorkerDetail, index: index }" class="item_list_item" :key="worker" v-for="(worker ,index) in workers">
+            <div v-tap="{ methods: goWorkerDetail, index: index }" class="item_list_item" :key="index" v-for="(worker ,index) in workers">
                 <img class="work_photo" :src="workerAvatar(worker.user_avatar)">
                 <div class="work_info lb_item">
                     <div class="work_info_top">
@@ -345,6 +345,8 @@ export default {
     background: #fff;
     padding: 15px;
     text-align: left;
+    border: 1px solid #fff;
+    border-radius: 6px;
 }
 .work_photo {
     width: 26%;
