@@ -1,29 +1,34 @@
 <template>
     <div class="menue">
-        <div v-tap="{ methods: goHome }" class="menue_box_5">
+        <div v-tap="{ methods: goHome }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="ios-home"></Icon>
             <div class="menue_txt">主页</div>
         </div>
-        <div v-tap="{ methods: goWork }" class="menue_box_5">
+        <div v-if="versions.is_xmjl || versions.is_worker" v-tap="{ methods: goWork }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="search"></Icon>
             <div class="menue_txt">找工人</div>
         </div>
-        <div v-tap="{ methods: goReProject }" class="menue_box_5">
+        <div v-if="versions.is_xmjl || versions.is_worker" v-tap="{ methods: goReProject }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="social-rss"></Icon>
-            <div class="menue_txt">项目发布</div>
+            <div class="menue_txt">{{ versions.is_xmjl ? '项目发布':'接单发布' }}</div>
         </div>
-        <div v-tap="{ methods: goMyProject }" class="menue_box_5">
+        <div v-if="versions.is_xmjl || versions.is_worker" v-tap="{ methods: goMyProject }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="ios-folder-outline"></Icon>
             <div class="menue_txt">我的项目</div>
         </div>
-        <div v-tap="{ methods: goPerson }" class="menue_box_5">
+        <div v-if="versions.is_owner || versions.is_wy" v-tap="{ methods: goVisitor }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
+            <Icon class="icon" type="android-people"></Icon>
+            <div class="menue_txt">访客记录</div>
+        </div> 
+        <div v-tap="{ methods: goPerson }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="android-person"></Icon>
             <div class="menue_txt">个人中心</div>
-        </div>
+        </div> 
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
     name: 'menue',
     data(){
@@ -31,6 +36,11 @@ export default {
 
         }
     },
+    computed: {
+		...mapState([
+			'versions'
+		])
+	},
     methods: {
         goHome(){
             this.$router.push('home')
@@ -43,6 +53,9 @@ export default {
         },
         goMyProject(){
             this.$router.push('my_project')
+        },
+        goVisitor(){
+            this.$router.push('visitor')
         },
         goPerson(){
             this.$router.push('person')

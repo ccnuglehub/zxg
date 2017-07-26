@@ -9,10 +9,12 @@
 				<span class="description txt_ell">{{ person_data.worker_description }}</span>
 			</div>
 			<div class="personal_detail">
-				<!--<span class="name">商总监</span>-->
-				<span class="type">油漆工</span>
+				<span class="type">姓名：王凯</span>
 			</div>
-			<div class="personal_number">13036134446</div>
+			<div class="personal_detail">
+				<span class="type">工作类型：油漆工</span>
+			</div>
+			<div class="personal_number">电话：13036134446</div>
 		</div>
 		<div v-tap="{ methods: goInfo }" class="item">
 			<div class="item_left">
@@ -32,13 +34,10 @@
 				<Icon type="chevron-right" size="16"></Icon>
 			</div>
 		</div>
-		<div v-tap="{ methods: goFocus }" class="item">
+		<div v-if="versions.is_xmjl || versions.is_worker" v-tap="{ methods: goFocus }" class="item">
 			<div class="item_left">
 				<Icon class="vertical_item" type="heart" size="16"></Icon>
 				<span class="vertical_item">我的关注</span>
-				<!-- <Badge count="3">
-					<a href="#" class="demo-badge"></a>
-				</Badge> -->
 				<Badge dot v-if="dot">
 					<a href="#" class="demo-badge"></a>
 				</Badge>
@@ -67,6 +66,7 @@ export default{
 	computed: {
 		...mapState([
 			'xmjl_info',
+			'versions'
 		])
 	},
 	methods:{

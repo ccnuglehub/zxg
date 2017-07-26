@@ -83,6 +83,10 @@ export default {
             this.worker_detail = this.$route.params.focus_worker
             this.worker_detail.worker_average_rate = parseInt(this.worker_detail.worker_average_rate)
         }
+        if(this.$route.params.visitor) {
+            this.worker_detail = this.$route.params.visitor
+            this.worker_detail.worker_average_rate = parseInt(this.worker_detail.worker_average_rate)
+        }
         this.getComments(this.worker_detail.user_id)
     },
     methods: {

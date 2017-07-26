@@ -100,7 +100,7 @@ export default {
 <style scoped>
 .login {
 	min-height: 100vh;
-    padding-top: 36vh;
+    padding-top: 24vh;
 }
 .input,
 .login_bt {

@@ -8,10 +8,13 @@
                     <Form-item label="姓名">
                         <Input v-model="form_data.user_name" class="info_input" type="text"></Input>
                     </Form-item>
+                     <Form-item v-if="versions.is_owner || versions.is_wy || versions.is_worker" label="电话">
+                        <Input class="info_input" type="text"></Input>
+                    </Form-item> 
                     <Form-item label="地址">
                         <Input v-model="form_data.user_address" class="info_input" type="text"></Input>
                     </Form-item>
-                    <Form-item label="个人简介">
+                    <Form-item v-if="versions.is_xmjl || versions.is_worker" label="个人简介">
                         <Input v-model="form_data.worker_description" class="info_input" type="textarea"></Input>
                     </Form-item>
                     <div v-tap="{ methods: addInfo }" class="bt">提交</div>
@@ -40,7 +43,8 @@ export default {
     },
     computed: {
         ...mapState([
-            'xmjl_info'
+            'xmjl_info',
+            'versions'
         ])
     },
     created(){

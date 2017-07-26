@@ -54,4 +54,7 @@ body {
     overflow:hidden;
     text-overflow:ellipsis;  /*截断*/
 }
+.ivu-select-placeholder {
+    display: inline-block !important;
+}
 </style>
