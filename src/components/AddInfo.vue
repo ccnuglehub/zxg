@@ -51,7 +51,7 @@ export default {
 			'changeXmjlInfo',
 		]),
         addInfo(){
-            console.log(this.form_data)
+            // console.log(this.form_data)
             this.$http.post(HOST_CONFIG.serverIp+'?c=register&f=update_user', 
             this.form_data,
 			{emulateJSON: true}).then((response) => {

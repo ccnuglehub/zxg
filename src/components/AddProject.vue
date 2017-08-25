@@ -14,7 +14,9 @@
                             <Select v-model="form_data.project_address_detail" style="width:100px">
                                 <Option v-for="(item, index) in cityList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
-                            <img class="qr_logo" src="../assets/qr_code.png">
+                            <div v-tap="{ methods: scan_code }" class="scan_code">
+                                <img class="qr_logo" src="../assets/qr_code.png">
+                            </div>
                         </div>
                         <textarea v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
                     </div>
@@ -33,6 +35,9 @@ import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import {HOST_CONFIG} from '@/api/config/api_config'
+
+import wx from "weixin-js-sdk"
+
 
 import { mapState } from 'vuex'
 export default {
@@ -101,7 +106,7 @@ export default {
             console.log(this.form_data.openid)
         },
         postProject(){
-            console.log(this.form_data)
+            // console.log(this.form_data)
             this.$http.post(HOST_CONFIG.serverIp + '?c=project&f=add_project',
             this.form_data,
             {emulateJSON: true}).then((response) => {
@@ -117,8 +122,39 @@ export default {
         },
         closeD(){
             this.cnotice_flag = false
+        },
+        scan_code(){
+            alert(1)
+            console.log(wx)
+            wx.scanQRCode({
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                    alert(result)
+                }
+            });
         }
-	},
+    },
+    created(){
+        this.$http.post(HOST_CONFIG.jssdkIp, {
+            params: { f_url: encodeURIComponent(location.href.split("#")[0]) }
+        }, { emulateJSON: true }).then((data) => {
+            let config = data.data.data
+            console.log(config)
+            wx.config({
+                debug: true,
+                appid: config.appId,
+                timestamp: config.timestamp,
+                nonceStr: config.nonceStr,
+                signature: config.signature,
+                jsApiList: ['chooseImage', 'scanQRCode']
+            })
+
+        }, (response) => {
+            alert(JSON.stringify(response))
+        })
+    },
     components: {
         CNotice,
         Chead,

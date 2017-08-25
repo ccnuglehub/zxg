@@ -2,7 +2,7 @@
 	<div v-infinite-scroll="onScroll" infinite-scroll-disabled="true" infinite-scroll-distance="22" class="worker_detail">
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="item_list_item">
-            <img class="work_photo" :src="worker_detail.user_avatar">
+            <img class="work_photo" :src="workerAvatar(worker_detail.user_avatar)">
             <div class="work_info lb_item">
                 <div class="work_info_top">
                     <div class="lb_item worker_type">{{ changeType(worker_detail.user_type) }}</div>
@@ -20,7 +20,7 @@
                 地址：{{ worker_detail.user_address }}
             </div>
             <div class="worker_info_item">
-                电话：{{ worker_detail.user_tel }}
+                电话：<a :href="tellphone">{{ worker_detail.user_tel }}</a>
             </div>
             <div class="worker_info_item description">
                 个人简介：{{ worker_detail.worker_description }}
@@ -74,7 +74,8 @@ export default {
             worker_detail: {}, 
             worker_comments:[],
             page: 0,
-            get_data_flag: true
+            get_data_flag: true,
+            tellphone:""
 		}
   	},
     created(){
@@ -82,7 +83,9 @@ export default {
         if(this.$route.params.focus_worker) {
             this.worker_detail = this.$route.params.focus_worker
             this.worker_detail.worker_average_rate = parseInt(this.worker_detail.worker_average_rate)
+            this.tellphone = "tel:"+this.worker_detail.user_tel
         }
+
         this.getComments(this.worker_detail.user_id)
     },
     methods: {
@@ -106,7 +109,11 @@ export default {
                 this.page++
                 this.getComments(this.worker_detail.user_id)
             }
-        }
+        },
+        workerAvatar(url){
+            // console.log(url)
+            return HOST_CONFIG.imageIp+url;
+        },
     },
     components: {
         Chead,

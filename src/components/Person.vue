@@ -2,7 +2,7 @@
 	<div class="container">
 		<Chead :msg="top_title"></Chead>
 		<div class="background">
-			<img class="person_head" src="../assets/people.png">
+			<img class="person_head" :src="workerAvatar(person_data.user_avatar)">
 		</div>
 		<div class="abstract">
 			<div class="personal_abstract">个人简介:
@@ -10,9 +10,9 @@
 			</div>
 			<div class="personal_detail">
 				<!--<span class="name">商总监</span>-->
-				<span class="type">油漆工</span>
+				<span class="type">{{change2type(person_data.user_type)}}</span>
 			</div>
-			<div class="personal_number">13036134446</div>
+			<div class="personal_number">{{person_data.user_tel}}</div>
 		</div>
 		<div v-tap="{ methods: goInfo }" class="item">
 			<div class="item_left">
@@ -55,6 +55,10 @@
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import { mapState } from 'vuex'
+import {changeType} from '@/util/util'
+import {API_ROUTER_CONFIG,HOST_CONFIG} from '@/api/config/api_config'
+
+
 // import { mapState, mapActions, mapGetters } from 'vuex'
 export default{
 	data(){
@@ -79,10 +83,20 @@ export default{
 		goFocus(){
 			this.$router.push('focus')
 		},
+		workerAvatar(url){
+            // console.log(url)
+            return HOST_CONFIG.imageIp+url;
+		},
+		change2type(type){
+			return changeType(type)
+		}
+		
 	},
 	created(){
 		if(this.xmjl_info) {
-			this.person_data.worker_description = this.xmjl_info.worker_description
+			// this.person_data.worker_description = this.xmjl_info.worker_description
+			this.person_data = this.xmjl_info;
+			console.log(this.person_data)
 		}
         // this.$http.post('url', data,
         //     {emulateJSON: true}).then((response) => {
@@ -112,7 +126,7 @@ export default{
 }
 .person_head{
 	height: 14.8vh;
-	border-radius: 7.9vh;
+	border-radius: 50%;
 	margin-top: 4vh;
 }
 .abstract{

@@ -1,5 +1,5 @@
 <template>
-	<div class="work">
+	<div v-infinite-scroll="onScroll" infinite-scroll-disabled="true" infinite-scroll-distance="22" class="work">
         <Chead :msg="top_title"></Chead>
 		<div class="top_menue">
 		    <div v-tap="{ methods: openLocaPicker }" class="top_menue_item">
@@ -78,12 +78,16 @@ export default {
             time:'',
             local: '',
             type: '',
+            load_data_flag:false,
             loca_flag: false,
             loca_wrap_flag: false,
             type_flag: false,
             type_wrap_flag: false,
             time_flag:false,
             time_wrap_flag:false,
+            page: 0,
+            selection:"type",
+            get_data_flag: true,
             local_slots: [
                 {
                 flex: 1,
@@ -97,16 +101,17 @@ export default {
             type_slots: [
                 {
                 flex: 1,
-                values: ['油漆工', '泥瓦工', '水电工', '木工',],
+                values: ['油漆工', '泥瓦工', '水电工', '木工'],
                     className: 'type_slots',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    visibleItemCount:4
                 }
             ],
             time_slots:[
                 {
                     flex: 1,
                     values: ['1天后', '2天后', '3天后', '4天后','5天后','6天后','7天后','8天后'],
-                    className: 'type_slots',
+                    className: 'time_slots',
                     textAlign: 'center',
                     visibleItemCount: 4,
                 }
@@ -121,6 +126,9 @@ export default {
         },
         closeLocaPicker(){
             this.loca_flag = false
+            this.get_data_flag = true
+            this.page = 0;
+            this.selection = "local";
             var self = this
             setTimeout(() => {
                 this.loca_wrap_flag = false
@@ -129,16 +137,116 @@ export default {
             // alert(1)
             this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=address_list',
             {
-                account: "0",
+                account: this.page,
                 address: this.local[0]
             },
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
                     this.workers  = changeRate2Number(response.body.data)
                 }
+                this.get_data_flag = false
             }, (response) => {
                     // error callback 
             })
+        },
+        onScroll(){
+            if(!this.get_data_flag) {
+                if(!this.page_busy){
+                    this.page++
+                }
+                // alert(this.page)
+                this.getWorkerlist(this.selection)
+                // alert(1)
+            }
+        },
+        getWorkerlist(selection){
+            switch(selection){
+                case "rate" : 
+                    this.get_data_flag = true
+                    this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=address_list',
+                    {
+                        account: this.page,
+                        address: this.local[0]
+                    },
+                    {emulateJSON: true}).then((response) => {
+                        if(response.status == 200){
+                            if(!response.body.data[0]){
+                                this.page_busy = true;
+                            }else{
+                                this.page_busy = false;
+                            }
+                            this.workers  = this.workers.concat(changeRate2Number(response.body.data))
+                        }
+                        this.get_data_flag = false
+                    }, (response) => {
+                            // error callback 
+                    })
+                    break;
+                case "type" :
+                    this.get_data_flag = true
+                    this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=type_list',
+                    {
+                        account: this.page,
+                        user_type: changeType2Number(this.type[0])
+                    },
+                    {emulateJSON: true}).then((response) => {
+                        if(response.status == 200){
+                            if(!response.body.data[0]){
+                                this.page_busy = true;
+                            }else{
+                                this.page_busy = false;
+                            }
+                            this.workers = this.workers.concat(changeRate2Number(response.body.data))
+                        }
+                        this.get_data_flag = false
+                    }, (response) => {
+                            // error callback 
+                    })
+                    break;
+                case "local":
+                    this.get_data_flag = true
+                    this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=address_list',
+                    {
+                        account: this.page,
+                        address: this.local[0]
+                    },
+                    {emulateJSON: true}).then((response) => {
+                        if(response.status == 200){
+                            if(!response.body.data[0]){
+                                this.page_busy = true;
+                            }else{
+                                this.page_busy = false;
+                            }
+                            this.workers  = this.workers.concat(changeRate2Number(response.body.data))
+                        }
+                        this.get_data_flag = false
+                    }, (response) => {
+                            // error callback 
+                    })
+                    break;
+                case "time":
+                    this.get_data_flag = true;
+                    this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=time_list',
+                    {
+                        account: this.page,
+                        time: this.changeAcceptDuty(this.time[0]),
+                    },
+                    {emulateJSON: true}).then((response) => {
+                        if(response.status == "200"){
+                            // console.log(response.body.data.length)
+                            if(!response.body.data[0]){
+                                this.page_busy = true;
+                            }else{
+                                this.page_busy = false;
+                            }
+                            this.workers = this.workers.concat(changeRate2Number(response.body.data))
+                        }
+                        this.get_data_flag  = false
+                    }, (response) => {
+                            // error callback 
+                    })
+
+            }
         },
         openTimePicker(){
             this.time_wrap_flag = true
@@ -149,10 +257,13 @@ export default {
             setTimeout(()=>{
                 this.time_wrap_flag = false
             },200)
+            this.page=0;
+            this.get_data_flag  =true;
+            this.selection = "time"
             // this.changeAcceptDuty(this.time[0])
             this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=time_list',
             {
-                account: "0",
+                account: this.page,
                 time: this.changeAcceptDuty(this.time[0]),
             },
             {emulateJSON: true}).then((response) => {
@@ -160,6 +271,7 @@ export default {
                     // console.log(response.body.data.length)
                     this.workers = changeRate2Number(response.body.data)
                 }
+                this.get_data_flag  = false
             }, (response) => {
                     // error callback 
             })
@@ -175,21 +287,26 @@ export default {
             setTimeout(() => {
                 this.type_wrap_flag = false
             },100)
+            this.page = 0;
+            this.get_data_flag = true;
+            this.selection = "type"
             this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=type_list',
             {
-                account: "0",
+                account: this.page,
                 user_type: changeType2Number(this.type[0])
             },
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
                     this.workers = changeRate2Number(response.body.data)
                 }
+                this.get_data_flag = false
             }, (response) => {
                     // error callback 
             })
         },
-        onLocaValuesChange(picker, values) {
+        onLocaValuesChange(picker,values) {
             // this.loca_flag = false
+            // alert(picker.getValues()[0])
             this.local = picker.getValues()
         },
         onTypeValuesChange(picker, values) {
@@ -200,9 +317,12 @@ export default {
             this.time = picker.getValues()
         },
         slotByRate(){
+            this.page = 0;
+            this.get_data_flag = true;
+            this.selection = "rate";
             this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
             {
-                account: "0"
+                account: this.page
             },
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
@@ -210,13 +330,15 @@ export default {
                     this.workers = changeRate2Number(response.body.data)
 
                 }
+                this.get_data_flag = false
             }, (response) => {
                     // error callback 
             })
         },
         goWorkerDetail(obj){
             var index = obj.index;
-            this.$router.push({url:'worker_detail',params:{worker : this.workers && this.workers[index]}})
+            // alert(1)
+            this.$router.push({name:'worker_detail',params:{focus_worker : this.workers && this.workers[index]}})
         },
         workerAvatar(url){
             // console.log(url)
@@ -276,9 +398,12 @@ export default {
         
 	},
     created(){
+        this.get_data_flag = true
+        this.page = 0;
+        this.selection = "rate"
         this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
             {
-                account: "0"
+                account: this.page
             },
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
@@ -286,6 +411,7 @@ export default {
                     this.workers = changeRate2Number(response.body.data)
 
                 }
+                this.get_data_flag = false;
             }, (response) => {
                     // error callback 
             })
@@ -394,12 +520,13 @@ export default {
     padding-right: 1vw;
 }
 .b_picker {
-    position: absolute;
+    position: fixed;
     width: 100vw;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     background: #fff;
+    margin-bottom:-10px; 
 }
 .picker_wrap {
     position: absolute;

@@ -16,95 +16,108 @@ import Header from '@/components/common/Header'
 import AddInfo from '@/components/AddInfo'
 import Identification from '@/components/Identification'
 import Focus from '@/components/Focus'
+import PublishWork from '@/components/PublishWork'
+import Visitor from '@/components/Visitor'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path:'/home',
-      name:'home',
-      component: Home,
-    },
-    {
+    mode: "history",
+    // base: "/zxgfront/",
+    routes: [{
+            path: '/login',
+            name: 'login',
+            component: Login
+        },
+        {
+            path: '/home',
+            name: 'home',
+            component: Home,
+        },
+        {
 
-      path:"/newsDetail",
-      name:"newsDetail",
-      component:NewsDetail
-      },
-    {
-      path:'/project_detail',
-      name:'project_detail',
-      component: ProjectDetail,
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    },
-    {
-      path: '/find_worker',
-      name: 'find_worker',
-      component: FindWorker
-    },
-    {
-      path: '/add_project',
-      name: 'add_project',
-      component: AddProject
-    },
-    {
-      path: '/worker_detail',
-      name: 'worker_detail',
-      component: WorkerDetail
-    },
-    {
-      path: '/my_project',
-      name: 'my_project',
-      component: Myproject
-    },
-    {
-      path: '/person',
-      name: 'person',
-      component:Person
-    },
-    {
-      path: '/qr_code',
-      name: 'qr_code',
-      component:QrCode
-    },
-    {
-      path: '/menue',
-      name: 'menue',
-      component:Menue
-    },
-    {
-      path: '/header',
-      name: 'header',
-      component:Header
-    },
-    {
-      path: '/add_info',
-      name: 'add_info',
-      component:AddInfo
-    },
-    {
-      path: '/identification',
-      name: 'identification',
-      component:Identification
-    },
-    {
-      path: '/focus',
-      name: 'focus',
-      component:Focus
-    },
-    {
-      path: '*',
-      component:Login
-    }
-  ]
+            path: "/news_detail",
+            name: "news_detail",
+            component: NewsDetail
+        },
+        {
+            path: '/project_detail',
+            name: 'project_detail',
+            component: ProjectDetail,
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: Register
+        },
+        {
+            path: '/find_worker',
+            name: 'find_worker',
+            component: FindWorker
+        },
+        {
+            path: '/add_project',
+            name: 'add_project',
+            component: AddProject
+        },
+        {
+            path: '/worker_detail',
+            name: 'worker_detail',
+            component: WorkerDetail
+        },
+        {
+            path: '/my_project',
+            name: 'my_project',
+            component: Myproject
+        },
+        {
+            path: '/person',
+            name: 'person',
+            component: Person
+        },
+        {
+            path: '/qr_code',
+            name: 'qr_code',
+            component: QrCode
+        },
+        {
+            path: '/menue',
+            name: 'menue',
+            component: Menue
+        },
+        {
+            path: '/header',
+            name: 'header',
+            component: Header
+        },
+        {
+            path: '/add_info',
+            name: 'add_info',
+            component: AddInfo
+        },
+        {
+            path: '/identification',
+            name: 'identification',
+            component: Identification
+        },
+        {
+            path: '/focus',
+            name: 'focus',
+            component: Focus
+        },
+        {
+            path: '/publish_work',
+            name: '/publish_work',
+            component: PublishWork
+        },
+        {
+            path: '/visitor',
+            name: 'visitor',
+            component: Visitor
+        },
+        {
+            path: '*',
+            component: Login
+        }
+    ]
 })

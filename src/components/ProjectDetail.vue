@@ -245,7 +245,11 @@ export default {
             this.evaluate_flag = false
         },
         addWork(){
-            this.$router.push('qr_code')
+            this.$router.push({name:'qr_code',params:{
+                url: HOST_CONFIG.serverIp+"?c=project&f=worker_addin_project",
+                project_id: this.detail.project_id,
+                open_id: this.open_id
+            }})
         },
         focus(item){
             this.$http.post(HOST_CONFIG.serverIp+'?c=focus&f=focus_worker',

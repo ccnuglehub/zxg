@@ -21,7 +21,7 @@ import QArt from 'qartjs';
       'config.value': function (val, oldVal) {
         this.config.vaule = val;
         this.renderQrcode(this.config);
-      console.log('new: %s, old: %s', val, oldVal)
+      // console.log('new: %s, old: %s', val, oldVal)
       },
     },
     mounted(){

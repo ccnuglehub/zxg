@@ -45,6 +45,11 @@ export default {
             this.getNewslist();
             this.getBanner();
         })
+
+        if(window.localStorage){
+            // alert(localStorage.getItem("openid"))
+            // localStorage.setItem("openid","123")
+        }
     },
     methods:{
         getNewslist(){

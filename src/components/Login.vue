@@ -21,14 +21,14 @@
     </div>
 </template>
 <script>
-import {API_ROUTER_CONFIG} from '@/api/config/api_config'
+import {API_ROUTER_CONFIG,HOST_CONFIG} from '@/api/config/api_config'
 import { checkPhone, checkEmpty } from '../util/util.js'
 import { mapActions } from 'vuex'
 export default {
     data () {
         return {
-            user_tel: '18627029526',
-            auth_code: '',
+            user_tel: '12345677825',
+            auth_code: '123',
             empty_flag: '',
 			phone_flag:true,
 			bt_text: '发送验证码',
@@ -51,10 +51,13 @@ export default {
             if(!this.phone_flag || this.checkEmpty(this.user_tel)) {
 				return
 			}
-            this.$http.post(API_ROUTER_CONFIG.login ,{
-                user_tel: this.user_tel
+            this.$http.post(HOST_CONFIG.serverIp+"?c=register&f=login" ,{
+				user_tel: this.user_tel,
+				auth_code:this.auth_code
+				
             },
 			{emulateJSON: true}).then((response) => {
+				console.log(response.body.data)
                 this.changeXmjlInfo(response.body.data)
                 this.$router.push('home')
 			}, (response) => {
@@ -84,8 +87,8 @@ export default {
 			if(!this.phone_flag) {
 				return
 			}
-			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=register&f=get_auth_code', {
-				user_tel: this.user_tel
+			this.$http.post(HOST_CONFIG.serverIp+'?c=register&f=get_auth_code', {
+				user_tel: this.user_tel,
 			},
 			{emulateJSON: true}).then((response) => {
 				this.sendMcodeTimer()
