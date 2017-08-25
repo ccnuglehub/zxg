@@ -110,7 +110,7 @@ export default {
 		},
 		onScroll(){
 			if(this.get_data_flag) {
-				this.page++
+				this.page++ 
 				this.getDataFn()
 			}
 		}

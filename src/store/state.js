@@ -6,10 +6,10 @@ const state = {
     },
     //软件针对的使用者
     versions: {
-        is_xmjl: false,
+        is_xmjl: true,
         is_worker: false,
         is_owner: false,
-        is_wy: true
+        is_wy: false
     },
     //用户类型
     user_type_list: [
