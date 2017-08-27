@@ -6,8 +6,8 @@ const state = {
     },
     //软件针对的使用者
     versions: {
-        is_xmjl: true,
-        is_worker: false,
+        is_xmjl: false,
+        is_worker: true,
         is_owner: false,
         is_wy: false
     },

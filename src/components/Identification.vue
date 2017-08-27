@@ -3,41 +3,10 @@
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="identification">
             <div class="title">请上传清晰的本人大头照及身份证照</div>
-            <div class="demo-upload-list" :key="item" v-for="item in uploadList">
-                <template v-if="item.status === 'finished'">
-                    <img class="preview_img" :src="item.url">
-                    <div class="demo-upload-list-cover">
-                        <Icon class="icon" type="ios-eye-outline" v-tap="{ methods: handleView(item.name) }"></Icon>
-                        <Icon class="icon" type="ios-trash-outline" v-tap="{ methods: handleRemove(item) }"></Icon>
-                    </div>
-                </template>
-                <template v-else>
-                    <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                </template>
+            <div v-tap="{ methods: choseImage }" class="uploader">
+                <Icon type="camera" size="20"></Icon>
             </div>
-            <Upload
-                v-if="flag"
-                ref="upload"
-                :show-upload-list="false"
-                :default-file-list="defaultList"
-                :on-success="handleSuccess"
-                :format="['jpg','jpeg','png']"
-                :max-size="2048"
-                :on-format-error="handleFormatError"
-                :on-exceeded-size="handleMaxSize"
-                :before-upload="handleBeforeUpload"
-                multiple
-                type="drag"
-                action="http://101.201.68.200/zxg/weixin/index?c=register&f=identity"
-                style="display: inline-block;width:58px;">
-                <div style="width: 58px;height:58px;line-height: 58px;">
-                    <Icon type="camera" size="20"></Icon>
-                </div>
-            </Upload>
-            <Modal title="查看图片" v-model="visible">
-                <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
-            </Modal>
-            <div class="bt">确认上传</div>
+            <div v-tap="{ methods: uploadImage }" class="bt">确认上传</div>
         </div>
     </div>    
 </template>
@@ -46,78 +15,44 @@
 import Chead from './common/Header.vue'
 // import { mapState, mapActions, mapGetters } from 'vuex'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
+var wx = require('weixin-js-sdk')
+
 export default {
     data () {
             return {
                 top_title: '实名认证',
-                defaultList: [
-                    {
-                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                        'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                    },
-                    {
-                        'name': 'bc7521e033abdd1e92222d733590f104',
-                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
-                    }
-                ],
-                imgName: '',
-                visible: false,
-                uploadList: [{
-                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                        'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                    },
-                    {
-                        'name': 'bc7521e033abdd1e92222d733590f104',
-                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
-                    }],
-                flag: true
+                wx,
+                localIds: ''
             }
         },
         methods: {
-            handleView (name) {
-                this.imgName = name;
-                this.visible = true;
+            choseImage(){
+                this.wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        this.localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    }
+                })
             },
-            handleRemove (file) {
-                // 从 upload 实例删除数据
-                const fileList = this.$refs.upload.fileList;
-                this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-            },
-            handleSuccess (res, file) {
-                // 因为上传过程为实例，这里模拟添加 url
-                file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-                file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-            },
-            handleFormatError (file) {
-                this.$Notice.warning({
-                    title: '文件格式不正确',
-                    desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
-                });
-            },
-            handleMaxSize (file) {
-                this.$Notice.warning({
-                    title: '超出文件大小限制',
-                    desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
-                });
-            },
-            handleBeforeUpload () {
-                const check = this.uploadList.length < 3;
-                if (!check) {
-                    this.$Notice.warning({
-                        title: '最多只能上传 2 张图片。'
-                    });
-                } 
-                if (this.uploadList.length == 2) {
-                    this.flag = false
-                } 
-                return check;
+            uploadImage(){
+                this.wx.uploadImage({
+                    localId: this.localIds, // 默认9
+                    isShowProgressTips: 1 ,
+                    success: function (res) {
+                         var serverId = res.serverId; // 返回图片的服务器端ID
+                    }
+                })
             }
-        },
-        mounted () {
-            this.uploadList = this.$refs.upload.fileList;
         },
         components: {
             Chead,
+        },
+        created() {
+            this.SDKRegister(this, () => {
+                
+            })
         }
     }
 </script>
@@ -141,10 +76,6 @@ export default {
     font-size: 22px;
     margin: 5px 6px;
 }
-.preview_img {
-    width: 100px;
-    height: 100px;
-}
 .bt {
     background: rgb(134, 210, 198);
     width: 100px;
@@ -155,5 +86,12 @@ export default {
     font-weight: bold;
     line-height: 30px;
     margin: 22px auto;
+}
+.uploader {
+    width: 58px;
+    height:58px;
+    line-height: 58px;
+    margin: 0 auto;
+    border: 1px dashed grey;
 }
 </style>

@@ -2,6 +2,7 @@
 	<div class="container">
 		<Chead :msg="top_title"></Chead>
 		<div class="background">
+			<img class="person_bg" src="../assets/personBackground.jpg">
 			<img class="person_head" src="../assets/people.png">
 		</div>
 		<div class="abstract">
@@ -100,20 +101,33 @@ export default{
 
 <style scoped>
 .container{
+	position: relative;
 	background-color: rgb(239,239,239);
 	height: calc(100vh - 45px);
+	padding-top: 21.8vh;
 }
 .background{
-	background: url(../assets/personBackground.jpg);
+	position: absolute;
+	top: 0;
 	height: 21.8vh;
 	width: 100vw;
-	background-repeat:no-repeat; 
-	background-size: 100% 180%;
+	overflow: hidden;
+}
+.person_bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	height: 180%;
+	width: 100%;
 }
 .person_head{
 	height: 14.8vh;
 	border-radius: 7.9vh;
-	margin-top: 4vh;
+	position: absolute;
+	top: 4vh;
+	left: 50%;
+	transform: translateX(-50%);
 }
 .abstract{
 	background: rgb(134,210,198);

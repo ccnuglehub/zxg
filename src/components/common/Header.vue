@@ -4,12 +4,19 @@
             <Icon class="icon" type="ios-arrow-back"></Icon>
         </div>
         <div class="title">{{ msg }}</div>
-        <img v-if="versions.is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
+        <img v-tap="{ methods: scanQrcode }" v-if="versions.is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
     </div>
 </template>
 <script>
 import { mapState } from 'vuex'
+var wx = require('weixin-js-sdk')
+
 export default {
+    data(){
+        return {
+            wx
+        }
+    },
     props:['msg','icon','qr'],
     name: 'header',
     computed: {
@@ -18,9 +25,23 @@ export default {
 		])
 	},
     methods: {
-        back(){
+        back() {
             this.$router.go(-1)
-        } 
+        },
+        scanQrcode() {
+            this.wx.scanQRCode({
+                needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                }
+            })
+        }
+    },
+    created(){
+        this.SDKRegister(this, () => {
+			
+        })
     }
 }
 </script>

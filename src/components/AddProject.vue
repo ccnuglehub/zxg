@@ -14,7 +14,7 @@
                             <Select v-model="form_data.project_address_detail" style="width:100px">
                                 <Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
-                            <img class="qr_logo" src="../assets/qr_code.png">
+                            <img v-tap="{ methods: scanQrcode }" class="qr_logo" src="../assets/qr_code.png">
                         </div>
                          <div v-if="versions.is_worker" class="p_local">
                             <label class="p_lable p_lable_bottom">可接单时间</label>
@@ -24,6 +24,7 @@
                         </div> 
                         <textarea v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
                     </div>
+                    
                     <div class="edit_area"></div>
                 </div>
             </div>
@@ -43,8 +44,9 @@ import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
-
+var wx = require('weixin-js-sdk')
 import { mapState } from 'vuex'
+
 export default {
   	name: 'add_project',
   	data () {
@@ -58,7 +60,8 @@ export default {
                 project_address_section: "洪山区",
                 project_address_detail: "武汉市洪山区",
                 projec_description: "测试"
-            }
+            },
+            wx
 		}
     },
     computed: {
@@ -70,6 +73,10 @@ export default {
         ])
     },
     created(){
+        this.SDKRegister(this, () => {
+			
+        })
+        
         if(this.versions.is_worker) {
             this.top_title = '接单发布'
         }
@@ -97,6 +104,15 @@ export default {
         },
         closeD(){
             this.cnotice_flag = false
+        },
+        scanQrcode(){
+            this.wx.scanQRCode({
+                needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                }
+            })
         }
 	},
     components: {
