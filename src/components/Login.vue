@@ -24,6 +24,7 @@
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { checkPhone, checkEmpty } from '../util/util.js'
 import { mapActions } from 'vuex'
+var wx = require('weixin-js-sdk')
 export default {
     data () {
         return {
@@ -33,6 +34,7 @@ export default {
 			phone_flag:true,
 			bt_text: '发送验证码',
 			time_count: 61,
+			wx
         }
     },
     methods:{
@@ -81,6 +83,26 @@ export default {
 			}
 		},
 		sendMcode(){
+
+
+
+
+
+
+			this.wx.chooseImage({
+				count: 1, // 默认9
+				sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+				sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+				success: function (res) {
+					var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+					alert(localIds[0])
+				}
+			})
+
+
+
+			
+			
 			if(!this.phone_flag) {
 				return
 			}
@@ -94,7 +116,12 @@ export default {
                       // error callback 
             })
 		}
-    }
+	},
+	created() {
+		this.SDKRegister(this, () => {
+			
+		})
+	}
 }
 </script>
 <style scoped>
