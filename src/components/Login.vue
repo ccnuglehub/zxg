@@ -48,6 +48,7 @@ export default {
         },
         ...mapActions([
 			'changeXmjlInfo',
+			'setVersion'
 		]),
         login(){
             if(!this.phone_flag || this.checkEmpty(this.user_tel)) {
@@ -57,7 +58,12 @@ export default {
                 user_tel: this.user_tel
             },
 			{emulateJSON: true}).then((response) => {
-                this.changeXmjlInfo(response.body.data)
+				this.changeXmjlInfo(response.body.data)
+
+				// 用返回数据设置用户类型
+				this.setVersion({
+					is_xmjl: true
+				})
                 this.$router.push('home')
 			}, (response) => {
 					// error callback 

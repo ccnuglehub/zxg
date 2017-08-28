@@ -18,19 +18,19 @@
 			</div>
 			<div class="input error"><span v-show="!phone_flag">电话号码格式不正确</span></div>
 		</div>
-		<!-- <div class="input_box">
+		 <div class="input_box">
 			<Input v-model="form_data.auth_code" @on-blur="emptyValidate(form_data.auth_code)" class="input" placeholder="请输入短信验证码">
 				<span slot="prepend"><Icon type="locked"></Icon></Icon></span>
 			</Input>
 			<div class="input error"><span v-show="empty_flag">验证码不能为空</span></div>
-		</div>  -->
+		</div>  
 		<div class="select_box">
 			<label class="select_lable">请选择身份</label>
-			<Select v-model="form_data.user_type" class="select">
+			<Select @on-change="getUserType" v-model="form_data.user_type" placeholder="请选择" class="select">
 				<Option v-for="(item, index) in user_type_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div>
-		<div class="select_box">
+		<div v-if="versions.is_worker" class="select_box">
 			<label class="select_lable"></label>
 			<Select v-model="form_data.user_work_type" class="select">
 				<Option v-for="(item, index) in user_work_type_list" :value="item.id" :key="index">{{ item.value }}</Option>
@@ -39,7 +39,7 @@
 		 <div v-if="versions.is_worker" class="select_box">
 			<label class="select_lable"></label>
 			<Select class="select">
-				<Option v-for="(item, index) in city_list" :value="item.label" :key="index">{{ item.value }}</Option>
+				<Option v-for="(item, index) in city_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div> 
 		 <div v-if="versions.is_owner" class="n_input_box">
@@ -78,7 +78,7 @@ export default {
 				user_name: '',
 				user_tel: '',
 				user_type: '',
-				// auth_code: '',
+				auth_code: '',
 				open_id: '3adf123adaf',
 				user_work_type: '',
 			},
@@ -113,8 +113,29 @@ export default {
 		emptyValidate(val){
 			this.empty_flag = this.checkEmpty(val)
 		},
+		getUserType(value) {
+			var version = {}
+			if(value == 1) {
+				// xmjl
+				version.is_xmjl = true
+			}
+			if(value == 2) {
+				// wygs
+				version.is_wy = true
+			}
+			if(value == 3) {
+				// yz
+				version.is_owner = true
+			}
+			if(value == 4) {
+				// gy
+				version.is_worker = true
+			}
+			this.setVersion(version)
+		},
 		...mapActions([
 			'changeXmjlInfo',
+			'setVersion'
 		]),
 		sendMcodeTimer(){
 			var self = this
@@ -141,7 +162,7 @@ export default {
 			}
 			this.$http.post( API_ROUTER_CONFIG.get_auth_code, 
 			{
-				user_tel: this.user_tel
+				user_tel: this.form_data.user_tel
 			},
 			{emulateJSON: true}).then((response) => {
 				this.sendMcodeTimer()
@@ -158,7 +179,7 @@ export default {
 				return
 			}
 			console.log(this.form_data)
-			this.$http.post('http://101.201.68.200/zxg/weixin/index?c=register&f=add_user',
+			this.$http.post(API_ROUTER_CONFIG.add_user,
 				this.form_data,
 			{emulateJSON: true}).then((response) => {
 				this.changeXmjlInfo(response.body.data)

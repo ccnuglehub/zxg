@@ -4,10 +4,11 @@ const state = {
         openid: "2adsfad1231",
         open_id: "2adsfad1231"
     },
+
     //软件针对的使用者
     versions: {
         is_xmjl: false,
-        is_worker: true,
+        is_worker: false,
         is_owner: false,
         is_wy: false
     },
@@ -52,40 +53,40 @@ const state = {
     //行政区列表
     city_list: [
         {
-            value: '1',
-            label: '江岸区'
+            id: '1',
+            value: '江岸区'
         },
         {
-            value: '2',
-            label: '江汉区'
+            id: '2',
+            value: '江汉区'
         },
         {
-            value: '3',
-            label: '硚口区'
+            id: '3',
+            value: '硚口区'
         },
         {
-            value: '4',
-            label: '黄陂区'
+            id: '4',
+            value: '黄陂区'
         },
         {
-            value: '5',
-            label: '东西湖区'
+            id: '5',
+            value: '东西湖区'
         },
         {
-            value: '6',
-            label: '洪山区'
+            id: '6',
+            value: '洪山区'
         },
         {
-            value: '7',
-            label: '武昌区'
+            id: '7',
+            value: '武昌区'
         },
         {
-            value: '8',
-            label: '江夏区'
+            id: '8',
+            value: '江夏区'
         },
         {
-            value: '9',
-            label: '汉阳区'
+            id: '9',
+            value: '汉阳区'
         }
     ],
     //可接单时间列表

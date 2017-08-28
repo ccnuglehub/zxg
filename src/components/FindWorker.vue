@@ -258,6 +258,7 @@ export default {
         callSlotByRate(e){
             this.page = 0
             this.workers = []
+            this.slotByRate()
         },
         slotByRate(e, flag){
             this.page_flag = 'rate_list'

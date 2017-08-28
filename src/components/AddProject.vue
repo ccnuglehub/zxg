@@ -11,21 +11,22 @@
                         </div>
                         <div v-if="versions.is_xmjl" class="p_local">
                             <label class="p_lable p_lable_bottom">项目地点</label>
-                            <Select v-model="form_data.project_address_detail" style="width:100px">
-                                <Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.label }}</Option>
+                            <Select v-model="form_data.project_address_section" style="width:100px">
+                                <Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.value }}</Option>
                             </Select>
                             <img v-tap="{ methods: scanQrcode }" class="qr_logo" src="../assets/qr_code.png">
                         </div>
                          <div v-if="versions.is_worker" class="p_local">
                             <label class="p_lable p_lable_bottom">可接单时间</label>
-                            <Select v-model="form_data.project_address_detail" style="width:100px">
+                            <!-- <Select v-model="form_data.project_time" placeholder="请选择" style="width:100px">
                                 <Option v-for="(item, index) in time_list" :value="item.value" :key="index">{{ item.label }}</Option>
-                            </Select>
+                            </Select> -->
                         </div> 
-                        <textarea v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
+                        <textarea v-if="versions.is_xmjl" v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
+                        <div v-if="versions.is_worker" class="p_txt">
+                            <div class="add_project_res">已发布3天后可接单</div>
+                        </div>
                     </div>
-                    
-                    <div class="edit_area"></div>
                 </div>
             </div>
             <div v-if="versions.is_worker" class="notice_box">
@@ -136,6 +137,9 @@ export default {
     padding-top: 22px;
     padding-right: 12px;
     padding-left: 12px;
+}
+.add_project_res {
+    padding-top: 4vh;
 }
 .edit_cont {
     background: rgb(250,250,250);
