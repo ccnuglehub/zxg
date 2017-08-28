@@ -59,8 +59,9 @@ export default {
     },
     methods:{
         getNewslist(){
+
             this.get_data_flag = false
-            this.$http.post(HOST_CONFIG.serverIp+'?c=news&f=news_list',
+            this.$http.post( API_ROUTER_CONFIG.news_list,
             {
                 account: this.page
             }
@@ -75,7 +76,7 @@ export default {
             })
         },
         getBanner(){
-            this.$http.post(HOST_CONFIG.serverIp+'?c=news&f=banner',
+            this.$http.post( API_ROUTER_CONFIG.banner,
             {
                 project_id: ""
             }
@@ -136,19 +137,20 @@ export default {
 ::-webkit-scrollbar {/*隐藏滚轮*/
     display: none;
 }
-.container{
+.container {
     background: rgb(236,236,236);
     min-height: 110vh;
 }
-.carousel{
+.carousel {
+    min-height: 32vh;
     position: relative;
     margin-bottom: 10px;
 }
-.banner{
+.banner {
     height: 32vh;
     width: 100%;
 }
-.newslist{
+.newslist {
     position: relative;
     width: 100vw;
     height: auto;

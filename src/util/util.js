@@ -21,6 +21,7 @@ const checkEmpty = val => {
 
 //把时间从秒转换为年月日
 const changeDate = val => {
+    console.log(val)
     if(val){
         // console.log(typeof val)
         var val = parseInt(val)
@@ -33,7 +34,7 @@ const changeDate = val => {
         return Y+M+D
     }else{
         var date = new Date();
-        Y = date.getFullYear() + '-';
+        Y = date.getFullYear() + '.';
         M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
         D = date.getDate() + ' ';
         return Y+M+D

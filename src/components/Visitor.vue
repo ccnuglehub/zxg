@@ -1,14 +1,14 @@
 <template>
-	<div class="visitor">
+	<div v-infinite-scroll="onScroll" infinite-scroll-disabled="true" infinite-scroll-distance="22" class="visitor">
         <Chead :msg="top_title"></Chead>
 		<div class="top_menue">
-		    <div v-tap="{ methods: getWorkerList, time_count: 'day' }" class="top_menue_item">
+		    <div v-tap="{ methods: getWorkerList, time_count: 'day', reset: true }" class="top_menue_item">
                 <span class="m_txt">今天</span>
             </div>
-            <div v-tap="{ methods: getWorkerList, time_count: 'week' }" class="top_menue_item">
+            <div v-tap="{ methods: getWorkerList, time_count: 'week', reset: true }" class="top_menue_item">
                 <span class="m_txt">最近一周</span>
             </div>
-            <div v-tap="{ methods: getWorkerList, time_count: 'month' }" class="top_menue_item">
+            <div v-tap="{ methods: getWorkerList, time_count: 'month', reset: true }" class="top_menue_item">
                 <span class="m_txt">最近一月</span>
             </div>
 		</div>
@@ -36,14 +36,17 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
-import { HOST_CONFIG } from '@/api/config/api_config'
+import { HOST_CONFIG, API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { changeType2Number, changeRate2Number, changeType } from '@/util/util'
 export default {
   	name: 'visitor',
   	data () {
     	return {
             top_title: '访客记录',
-            workers: []
+            workers: [],
+            get_data_flag: true,
+            page: 0,
+            limitation: ''
 		}
   	},
 	methods: {
@@ -53,11 +56,40 @@ export default {
             this.$router.push({ name:'worker_detail', params:{ visitor: item }})
         },
         workerAvatar(url){
-            // console.log(url)
             return HOST_CONFIG.imageIp+url;
         },
         getWorkerList(params){
-            console.log(params.time_count)
+            if(params.time_count == 'day') {
+                this.limitation = 1
+            }
+            if(params.time_count == 'week') {
+                this.limitation = 7
+            }
+            if(params.time_count == 'month') {
+                this.limitation = 30
+            }
+            if(params.reset) {
+                this.page = 0
+            }
+            this.$http.post( API_ROUTER_CONFIG.visitor_list_limitation,
+            {
+                account: this.page,
+                limitation: this.limitation
+            },
+            {emulateJSON: true}).then((response) => {
+                if(response.status == 200){
+                    var worker_data = changeRate2Number(response.body.data)
+                    this.workers = this.workers.concat(worker_data)
+                }
+            }, (response) => {
+                    // error callback 
+            })
+        },
+        onScroll() {
+            if(this.get_data_flag) {
+                this.page++ 
+				this.getWorkerList({})
+			}
         }
 	},
     created(){
@@ -67,9 +99,8 @@ export default {
         },
         {emulateJSON: true}).then((response) => {
             if(response.status == 200){
-                // console.log(response.body)
-                this.workers = changeRate2Number(response.body.data)
-
+                var worker_data = changeRate2Number(response.body.data)
+                this.workers = this.workers.concat(worker_data)
             }
         }, (response) => {
                 // error callback 
@@ -83,6 +114,19 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.visitor {
+    min-height: 100vh;
+}
+.top_menue {
+    position: fixed;
+    top: 45px;
+    width: 100%;
+    background: #fff;
+    font-size: 0;
+    height: 36px;
+    border-top: 1px solid rgba(187,187,187,.6);
+    border-bottom: 1px solid rgba(187,187,187,.6);
+}
 .top_menue_item {
     display: inline-block;
     vertical-align: top;
@@ -94,16 +138,10 @@ export default {
 .top_menue_item:last-child {
     border: 0;
 }
-.top_menue {
-    font-size: 0;
-    height: 36px;
-    border-top: 1px solid rgba(187,187,187,.6);
-    border-bottom: 1px solid rgba(187,187,187,.6);
-}
 .item_list {
      min-height: 88vh;
      background:#eee;
-     padding-top: 1px;
+     padding-top: 36px;
      font-size: 0;
      padding-bottom: 60px;
 }

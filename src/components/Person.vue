@@ -10,16 +10,16 @@
 				<span class="description txt_ell">{{ person_data.worker_description }}</span>
 			</div>
 			<div class="personal_detail">
-				<span class="type">姓名：王凯</span>
+				<span class="type">姓名：{{ person_data.user_name }}</span>
 			</div>
 			<div class="personal_detail">
-				<span class="type">工作类型：油漆工</span>
+				<span class="type">工作类型：{{ person_data.user_type }}</span>
 			</div>
-			<div class="personal_number">电话：13036134446</div>
+			<div class="personal_number">电话：{{ person_data.user_tell }}</div>
 		</div>
 		<div v-tap="{ methods: goInfo }" class="item">
 			<div class="item_left">
-				<Icon class="vertical_item" type="soup-can" size="16"></Icon>
+				<Icon class="vertical_item icon_left" type="soup-can" size="16"></Icon>
 				<span class="vertical_item">完善个人信息</span>
 			</div>
 			<div class="icon">
@@ -28,8 +28,17 @@
 		</div>
 		<div v-tap="{ methods: goIdent }" class="item">
 			<div class="item_left">
-				<Icon type="card" class="vertical_item" size="16"></Icon>
+				<Icon class="vertical_item icon_left" type="card" size="16"></Icon>
 				<span class="vertical_item">进行实名认证</span>
+			</div>
+			<div class="icon">
+				<Icon type="chevron-right" size="16"></Icon>
+			</div>
+		</div>
+		<div v-if="!versions.is_worker" v-tap="{ methods: goScanQr }" class="item">
+			<div class="item_left">
+				<Icon class="vertical_item icon_left" type="qr-scanner" size="16"></Icon>
+				<span class="vertical_item">生成二维码</span>
 			</div>
 			<div class="icon">
 				<Icon type="chevron-right" size="16"></Icon>
@@ -39,9 +48,6 @@
 			<div class="item_left">
 				<Icon class="vertical_item" type="heart" size="16"></Icon>
 				<span class="vertical_item">我的关注</span>
-				<Badge dot v-if="dot">
-					<a href="#" class="demo-badge"></a>
-				</Badge>
 			</div>
 			<div class="icon">
 				<Icon type="chevron-right" size="16"></Icon>
@@ -60,7 +66,6 @@ export default{
 	data(){
 		return{
 			top_title: '个人中心',
-			dot:true,
 			person_data: {}
 		}
 	},
@@ -80,6 +85,9 @@ export default{
 		goFocus(){
 			this.$router.push('focus')
 		},
+		goScanQr(){
+			this.$router.push('qr_code')
+		}
 	},
 	created(){
 		if(this.xmjl_info) {
@@ -165,7 +173,7 @@ export default{
 	vertical-align: middle;
 }
 .icon{
-	/*float: right;*/
+	line-height: 28px;
 	text-align: right;
 	vertical-align: middle;
 }
@@ -173,6 +181,9 @@ export default{
 	content: '';
     display: block;
     clear: both;
+}
+.icon_left {
+	padding-bottom: 1px;
 }
 .demo-badge{
 	height: 3.4vh;

@@ -5,8 +5,30 @@
 </template>
 
 <script>
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
+import { mapActions, mapState } from 'vuex'
+
 export default {
-  name: 'app'
+    name: 'app',
+    data() {
+        return {
+            open_id: ''
+        }
+    },
+    computed: {
+		...mapState([
+			'xmjl_info'
+		])
+	},
+    created() {
+        this.$http.get(API_ROUTER_CONFIG.get_open_id,
+        {emulateJSON: true}).then((response) => {
+            this.open_id = response.body.data.open_id
+            this.changeXmjlInfo(response.body.data)
+        }, (response) => {
+                // error callback 
+        })
+    }
 }
 </script>
 
@@ -54,7 +76,7 @@ body {
     overflow:hidden;
     text-overflow:ellipsis;  /*截断*/
 }
-.ivu-select-placeholder {
+/* .ivu-select-placeholder {
     display: inline-block !important;
-}
+}  */
 </style>

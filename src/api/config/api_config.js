@@ -30,6 +30,8 @@ const api_router_config = {
 	get_open_id:host_config.Ip+"zxg/Weixin/WxApi/get_openid/user_register/123",
 	//访客记录列表
 	visitor_list: host_config.Ip+"zxg/weixin/index?c=visitor&f=visitor_list",
+	//按 一天、一周、一月获取访客记录
+	visitor_list_limitation: host_config.Ip+"zxg/weixin/index?c=visitor&f=visitor_list_limitation",
 	//工人扫描进房间
 	owner_visit: host_config.Ip+"zxg/weixin/index?c=visitor&f=owner_visit",
 	//工人扫码进小区
