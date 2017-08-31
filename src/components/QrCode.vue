@@ -5,13 +5,12 @@
         <h1 class="qr_desp">{{ msg }}</h1>
         <!--<div v-vue-q-art="config"></div>-->
         <vue-q-art :config="config" :downloadButton="downloadButton"></vue-q-art>
-        change qrcode url: <input type="text" v-model="config.value">
     </div>
 </template>
 
 <script>
 import Chead from './common/Header.vue'
-import VueQArt from './vue-qart.vue'
+import VueQArt from './VueQart.vue'
 export default {
     components: {
         VueQArt,
@@ -20,17 +19,18 @@ export default {
     name: 'qrcode',
     data () {
         return {
-            msg: '请扫码添加工人进项目组',
+            msg: '请扫码二维码',
             top_title: "生成二维码",
             config: {
-                value: 'https://sina.com.cn',
-                imagePath: '../../static/logo.png',
-                // imagePath:'../assets/logo.png',
-                // filter: 'color',
-                size: 500
+                value: '',
+                imagePath: '../../static/test.png',
+                filter: 'color'
             },
-            downloadButton: false
+            downloadButton: true
         }
+    },
+    created() {
+        this.config.value = this.$route.params.data
     }
 }
 </script>

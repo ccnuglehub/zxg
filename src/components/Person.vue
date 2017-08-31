@@ -35,7 +35,7 @@
 				<Icon type="chevron-right" size="16"></Icon>
 			</div>
 		</div>
-		<div v-if="!versions.is_worker" v-tap="{ methods: goScanQr }" class="item">
+		<div v-if="!versions.is_worker && !versions.is_xmjl" v-tap="{ methods: goScanQr }" class="item">
 			<div class="item_left">
 				<Icon class="vertical_item icon_left" type="qr-scanner" size="16"></Icon>
 				<span class="vertical_item">生成二维码</span>
@@ -61,6 +61,7 @@
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import { mapState } from 'vuex'
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 // import { mapState, mapActions, mapGetters } from 'vuex'
 export default{
 	data(){
@@ -86,8 +87,22 @@ export default{
 			this.$router.push('focus')
 		},
 		goScanQr(){
-			this.$router.push('qr_code')
-		}
+			var url
+			if(this.versions.is_wy) {
+				url = API_ROUTER_CONFIG.facility_get_code
+			}
+			if(this.versions.is_yz) {
+				url = API_ROUTER_CONFIG.owner_get_code
+			}
+			this.$http.post(url, {
+				open_id: ''
+			},
+			{emulateJSON: true}).then((response) => {
+				this.$router.push({ name:'qr_code', params: { data: response.body.data.user_address + '&' + 'open_id' }})
+			}, (response) => {
+			            // error callback 
+			})
+		},
 	},
 	created(){
 		if(this.xmjl_info) {

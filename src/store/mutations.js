@@ -16,6 +16,44 @@ const mutations = {
 				state.versions[key] = false
 			}
 		}
+	},
+	upDateLocalStorage(state, obj) {
+		if(typeof obj == 'object') {
+			for(var key in obj) {
+				localStorage[key] = obj[key]
+			}
+		} else {
+			console.error('upDateLocalStorage方法的参数只能是对象')
+		}
+	},
+	getLocalStorage(state, data) {
+		var obj = {}
+		if (Object.prototype.toString.call(data) === '[object String]') {
+			obj[data] = localStorage[data]
+		} else if (Object.prototype.toString.call(data) === '[object Array]') {
+			data.forEach(element => {
+				obj[element] = localStorage[element]
+			})
+		}
+		return obj
+	},
+	setState(state, obj) {
+		if (Object.prototype.toString.call(obj) === '[object Object]') {
+			if(obj.anchor) {
+				state.anchor = {}
+				for(var key in obj) {
+					if( key != 'anchor'){
+						state.anchor[key] = obj[key]
+					}
+				}
+			} else {
+				for(var key in obj) {
+						state[key] = obj[key]
+				}
+			}
+		} else {
+			console.error('setState方法的参数只能是对象')
+		}
 	}
 }
 

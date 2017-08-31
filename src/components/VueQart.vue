@@ -1,7 +1,7 @@
 <template>
     <div>
         <div ref="qart"></div>
-        <button @click="convertToImage" v-if="downloadButton">download t2o image</button>
+        <Button class="download_bt" type="success" @click="convertToImage" v-if="downloadButton">保存到本地</Button>
     </div>
 </template>
 
@@ -11,7 +11,6 @@ import QArt from 'qartjs';
   export default {
     props: ['config', 'downloadButton'],
     name: 'VueQart',
-  
     data () {
       return {
         msg: '',
@@ -42,4 +41,13 @@ import QArt from 'qartjs';
     }
   }
 </script>
+
+<style scoped>
+.download_bt {
+  font-size: 14px;
+  padding: 4px 6px;
+  font-weight: bold;
+}
+</style>
+
 

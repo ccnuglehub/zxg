@@ -20,7 +20,7 @@
             <div class="project_intro project_intro_bottom">
                 <div class="bottom_title">
                     <div class="intro_title intro_title_b">工人信息</div>
-                    <div v-tap="{ methods: addWork }" class="b_bt_box">
+                    <div v-tap="{ methods: addWorker }" class="b_bt_box">
                         <div class="bt">添加工人</div>
                     </div>
                 </div>
@@ -244,7 +244,7 @@ export default {
             console.log('j')
             this.evaluate_flag = false
         },
-        addWork(){
+        addWorker(){
             this.$router.push('qr_code')
         },
         focus(item){
