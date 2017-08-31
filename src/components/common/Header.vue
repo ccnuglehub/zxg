@@ -14,7 +14,7 @@ var wx = require('weixin-js-sdk')
 export default {
     data(){
         return {
-            wx
+            wx 
         }
     },
     props:['msg','icon','qr'],

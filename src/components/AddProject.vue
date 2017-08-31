@@ -18,23 +18,23 @@
                         </div>
                          <div v-if="versions.is_worker" class="p_local">
                             <label class="p_lable p_lable_bottom">可接单时间</label>
-                            <!-- <Select v-model="form_data.project_time" placeholder="请选择" style="width:100px">
-                                <Option v-for="(item, index) in time_list" :value="item.value" :key="index">{{ item.label }}</Option>
-                            </Select> -->
+                             <Select @on-change="getTime" v-if="!posted_work" :label-in-value="true" v-model="form_data.project_time" placeholder="请选择" style="width:100px">
+                                <Option v-for="(item, index) in time_list" :value="item.value" :key="index">{{ item.lable }}</Option>
+                            </Select>
                         </div> 
                         <textarea v-if="versions.is_xmjl" v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
                         <div v-if="versions.is_worker" class="p_txt">
-                            <div class="add_project_res">已发布3天后可接单</div>
+                            <div v-if="posted_work" class="add_project_res">已发布{{ project_time }}</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-if="versions.is_worker" class="notice_box">
+            <div v-if="versions.is_worker && !posted_work" class="notice_box">
                 <Icon class="icon" type="volume-high"></Icon>
                 <div class="notice">温馨提示：您未发布接单，请发布新的接单</div>
             </div> 
-            <div v-tap="{ methods: showNotice }" class="bt_box">发布</div>
-            <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="postProject" :msg="msg"></CNotice>
+            <div v-if="!posted_work" v-tap="{ methods: showNotice }" class="bt_box">发布</div>
+            <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
         </div>
         <Menue></Menue>
     </div>
@@ -60,9 +60,15 @@ export default {
                 openid: "1adf123adaf",
                 project_address_section: "洪山区",
                 project_address_detail: "武汉市洪山区",
-                projec_description: "测试"
+                projec_description: "测试",
+                project_time: ''
             },
-            wx
+            wx,
+            posted_work: false,
+            mFn(){
+                console.log('请绑定函数！')
+            },
+            project_time: ''
 		}
     },
     computed: {
@@ -80,6 +86,10 @@ export default {
         
         if(this.versions.is_worker) {
             this.top_title = '接单发布'
+            this.msg = '您确定发布新的接单？'
+            this.mFn = this.postOrder
+        } else {
+            this.mFn = this.postProject
         }
     },
 	methods: {
@@ -88,8 +98,24 @@ export default {
             this.form_data.openid = this.xmjl_info.openid
             console.log(this.form_data.openid)
         },
+        getTime(obj) {
+            this.project_time = obj.label
+        },
+        postOrder(){
+            // 发布接单后的逻辑处理
+            this.posted_work = true
+
+            this.$http.post( API_ROUTER_CONFIG.accept_time,
+            this.form_data,
+            {emulateJSON: true}).then((response) => {
+                if(response.body.status == 1) {
+                    this.cnotice_flag = false
+                }
+            }, (response) => {
+                      // error callback 
+            })
+        },
         postProject(){
-            console.log(this.form_data)
             this.$http.post( API_ROUTER_CONFIG.add_project,
             this.form_data,
             {emulateJSON: true}).then((response) => {

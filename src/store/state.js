@@ -93,43 +93,43 @@ const state = {
     time_list: [
         {
             value: '0',
-            label: '当前可接单'
+            lable: '当前可接单'
         },
         {
             value: '1',
-            label: '一天后接单'
+            lable: '一天后接单'
         },
         {
             value: '2',
-            label: '两天后接单'
+            lable: '两天后接单'
         },
         {
             value: '3',
-            label: '三天后接单'
+            lable: '三天后接单'
         },
         {
             value: '4',
-            label: '四天后接单'
+            lable: '四天后接单'
         },
         {
             value: '5',
-            label: '五天后接单'
+            lable: '五天后接单'
         },
         {
             value: '6',
-            label: '六天后接单'
+            lable: '六天后接单'
         },
         {
             value: '7',
-            label: '七天后接单'
+            lable: '七天后接单'
         },
         {
             value: '8',
-            label: '十五天后接单'
+            lable: '十五天后接单'
         },
         {
             value: '9',
-            label: '一月后接单'
+            lable: '一月后接单'
         }
     ],
 }
