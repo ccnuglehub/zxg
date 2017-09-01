@@ -1,26 +1,26 @@
 <template>
     <div class="menue">
-        <div v-tap="{ methods: goHome }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
+        <div v-tap="{ methods: goHome }" :class="[ (is_owner || is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="ios-home"></Icon>
             <div class="menue_txt">主页</div>
         </div>
-        <div v-if="versions.is_xmjl || versions.is_worker" v-tap="{ methods: goWork }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
+        <div v-if="is_xmjl || is_worker" v-tap="{ methods: goWork }" :class="[ (is_owner || is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="search"></Icon>
             <div class="menue_txt">找工人</div>
         </div>
-        <div v-if="versions.is_xmjl || versions.is_worker" v-tap="{ methods: goReProject }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
+        <div v-if="is_xmjl || is_worker" v-tap="{ methods: goReProject }" :class="[ (is_owner || is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="social-rss"></Icon>
-            <div class="menue_txt">{{ versions.is_xmjl ? '项目发布':'接单发布' }}</div>
+            <div class="menue_txt">{{ is_xmjl ? '项目发布':'接单发布' }}</div>
         </div>
-        <div v-if="versions.is_xmjl || versions.is_worker" v-tap="{ methods: goMyProject }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
+        <div v-if="is_xmjl || is_worker" v-tap="{ methods: goMyProject }" :class="[ (is_owner || is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="ios-folder-outline"></Icon>
             <div class="menue_txt">我的项目</div>
         </div>
-        <div v-if="versions.is_owner || versions.is_wy" v-tap="{ methods: goVisitor }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
+        <div v-if="is_owner || is_wy" v-tap="{ methods: goVisitor }" :class="[ (is_owner || is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="android-people"></Icon>
             <div class="menue_txt">访客记录</div>
         </div> 
-        <div v-tap="{ methods: goPerson }" :class="[ (versions.is_owner || versions.is_wy) ? 'menue_box_3':'menue_box_5']">
+        <div v-tap="{ methods: goPerson }" :class="[ (is_owner || is_wy) ? 'menue_box_3':'menue_box_5']">
             <Icon class="icon" type="android-person"></Icon>
             <div class="menue_txt">个人中心</div>
         </div> 
@@ -33,14 +33,12 @@ export default {
     name: 'menue',
     data(){
         return {
-
+            is_xmjl: false,
+            is_worker: false,
+            is_wy: false,
+            is_owner: false
         }
     },
-    computed: {
-		...mapState([
-			'versions'
-		])
-	},
     methods: {
         goHome(){
             this.$router.push('home')
@@ -60,6 +58,12 @@ export default {
         goPerson(){
             this.$router.push('person')
         }
+    },
+    created() {
+        localStorage.is_xmjl == 'true' ? this.is_xmjl = true : this.is_xmjl = false
+        localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
+        localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
+        localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
     }
 }
 </script>

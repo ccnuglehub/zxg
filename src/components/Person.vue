@@ -35,7 +35,7 @@
 				<Icon type="chevron-right" size="16"></Icon>
 			</div>
 		</div>
-		<div v-if="!versions.is_worker && !versions.is_xmjl" v-tap="{ methods: goScanQr }" class="item">
+		<div v-if="!is_worker && !is_xmjl" v-tap="{ methods: goScanQr }" class="item">
 			<div class="item_left">
 				<Icon class="vertical_item icon_left" type="qr-scanner" size="16"></Icon>
 				<span class="vertical_item">生成二维码</span>
@@ -44,7 +44,7 @@
 				<Icon type="chevron-right" size="16"></Icon>
 			</div>
 		</div>
-		<div v-if="versions.is_xmjl || versions.is_worker" v-tap="{ methods: goFocus }" class="item">
+		<div v-if="is_xmjl || is_worker" v-tap="{ methods: goFocus }" class="item">
 			<div class="item_left">
 				<Icon class="vertical_item" type="heart" size="16"></Icon>
 				<span class="vertical_item">我的关注</span>
@@ -60,21 +60,19 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 // import { mapState, mapActions, mapGetters } from 'vuex'
 export default{
 	data(){
 		return{
 			top_title: '个人中心',
-			person_data: {}
+			person_data: {},
+			is_xmjl: false,
+            is_worker: false,
+            is_wy: false,
+            is_owner: false
 		}
-	},
-	computed: {
-		...mapState([
-			'xmjl_info',
-			'versions'
-		])
 	},
 	methods:{
 		goInfo(){
@@ -88,10 +86,10 @@ export default{
 		},
 		goScanQr(){
 			var url
-			if(this.versions.is_wy) {
+			if(this.is_wy) {
 				url = API_ROUTER_CONFIG.facility_get_code
 			}
-			if(this.versions.is_yz) {
+			if(this.is_yz) {
 				url = API_ROUTER_CONFIG.owner_get_code
 			}
 			this.$http.post(url, {
@@ -105,9 +103,14 @@ export default{
 		},
 	},
 	created(){
-		if(this.xmjl_info) {
-			this.person_data.worker_description = this.xmjl_info.worker_description
-		}
+
+		localStorage.is_xmjl == 'true' ? this.is_xmjl = true : this.is_xmjl = false
+        localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
+        localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
+		localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
+		this.person_data.worker_description = localStorage.worker_description
+		this.open_id = localStorage.open_id
+		
         // this.$http.post('url', data,
         //     {emulateJSON: true}).then((response) => {
                 

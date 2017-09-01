@@ -14,7 +14,7 @@
 <script>
 import Chead from './common/Header.vue'
 import { changeType } from '../util/util.js'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 export default {
     data(){
@@ -24,13 +24,8 @@ export default {
             open_id: '',
         }
     },
-    computed: {
-        ...mapState([
-            'xmjl_info'
-        ])
-    },
     created(){
-        this.open_id = this.xmjl_info.open_id
+        this.open_id = localStorage.open_id
         this.$http.post( API_ROUTER_CONFIG.focus_list, {
 	        open_id: this.open_id
         },

@@ -8,13 +8,13 @@
                     <Form-item label="姓名">
                         <Input v-model="form_data.user_name" class="info_input" type="text"></Input>
                     </Form-item>
-                     <Form-item v-if="versions.is_owner || versions.is_wy || versions.is_worker" label="电话">
+                     <Form-item v-if="is_owner || is_wy || is_worker" label="电话">
                         <Input class="info_input" type="text"></Input>
                     </Form-item> 
                     <Form-item label="地址">
                         <Input v-model="form_data.user_address" class="info_input" type="text"></Input>
                     </Form-item>
-                    <Form-item v-if="versions.is_xmjl || versions.is_worker" label="个人简介">
+                    <Form-item v-if="is_xmjl || is_worker" label="个人简介">
                         <Input v-model="form_data.worker_description" class="info_input" type="textarea"></Input>
                     </Form-item>
                     <div v-tap="{ methods: addInfo }" class="bt">提交</div>
@@ -38,21 +38,24 @@ export default {
                 user_name: "",
                 user_address: "",
                 worker_description: "",
-            }
+            },
+            is_xmjl: false,
+            is_worker: false,
+            is_wy: false,
+            is_owner: false
         }
     },
-    computed: {
-        ...mapState([
-            'xmjl_info',
-            'versions'
-        ])
-    },
     created(){
-        this.form_data.open_id = this.xmjl_info.open_id
+        //获取用户信息
+        localStorage.is_xmjl == 'true' ? this.is_xmjl = true : this.is_xmjl = false
+        localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
+        localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
+        localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
+        this.form_data.open_id = localStorage.open_id
     },
     methods: {
         ...mapActions([
-			'changeXmjlInfo',
+            'upDateLocalStorage'
 		]),
         addInfo(){
             console.log(this.form_data)
@@ -60,7 +63,9 @@ export default {
             this.form_data,
 			{emulateJSON: true}).then((response) => {
 				if(response.body.status == 1) {
-                    this.changeXmjlInfo(this.form_data)
+                    //将localstorage的用户信息更新
+                    this.upDateLocalStorage(this.form_data)
+                    
                     this.$router.go(-1)
                 }
 			}, (response) => {

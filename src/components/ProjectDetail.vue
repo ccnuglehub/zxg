@@ -85,7 +85,7 @@ import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { changeDate, changeType } from '../util/util.js'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   	name: 'project_detail',
   	data () {
@@ -113,11 +113,6 @@ export default {
             }
         }
     },
-    computed: {
-        ...mapState([
-            'xmjl_info'
-        ])
-    },
     filters: {
         getStatus: function(status){
             if(status == 0) {
@@ -131,14 +126,13 @@ export default {
             }
         }
     },
-    created(){
-        this.open_id = this.xmjl_info.open_id
-    },
     components: {
         CNotice,
         Chead,
     },
     created(){
+        this.open_id = localStorage.open_id
+        
         //如果是项目发布后跳转
         if(this.$route.params.obj) {
             this.detail = this.$route.params.obj
