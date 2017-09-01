@@ -30,31 +30,31 @@
 				<Option v-for="(item, index) in user_type_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div>
-		<div v-if="versions.is_worker" class="select_box">
+		<div v-if="is_worker" class="select_box">
 			<label class="select_lable"></label>
 			<Select v-model="form_data.user_work_type" class="select">
 				<Option v-for="(item, index) in user_work_type_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div>
-		 <div v-if="versions.is_worker" class="select_box">
+		 <div v-if="is_worker" class="select_box">
 			<label class="select_lable"></label>
 			<Select class="select">
 				<Option v-for="(item, index) in city_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div> 
-		 <div v-if="versions.is_owner" class="n_input_box">
+		 <div v-if="is_owner" class="n_input_box">
 			<Input class="input" placeholder="请输入房屋地址">
 				<span slot="prepend"><Icon type="location"></Icon></span>
 			</Input>
 			<div class="input error"></div>
 		</div>
-		 <div v-if="versions.is_wy" class="n_input_box">
+		 <div v-if="is_wy" class="n_input_box">
 			<Input class="input" placeholder="请输入物业公司名称">
 				<span slot="prepend"><Icon type="ios-home"></Icon></span>
 			</Input>
 			<div class="input error"></div>
 		</div>
-		<div v-if="versions.is_wy" class="n_input_box">
+		<div v-if="is_wy" class="n_input_box">
 			<Input class="input" placeholder="请输入小区地址">
 				<span slot="prepend"><Icon type="location"></Icon></span>
 			</Input>
@@ -80,27 +80,37 @@ export default {
 				user_type: '',
 				auth_code: '',
 				open_id: '3adf123adaf',
-				user_work_type: '',
+				// user_work_type: '',
 			},
 			bt_text: '发送验证码',
 			phone_flag: true,
 			name_flag: true,
-			empty_flag: false
+			empty_flag: false,
+			is_xmjl: false,
+            is_worker: false,
+            is_wy: false,
+            is_owner: false
 		}
 	},
 	computed: {
 		...mapState([
-			'xmjl_info',
-			'versions',
 			'user_type_list',
 			'user_work_type_list',
-			'city_list'
+			'city_list',
 		])
 	},
 	created(){
-		this.form_data.open_id = this.xmjl_info.open_id
+		// var obj = this.upDateLocalStorage(['open_id', 'is_xmjl', 'is_worker', 'is_wy', 'is_owner'])
+		// this.is_xmjl = obj.is_xmjl
+        // this.is_worker = obj.is_worker
+        // this.is_owner = obj.is_owner
+        // this.is_wy = obj.is_wy
+		// this.form_data.open_id = obj.open_id
 	},
 	methods: {
+		...mapActions([
+			'upDateLocalStorage'
+		]),
 		checkPhone,
 		checkName,
 		checkEmpty,
@@ -114,29 +124,33 @@ export default {
 			this.empty_flag = this.checkEmpty(val)
 		},
 		getUserType(value) {
-			var version = {}
+			this.is_xmjl = false
+			this.is_worker = false
+			this.is_owner = false
+			this.is_wy = false
 			if(value == 1) {
 				// xmjl
-				version.is_xmjl = true
+				this.is_xmjl = true
 			}
 			if(value == 2) {
 				// wygs
-				version.is_wy = true
+				this.is_wy = true
 			}
 			if(value == 3) {
 				// yz
-				version.is_owner = true
+				this.is_owner = true
 			}
 			if(value == 4) {
 				// gy
-				version.is_worker = true
+				this.is_worker = true
 			}
-			this.setVersion(version)
+			var obj = {}
+			obj.is_xmjl = this.is_xmjl
+			obj.is_worker = this.is_worker
+			obj.is_owner = this.is_owner
+			obj.is_wy = this.is_wy
+			this.upDateLocalStorage(obj)
 		},
-		...mapActions([
-			'changeXmjlInfo',
-			'setVersion'
-		]),
 		sendMcodeTimer(){
 			var self = this
 			if(self.time_count != 61) {
@@ -178,11 +192,21 @@ export default {
 			if(this.checkEmpty(this.form_data.user_name) || this.checkEmpty(this.form_data.user_tel)) {
 				return
 			}
-			console.log(this.form_data)
+			alert(this.form_data.user_name)
+			alert(this.form_data.user_tel)
+			alert(this.form_data.user_type)
+			alert(this.form_data.auth_code)
 			this.$http.post(API_ROUTER_CONFIG.add_user,
 				this.form_data,
 			{emulateJSON: true}).then((response) => {
-				this.changeXmjlInfo(response.body.data)
+				var info = response.body.data
+				info.openid = info.open_id
+
+				alert(info.openid)
+
+				//将用户信息存储到localstorage
+				this.upDateLocalStorage(info)
+
                 this.$router.push('home')
 			}, (response) => {
 					// error callback 

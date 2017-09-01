@@ -27,7 +27,7 @@
 import { API_ROUTER_CONFIG, API_ASSETS_CONFIG, HOST_CONFIG } from '@/api/config/api_config'
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
     data () {
@@ -40,13 +40,10 @@ export default {
             qr_code: false,
         }
     },
-    computed: {
-		...mapState([
-			'versions'
-		])
-	},
     created(){
-        if(this.versions.is_worker) {
+        var is_worker
+        is_worker = localStorage.is_worker
+        if(is_worker) {
             this.qr_code = true
         }
         this.page = 0

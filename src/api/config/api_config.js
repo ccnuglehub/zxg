@@ -5,12 +5,12 @@ const key_config ={
 
 const host_config ={
 	// serverIp:"http://localhost:8080"
-	serverIp:"http://101.201.68.200/zxg/weixin/index",
+	serverIp:"http://dashifan.cn/zxg/weixin/index",
 	// serverMain:"",
-	imageIp:"http://101.201.68.200/zxg/data/upload/",
+	imageIp:"http://dashifan.cn/zxg/data/upload/",
 
 	//服务器ip或域名
-	Ip: 'http://101.201.68.200/'
+	Ip: 'http://dashifan.cn/'
 }
 
 const api_router_config = {

@@ -1,17 +1,13 @@
 const state = {
     // 项目经理个人信息,包含属性：name
-    xmjl_info: {
-        openid: "2adsfad1231",
-        open_id: "2adsfad1231"
-    },
+    openid: "2adsfad1231",
+    open_id: "2adsfad1231",
 
     //软件针对的使用者
-    versions: {
-        is_xmjl: false,
-        is_worker: false,
-        is_owner: false,
-        is_wy: false
-    },
+    is_xmjl: false,
+    is_worker: false,
+    is_owner: false,
+    is_wy: false,
     //用户类型
     user_type_list: [
         {

@@ -5,31 +5,31 @@
             <div class="edit_cont">
                 <div class="edit_box">
                     <div class="edit_box_top">
-                        <div v-if="versions.is_xmjl" class="p_name">
+                        <div v-if="is_xmjl" class="p_name">
                             <label class="p_lable p_lable_top">项目名称</label>
                             <input v-model="form_data.project_name" class="p_input" placeholder="请输入项目名称">
                         </div>
-                        <div v-if="versions.is_xmjl" class="p_local">
+                        <div v-if="is_xmjl" class="p_local">
                             <label class="p_lable p_lable_bottom">项目地点</label>
                             <Select v-model="form_data.project_address_section" style="width:100px">
                                 <Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.value }}</Option>
                             </Select>
                             <img v-tap="{ methods: scanQrcode }" class="qr_logo" src="../assets/qr_code.png">
                         </div>
-                         <div v-if="versions.is_worker" class="p_local">
+                         <div v-if="is_worker" class="p_local">
                             <label class="p_lable p_lable_bottom">可接单时间</label>
                              <Select @on-change="getTime" v-if="!posted_work" :label-in-value="true" v-model="form_data.project_time" placeholder="请选择" style="width:100px">
                                 <Option v-for="(item, index) in time_list" :value="item.value" :key="index">{{ item.lable }}</Option>
                             </Select>
                         </div> 
-                        <textarea v-if="versions.is_xmjl" v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
-                        <div v-if="versions.is_worker" class="p_txt">
+                        <textarea v-if="is_xmjl" v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
+                        <div v-if="is_worker" class="p_txt">
                             <div v-if="posted_work" class="add_project_res">已发布{{ project_time }}</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-if="versions.is_worker && !posted_work" class="notice_box">
+            <div v-if="is_worker && !posted_work" class="notice_box">
                 <Icon class="icon" type="volume-high"></Icon>
                 <div class="notice">温馨提示：您未发布接单，请发布新的接单</div>
             </div> 
@@ -46,7 +46,7 @@ import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 var wx = require('weixin-js-sdk')
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   	name: 'add_project',
@@ -68,23 +68,31 @@ export default {
             mFn(){
                 console.log('请绑定函数！')
             },
-            project_time: ''
+            project_time: '',
+            is_xmjl: false,
+            is_worker: false,
+            is_wy: false,
+            is_owner: false
 		}
     },
     computed: {
         ...mapState([
-            'xmjl_info',
-            'versions',
             'city_list',
-            'time_list'
+            'time_list',
         ])
     },
     created(){
+        localStorage.is_xmjl == 'true' ? this.is_xmjl = true : this.is_xmjl = false
+        localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
+        localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
+        localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
+        this.form_data.open_id = localStorage.open_id
+
         this.SDKRegister(this, () => {
 			
         })
         
-        if(this.versions.is_worker) {
+        if(this.is_worker) {
             this.top_title = '接单发布'
             this.msg = '您确定发布新的接单？'
             this.mFn = this.postOrder
@@ -95,8 +103,7 @@ export default {
 	methods: {
 		showNotice(){
             this.cnotice_flag = true
-            this.form_data.openid = this.xmjl_info.openid
-            console.log(this.form_data.openid)
+            this.form_data.open_id = localStorage.open_id
         },
         getTime(obj) {
             this.project_time = obj.label

@@ -9,16 +9,16 @@ const mutations = {
 		}
 	},
 	setVersion(state, version) {
-		for(var key in state.versions) {
+		for(var key in state) {
 			if(version[key]) {
-				state.versions[key] = version[key]
+				state[key] = version[key]
 			} else {
-				state.versions[key] = false
+				state[key] = false
 			}
 		}
 	},
 	upDateLocalStorage(state, obj) {
-		if(typeof obj == 'object') {
+		if(typeof obj == 'object') { 
 			for(var key in obj) {
 				localStorage[key] = obj[key]
 			}

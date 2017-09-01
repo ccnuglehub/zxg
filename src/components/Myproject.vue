@@ -26,7 +26,7 @@
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
 	data() {
 		return{
@@ -40,11 +40,6 @@ export default {
 			},
 			get_data_flag: true
 		}
-	},
-	computed: {
-		...mapState([
-			'xmjl_info'
-		])
 	},
 	methods:{
 		//改变完成字体颜色 
@@ -92,7 +87,7 @@ export default {
 			this.$http.post( API_ROUTER_CONFIG.project_list,
 			{
 				account: this.page,
-				openid: "2adsfad1231",
+				openid: this.openid,
 				project_status: "1"
 			}
 			,
@@ -116,7 +111,7 @@ export default {
 		}
 	},
 	created(){
-		this.openid = this.xmjl_info.openid
+		this.openid = localStorage.openid
 		this.getDataFn = this.getProgress
 		this.getProgress()
     },

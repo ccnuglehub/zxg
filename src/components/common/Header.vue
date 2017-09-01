@@ -4,7 +4,7 @@
             <Icon class="icon" type="ios-arrow-back"></Icon>
         </div>
         <div class="title">{{ msg }}</div>
-        <img v-tap="{ methods: scanQrcode }" v-if="versions.is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
+        <img v-tap="{ methods: scanQrcode }" v-if="is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
     </div>
 </template>
 <script>
@@ -14,16 +14,15 @@ var wx = require('weixin-js-sdk')
 export default {
     data(){
         return {
+            is_xmjl: false,
+            is_worker: false,
+            is_wy: false,
+            is_owner: false,
             wx 
         }
     },
     props:['msg','icon','qr'],
     name: 'header',
-    computed: {
-		...mapState([
-			'versions'
-		])
-	},
     methods: {
         back() {
             this.$router.go(-1)
@@ -39,6 +38,11 @@ export default {
         }
     },
     created(){
+        localStorage.is_xmjl == 'true' ? this.is_xmjl = true : this.is_xmjl = false
+        localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
+        localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
+        localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
+        
         this.SDKRegister(this, () => {
 			
         })

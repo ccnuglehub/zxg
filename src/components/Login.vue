@@ -47,8 +47,7 @@ export default {
 			this.empty_flag = this.checkEmpty(val)
         },
         ...mapActions([
-			'changeXmjlInfo',
-			'setVersion'
+			'upDateLocalStorage'
 		]),
         login(){
             if(!this.phone_flag || this.checkEmpty(this.user_tel)) {
@@ -58,12 +57,27 @@ export default {
                 user_tel: this.user_tel
             },
 			{emulateJSON: true}).then((response) => {
-				this.changeXmjlInfo(response.body.data)
+				var info = response.body.data
+				info.openid = info.open_id
 
 				// 用返回数据设置用户类型
-				this.setVersion({
-					is_xmjl: true
-				})
+				info.is_xmjl = false
+				info.is_worker = false
+				info.is_owner = false
+				info.is_wy = false
+				if(info.user_type == 1) {
+					info.is_xmjl = true
+				} else if(info.user_type == 2) {
+					info.is_wy = true
+				} else if(info.user_type == 3) {
+					info.is_owner = true
+				} else {
+					info.is_worker = true
+				}
+
+				//将用户信息存储到localstorage
+				this.upDateLocalStorage(info)
+
                 this.$router.push('home')
 			}, (response) => {
 					// error callback 
@@ -89,26 +103,6 @@ export default {
 			}
 		},
 		sendMcode(){
-
-
-
-
-
-
-			this.wx.chooseImage({
-				count: 1, // 默认9
-				sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-				sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-				success: function (res) {
-					var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-					alert(localIds[0])
-				}
-			})
-
-
-
-			
-			
 			if(!this.phone_flag) {
 				return
 			}
