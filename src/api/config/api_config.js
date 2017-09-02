@@ -78,6 +78,8 @@ const api_router_config = {
 	news_list: host_config.Ip+"zxg/weixin/index?c=news&f=news_list",
 	//banner新闻请求
 	banner: host_config.Ip+"zxg/weixin/index?c=news&f=banner",
+	//获取用户详细信息
+	get_user_detail: host_config.Ip+"zxg/weixin/index?c=register&f=get_user_detail",
 }
 
 const api_assets_config = {

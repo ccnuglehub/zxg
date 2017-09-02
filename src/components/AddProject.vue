@@ -57,11 +57,11 @@ export default {
             cnotice_flag: false,
             form_data: {
                 project_name: "测试",
-                openid: "1adf123adaf",
+                openid: '',
                 project_address_section: "洪山区",
                 project_address_detail: "武汉市洪山区",
                 projec_description: "测试",
-                project_time: ''
+                // project_time: ''
             },
             wx,
             posted_work: false,
@@ -86,7 +86,7 @@ export default {
         localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
         localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
         localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
-        this.form_data.open_id = localStorage.open_id
+        this.form_data.openid = localStorage.openid
 
         this.SDKRegister(this, () => {
 			
@@ -103,7 +103,6 @@ export default {
 	methods: {
 		showNotice(){
             this.cnotice_flag = true
-            this.form_data.open_id = localStorage.open_id
         },
         getTime(obj) {
             this.project_time = obj.label

@@ -110,7 +110,8 @@ export default {
                 rate_content: "",
                 rate_project_name: "",
                 p2w_id: ""
-            }
+            },
+            project_id: ''
         }
     },
     filters: {
@@ -136,7 +137,7 @@ export default {
         //如果是项目发布后跳转
         if(this.$route.params.obj) {
             this.detail = this.$route.params.obj
-            this.from_add_project = true
+            this.from_add_project = false
             this.detail.project_start_time =new Date().getTime()
         }
         if(this.$route.params.item) {
@@ -157,8 +158,8 @@ export default {
             }
             ,
             {emulateJSON: true}).then((response) => {
-                if(true) {
-                    
+                if(response.body.data.status = 1) {
+                    this.from_add_project = true
                 } else {
 
                 }
@@ -235,11 +236,11 @@ export default {
             this.evaluate_flag = true
         },
         closeEnotce(){
-            console.log('j')
             this.evaluate_flag = false
         },
         addWorker(){
-            this.$router.push('qr_code')
+            var txt = 'worker_enter_project' + this.open_id + '&' + this.detail.project_id
+            this.$router.push({ name: 'qr_code', params: { from: 'project_detail', txt: txt }})
         },
         focus(item){
             this.$http.post( API_ROUTER_CONFIG.focus_worker,

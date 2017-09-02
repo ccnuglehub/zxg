@@ -45,6 +45,15 @@ const changeType = val => {
     // console.log(typeof type)
     //4油漆工 5泥瓦工 6水电工 7木工
     switch(val){
+        case "1":
+            return "项目经理";
+            break;
+        case "2":
+            return "物业公司";
+            break;
+        case "3":
+            return "业主";
+            break;
         case "4":
             return "油漆工";
             break;
@@ -92,6 +101,41 @@ const changeRate2Number = val =>{
         return val
     }
 }
+
+const parseUrl = () => {
+    String.prototype.parseURL = function(){
+        var url =this.toString()
+        var a = document.createElement('a');
+        a.href = url;
+        return {
+            source: url,
+            protocol: a.protocol.replace(':', ''),
+            host: a.hostname,
+            port: a.port,
+            query: a.search,
+            file: (a.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1],
+            hash: a.hash.replace('#', ''),
+            path: a.pathname.replace(/^([^\/])/, '/$1'),
+            relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ''])[1],
+            segments: a.pathname.replace(/^\//, '').split('/'),
+            params: (function() {
+                var ret = {};
+                var seg = a.search.replace(/^\?/, '').split('&').filter(function(v,i){
+                    if (v!==''&&v.indexOf('=')) {
+                        return true;
+                    }
+                });
+                seg.forEach( function(element, index) {
+                    var idx = element.indexOf('=');
+                    var key = element.substring(0, idx);
+                    var val = element.substring(idx+1);
+                    ret[key] = val;
+                });
+                return ret;
+            })()
+        };
+    }
+}
 export {
 	checkPhone,
     checkName,
@@ -99,5 +143,6 @@ export {
     changeDate,
     changeType,
     changeType2Number,
-    changeRate2Number
+    changeRate2Number,
+    parseUrl
 }

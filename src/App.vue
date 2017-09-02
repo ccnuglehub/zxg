@@ -7,6 +7,7 @@
 <script>
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { mapActions, mapState } from 'vuex'
+import { parseUrl } from './util/util.js'
 
 export default {
     name: 'app',
@@ -15,19 +16,18 @@ export default {
             open_id: ''
         }
     },
-    computed: {
-		...mapState([
-			'xmjl_info'
-		])
-	},
+    methods: {
+        parseUrl
+    },
     created() {
-        this.$http.get(API_ROUTER_CONFIG.get_open_id,
-        {emulateJSON: true}).then((response) => {
-            this.open_id = response.body.data.open_id
-            this.changeXmjlInfo(response.body.data)
-        }, (response) => {
-                // error callback 
-        })
+        parseUrl()
+        // this.$http.get(API_ROUTER_CONFIG.get_open_id,
+        // {emulateJSON: true}).then((response) => {
+        //     this.open_id = response.body.data.open_id
+        //     this.changeXmjlInfo(response.body.data)
+        // }, (response) => {
+        //         // error callback 
+        // })
     }
 }
 </script>

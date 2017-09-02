@@ -47,6 +47,8 @@ import QArt from 'qartjs';
   font-size: 14px;
   padding: 4px 6px;
   font-weight: bold;
+  margin-top: 20px;
+  background: rgb(134,210,198);
 }
 </style>
 

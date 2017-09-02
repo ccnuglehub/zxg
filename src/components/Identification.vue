@@ -37,12 +37,29 @@ export default {
                 })
             },
             uploadImage(){
-                this.wx.uploadImage({
-                    localId: this.localIds, // 默认9
-                    isShowProgressTips: 1 ,
-                    success: function (res) {
-                         var serverId = res.serverId; // 返回图片的服务器端ID
+                if(this.this.localIds) {
+                    this.wx.uploadImage({
+                        localId: this.localIds.toString(), // 默认9
+                        isShowProgressTips: 1 ,
+                        success: function (res) {
+                            var mediaId = res.serverId; // 返回图片的服务器端ID
+                        }
+                    })
+                }
+            },
+            putImageToServer(mediaId){
+                var open_id = this.localStorage[open_id]
+                this.$http.post( API_ROUTER_CONFIG.identity,
+                {
+                    media_id: mediaId,
+                    open_id: open_id
+                },
+                {emulateJSON: true}).then((response) => {
+                    if(response.body.status == 1) {
+                        
                     }
+                }, (response) => {
+                        // error callback 
                 })
             }
         },

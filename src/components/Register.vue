@@ -32,40 +32,51 @@
 		</div>
 		<div v-if="is_worker" class="select_box">
 			<label class="select_lable"></label>
-			<Select v-model="form_data.user_work_type" class="select">
+			<Select v-model="form_data.user_type" class="select">
 				<Option v-for="(item, index) in user_work_type_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div>
 		 <div v-if="is_worker" class="select_box">
 			<label class="select_lable"></label>
-			<Select class="select">
+			<Select v-model="form_data.user_address" class="select">
 				<Option v-for="(item, index) in city_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div> 
-		 <div v-if="is_owner" class="n_input_box">
-			<Input class="input" placeholder="请输入房屋地址">
+		<div v-if="is_owner" class="n_input_box">
+			<Input v-model="form_data.user_address" class="input" placeholder="请输入房屋地址">
 				<span slot="prepend"><Icon type="location"></Icon></span>
 			</Input>
 			<div class="input error"></div>
 		</div>
 		 <div v-if="is_wy" class="n_input_box">
-			<Input class="input" placeholder="请输入物业公司名称">
+			<Input v-model="form_data.facility_name" class="input" placeholder="请输入物业公司名称">
 				<span slot="prepend"><Icon type="ios-home"></Icon></span>
 			</Input>
 			<div class="input error"></div>
 		</div>
 		<div v-if="is_wy" class="n_input_box">
-			<Input class="input" placeholder="请输入小区地址">
+			<Input v-model="form_data.user_address" class="input" placeholder="请输入小区地址">
 				<span slot="prepend"><Icon type="location"></Icon></span>
 			</Input>
 			<div class="input error"></div>
 		</div>  
-		<Button v-tap="{ methods: register }" class="register_bt" type="success" long>注册</Button>
+		<form class="register_form" action="http://dashifan.cn/zxg/weixin/index?c=register&f=add_user" method="post">
+			<p class="register_item">姓名: <input type="text" v-model="form_data.user_name" name="user_name" /></p >
+			<p class="register_item">电话: <input type="text" v-model="form_data.user_tel" name="user_tel" /></p >
+			<p class="register_item">验证码: <input type="text" v-model="form_data.auth_code" name="auth_code" /></p >
+			<p class="register_item">用户类型: <input type="text" v-model="form_data.user_type" name="user_type" /></p >
+			<p v-if="is_wy" class="register_item">请输入物业公司名称: <input type="text" v-model="form_data.user_type" name="user_type" /></p >
+			<p v-if="!is_xmjl" class="register_item">地址: <input type="text" v-model="form_data.user_type" name="user_type" /></p >
+			<input class="register_bt" type="submit" value="注册" /> 
+			<!-- <Button v-tap="{ methods: register }" class="register_bt" type="success" long>注册</Button>   -->
+		</form>
+		<CNotice v-if="show_notice" :nclick="closeD" :mclick="mFn" :msg="msg" :btmsg="btmsg"></CNotice>
 	</div>
 </template>
 
 <script>
 import { checkPhone, checkName, checkEmpty } from '../util/util.js'
+import CNotice from './common/Notice.vue'
 import { mapActions, mapState } from 'vuex'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 export default {
@@ -89,7 +100,10 @@ export default {
 			is_xmjl: false,
             is_worker: false,
             is_wy: false,
-            is_owner: false
+			is_owner: false,
+			show_notice: false,
+			msg: '',
+			btmsg: '前往注册'
 		}
 	},
 	computed: {
@@ -106,6 +120,15 @@ export default {
         // this.is_owner = obj.is_owner
         // this.is_wy = obj.is_wy
 		// this.form_data.open_id = obj.open_id
+
+		var arg = window.location.href.parseURL()
+		if(arg.params.status == 0) {
+			this.show_notice = true
+			this.msg = arg.params.msg
+		}
+	},
+	components: {
+		CNotice
 	},
 	methods: {
 		...mapActions([
@@ -211,6 +234,12 @@ export default {
 			}, (response) => {
 					// error callback 
             })
+		},
+		closeD() {
+			this.show_notice = false
+		},
+		mFn() {
+			
 		}
 	}
 }
@@ -221,6 +250,13 @@ export default {
 .register {
 	min-height: calc(100vh - 45px);
 	box-sizing: border-box;
+}
+.register_form {
+	margin: 0;
+	padding: 0;
+}
+.register_item {
+	display: none;
 }
 .app_logo {
 	margin-top: 36px;
@@ -257,6 +293,13 @@ export default {
 .input,
 .register_bt {
 	width: 66%;
+}
+.register_bt {
+	border: 1px solid #19be6b;
+	border-radius: 4px;
+	padding: 4px 0;
+	color: #fff;
+    background-color: #19be6b;
 }
 .m_bt {
 	width: 30%;

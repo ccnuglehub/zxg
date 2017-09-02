@@ -30,19 +30,19 @@ const state = {
     //工人类型
     user_work_type_list: [
         {
-            id: 1,
+            id: 4,
             value: '油漆工'
         },
         {
-            id: 2,
+            id: 5,
             value: '泥瓦工'
         },
         {
-            id: 3,
+            id: 6,
             value: '水电工'
         },
         {
-            id: 4,
+            id: 7,
             value: '木工'
         }
     ],

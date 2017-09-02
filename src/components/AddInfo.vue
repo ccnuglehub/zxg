@@ -8,9 +8,9 @@
                     <Form-item label="姓名">
                         <Input v-model="form_data.user_name" class="info_input" type="text"></Input>
                     </Form-item>
-                     <Form-item v-if="is_owner || is_wy || is_worker" label="电话">
-                        <Input class="info_input" type="text"></Input>
-                    </Form-item> 
+                    <!-- <Form-item v-if="is_owner || is_wy || is_worker" label="电话">
+                        <Input v-model="form_data.user_tel" class="info_input" type="text"></Input>
+                    </Form-item>  -->
                     <Form-item label="地址">
                         <Input v-model="form_data.user_address" class="info_input" type="text"></Input>
                     </Form-item>
@@ -36,6 +36,7 @@ export default {
             form_data: {
                 open_id: '2adsfad1231',
                 user_name: "",
+                // user_tel: '',
                 user_address: "",
                 worker_description: "",
             },

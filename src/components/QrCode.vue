@@ -30,7 +30,9 @@ export default {
         }
     },
     created() {
-        this.config.value = this.$route.params.data
+        // if(this.$route.params.from = 'project_detail') {
+            this.config.value = this.$route.params.txt
+        // }
     }
 }
 </script>

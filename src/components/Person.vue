@@ -15,7 +15,7 @@
 			<div class="personal_detail">
 				<span class="type">工作类型：{{ person_data.user_type }}</span>
 			</div>
-			<div class="personal_number">电话：{{ person_data.user_tell }}</div>
+			<div class="personal_number">电话：<a :href="'tel:' + person_data.user_tel">{{ person_data.user_tel }}</a></div>
 		</div>
 		<div v-tap="{ methods: goInfo }" class="item">
 			<div class="item_left">
@@ -60,6 +60,7 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
+import { changeType } from '@/util/util'
 import { mapState, mapActions } from 'vuex'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 // import { mapState, mapActions, mapGetters } from 'vuex'
@@ -75,6 +76,7 @@ export default{
 		}
 	},
 	methods:{
+		changeType,
 		goInfo(){
 			this.$router.push('add_info')
 		},
@@ -85,18 +87,21 @@ export default{
 			this.$router.push('focus')
 		},
 		goScanQr(){
-			var url
+			var url, aim
 			if(this.is_wy) {
 				url = API_ROUTER_CONFIG.facility_get_code
+				aim = 'worker_enter_xq'
 			}
 			if(this.is_yz) {
 				url = API_ROUTER_CONFIG.owner_get_code
+				aim = 'worker_enter_fj'
 			}
+			console.log(url)
 			this.$http.post(url, {
 				open_id: ''
 			},
 			{emulateJSON: true}).then((response) => {
-				this.$router.push({ name:'qr_code', params: { data: response.body.data.user_address + '&' + 'open_id' }})
+				this.$router.push({ name:'qr_code', params: { aim: aim, txt: response.body.data.user_address + '&' + 'open_id' }})
 			}, (response) => {
 			            // error callback 
 			})
@@ -109,6 +114,9 @@ export default{
         localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
 		localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
 		this.person_data.worker_description = localStorage.worker_description
+		this.person_data.user_name = localStorage.user_name
+		this.person_data.user_tel = localStorage.user_tel
+		this.person_data.user_type = this.changeType(localStorage.user_type)
 		this.open_id = localStorage.open_id
 		
         // this.$http.post('url', data,
@@ -212,7 +220,6 @@ export default{
 }
 .description {
 	padding-left: 2px;
-	font-weight: normal;
 	font-size: 13px;
 }
 </style>
