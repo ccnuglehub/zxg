@@ -3,6 +3,9 @@
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="identification">
             <div class="title">请上传清晰的本人大头照及身份证照</div>
+            <div v-for="(item, index) in img_data" :key="index">
+                <img class="preview" :src="item" />
+            </div>
             <div v-tap="{ methods: choseImage }" class="uploader">
                 <Icon type="camera" size="20"></Icon>
             </div>
@@ -22,30 +25,61 @@ export default {
             return {
                 top_title: '实名认证',
                 wx,
-                localIds: ''
+                img_data: [],
+                localIds: []
             }
         },
         methods: {
             choseImage(){
+                this.img_data = []
+                var self = this
                 this.wx.chooseImage({
-                    count: 1, // 默认9
+                    count: 2, // 默认9
                     sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
                     sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
                     success: function (res) {
-                        this.localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        self.localIds = localIds
+                        alert(4)
+                        localIds.forEach(function(element) {
+                             alert(3)
+                            self.getImageData(element)
+                            alert(2)
+                        }, self);
                     }
                 })
             },
+            getImageData(localId) {
+                var self = this
+                this.wx.getLocalImgData({
+                    localId: localId.toString(),
+                    success: function (res) {
+                        alert(res.localData)
+                        self.img_data.push(res.localData)
+                    },
+                    fail: function(res) {
+                        for(var key in res) {
+                            alert(res[key])
+                        }
+                    }
+                }) 
+            },
             uploadImage(){
-                if(this.this.localIds) {
+                var localIds = this.localIds
+                var self = this
+                localIds.forEach(function(element) {
                     this.wx.uploadImage({
-                        localId: this.localIds.toString(), // 默认9
-                        isShowProgressTips: 1 ,
+                        localId: element.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
                         success: function (res) {
                             var mediaId = res.serverId; // 返回图片的服务器端ID
+                            self.putImageToServer(mediaId)
+                        },
+                        fail:function(res){
+
                         }
                     })
-                }
+                }, self);
             },
             putImageToServer(mediaId){
                 var open_id = this.localStorage[open_id]
@@ -109,6 +143,14 @@ export default {
     height:58px;
     line-height: 58px;
     margin: 0 auto;
+    border: 1px dashed grey;
+}
+.img_cont {
+    text-align: center;
+    width: 100%;
+}
+.preview {
+    width: 30%;
     border: 1px dashed grey;
 }
 </style>

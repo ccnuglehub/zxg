@@ -39,7 +39,7 @@
 		 <div v-if="is_worker" class="select_box">
 			<label class="select_lable"></label>
 			<Select v-model="form_data.user_address" class="select">
-				<Option v-for="(item, index) in city_list" :value="item.id" :key="index">{{ item.value }}</Option>
+				<Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div> 
 		<div v-if="is_owner" class="n_input_box">
@@ -65,11 +65,11 @@
 			<p class="register_item">电话: <input type="text" v-model="form_data.user_tel" name="user_tel" /></p >
 			<p class="register_item">验证码: <input type="text" v-model="form_data.auth_code" name="auth_code" /></p >
 			<p class="register_item">用户类型: <input type="text" v-model="form_data.user_type" name="user_type" /></p >
-			<p v-if="is_wy" class="register_item">请输入物业公司名称: <input type="text" v-model="form_data.user_type" name="user_type" /></p >
-			<p v-if="!is_xmjl" class="register_item">地址: <input type="text" v-model="form_data.user_type" name="user_type" /></p >
+			<p v-if="is_wy" class="register_item">请输入物业公司名称: <input type="text" v-model="form_data.facility_name" name="facility_name" /></p >
+			<p v-if="!is_xmjl" class="register_item">地址: <input type="text" v-model="form_data.user_address" name="user_address" /></p >
 			<input class="register_bt" type="submit" value="注册" /> 
-			<!-- <Button v-tap="{ methods: register }" class="register_bt" type="success" long>注册</Button>   -->
 		</form>
+		<!-- <Button v-tap="{ methods: register }" class="register_bt" type="success" long>注jj册</Button>   -->
 		<CNotice v-if="show_notice" :nclick="closeD" :mclick="mFn" :msg="msg" :btmsg="btmsg"></CNotice>
 	</div>
 </template>
@@ -90,8 +90,8 @@ export default {
 				user_tel: '',
 				user_type: '',
 				auth_code: '',
-				open_id: '3adf123adaf',
-				// user_work_type: '',
+				user_address: '',
+				facility_name: ''
 			},
 			bt_text: '发送验证码',
 			phone_flag: true,
@@ -103,7 +103,10 @@ export default {
 			is_owner: false,
 			show_notice: false,
 			msg: '',
-			btmsg: '前往注册'
+			btmsg: '前往登录',
+			mFn: () => {
+				console.log('需绑定函数！')
+			}
 		}
 	},
 	computed: {
@@ -124,8 +127,14 @@ export default {
 		var arg = window.location.href.parseURL()
 		if(arg.params.status == 0) {
 			this.show_notice = true
-			this.msg = arg.params.msg
+			this.mFn = this.goLogin
 		}
+		if(arg.params.status == 1) {
+			this.show_notice = true
+			this.btmsg = '确定'
+			this.mFn = this.reTry
+		}
+		this.msg = decodeURI(arg.params.msg)
 	},
 	components: {
 		CNotice
@@ -215,17 +224,13 @@ export default {
 			if(this.checkEmpty(this.form_data.user_name) || this.checkEmpty(this.form_data.user_tel)) {
 				return
 			}
-			alert(this.form_data.user_name)
-			alert(this.form_data.user_tel)
-			alert(this.form_data.user_type)
-			alert(this.form_data.auth_code)
+			console.log(this.form_data)
+			return
 			this.$http.post(API_ROUTER_CONFIG.add_user,
 				this.form_data,
 			{emulateJSON: true}).then((response) => {
 				var info = response.body.data
 				info.openid = info.open_id
-
-				alert(info.openid)
 
 				//将用户信息存储到localstorage
 				this.upDateLocalStorage(info)
@@ -238,8 +243,11 @@ export default {
 		closeD() {
 			this.show_notice = false
 		},
-		mFn() {
-			
+		goLogin() {
+			this.$router.push('login')
+		},
+		reTry() {
+			this.show_notice = false
 		}
 	}
 }

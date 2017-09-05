@@ -2,7 +2,7 @@
 	<div v-infinite-scroll="onScroll" infinite-scroll-disabled="true" infinite-scroll-distance="22" class="worker_detail">
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="item_list_item">
-            <img class="work_photo" :src="worker_detail.user_avatar">
+            <img class="work_photo" :src="workerAvatar(worker_detail.user_avatar)">
             <div class="work_info lb_item">
                 <div class="work_info_top">
                     <div class="lb_item worker_type">{{ changeType(worker_detail.user_type) }}</div>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="evaluate_etc_bottom">
                         <div class="evaluate_xm fsz txt_ell">项目名称：{{ item.rate_project_name }}</div>
-                        <div class="evaluate_time fsz txt_ell">{{ item.rate_time }}</div>
+                        <div class="evaluate_time fsz txt_ell">{{ changeDate(item.rate_time) }}</div>
                     </div>
                 </div>
             </div>
@@ -63,8 +63,8 @@
 
 <script>
 import Chead from './common/Header.vue'
-import { changeType } from '../util/util.js'
-import { API_ROUTER_CONFIG } from '@/api/config/api_config'
+import { changeType, changeDate } from '../util/util.js'
+import { API_ROUTER_CONFIG, HOST_CONFIG } from '@/api/config/api_config'
 
 export default {
   	name: 'worker_detail',
@@ -83,22 +83,32 @@ export default {
             this.worker_detail = this.$route.params.focus_worker
             this.worker_detail.worker_average_rate = parseInt(this.worker_detail.worker_average_rate)
         }
+        if(this.$route.params.find_worker) {
+            this.worker_detail = this.$route.params.find_worker
+            this.worker_detail.worker_average_rate = parseInt(this.worker_detail.worker_average_rate)
+        }
         if(this.$route.params.visitor) {
             this.worker_detail = this.$route.params.visitor
             this.worker_detail.worker_average_rate = parseInt(this.worker_detail.worker_average_rate)
         }
-        this.getComments(this.worker_detail.user_id)
+        this.getComments(this.worker_detail.open_id)
     },
     methods: {
         changeType,
-        getComments(user_id){
+        changeDate,
+        workerAvatar(url){
+            // console.log(url)
+            return HOST_CONFIG.imageIp+url;
+        },
+        getComments(open_id){
             this.get_data_flag = false
             this.$http.post( API_ROUTER_CONFIG.rate_detail,
             {
                 account: this.page,
-                user_id: user_id
+                open_id: open_id
             },
             {emulateJSON: true}).then((response) => {
+                console.log(response)
                 this.worker_comments = response.body.data
                 this.get_data_flag = true
             }, (response) => {
@@ -108,7 +118,7 @@ export default {
         onScroll(){
             if(this.get_data_flag) {
                 this.page++
-                this.getComments(this.worker_detail.user_id)
+                this.getComments(this.worker_detail.open_id)
             }
         }
     },

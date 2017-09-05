@@ -20,7 +20,7 @@
             </div>
 		</div>
         <div class="item_list">
-            <div v-tap="{ methods: goWorkerDetail, index: index }" class="item_list_item" :key="index" v-for="(worker ,index) in workers">
+            <div v-tap="{ methods: goWorkerDetail, worker: worker }" class="item_list_item" :key="index" v-for="(worker ,index) in workers">
                 <img class="work_photo" :src="workerAvatar(worker.user_avatar)">
                 <div class="work_info lb_item">
                     <div class="work_info_top">
@@ -30,7 +30,7 @@
                     </div>
                     <Rate allow-half disabled v-model.number="worker.worker_average_rate"></Rate>
                     <div class="work_info_bottom">
-                        <div class="lb_item worker_region">{{worker.user_address}}</div>
+                        <div class="lb_item worker_region">{{ worker.user_address }}</div>
                         <div class="lb_item">已接单：{{worker.worker_orders_count}}</div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
-import {HOST_CONFIG} from '@/api/config/api_config'
+import { HOST_CONFIG } from '@/api/config/api_config'
 import { changeType2Number, changeRate2Number } from '@/util/util'
 export default {
   	name: 'work',
@@ -87,7 +87,6 @@ export default {
             local_slots: [
                 {
                 flex: 1,
-                //
                 values: ['江岸区', '江汉区', '硚口区', '汉阳区', '武昌区', '青山区','洪山区','蔡甸区','江夏区','黄陂区','新洲区'],
                     className: 'local_slots',
                     textAlign: 'center',
@@ -278,8 +277,9 @@ export default {
             })
         },
         goWorkerDetail(obj){
-            var index = obj.index;
-            this.$router.push({url:'worker_detail',params:{worker : this.workers && this.workers[index]}})
+
+            var worker = obj.worker;
+            this.$router.push({ name:'worker_detail', params:{ find_worker : worker }})
         },
         workerAvatar(url){
             // console.log(url)

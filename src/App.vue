@@ -11,23 +11,14 @@ import { parseUrl } from './util/util.js'
 
 export default {
     name: 'app',
-    data() {
-        return {
-            open_id: ''
-        }
-    },
     methods: {
         parseUrl
     },
     created() {
         parseUrl()
-        // this.$http.get(API_ROUTER_CONFIG.get_open_id,
-        // {emulateJSON: true}).then((response) => {
-        //     this.open_id = response.body.data.open_id
-        //     this.changeXmjlInfo(response.body.data)
-        // }, (response) => {
-        //         // error callback 
-        // })
+        if(localStorage.open_id) {
+            this.$router.push('home')
+        }
     }
 }
 </script>

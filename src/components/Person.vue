@@ -53,6 +53,15 @@
 				<Icon type="chevron-right" size="16"></Icon>
 		    </div>
 		</div>
+		<div v-tap="{ methods: exit }" class="item">
+			<div class="item_left">
+				<Icon class="vertical_item" type="android-exit" size="16"></Icon>
+				<span class="vertical_item">注销账号</span>
+			</div>
+			<div class="icon">
+				<Icon type="chevron-right" size="16"></Icon>
+		    </div>
+		</div>
 		<Menue></Menue>
 	</div>
 </template>
@@ -86,25 +95,29 @@ export default{
 		goFocus(){
 			this.$router.push('focus')
 		},
+		exit() {
+			localStorage.clear()
+			this.$router.push('login')
+		},
 		goScanQr(){
-			var url, aim
+			var aim, id = localStorage.open_id, facility_adress
 			if(this.is_wy) {
-				url = API_ROUTER_CONFIG.facility_get_code
 				aim = 'worker_enter_xq'
+				this.$http.post( API_ROUTER_CONFIG.facility_get_code, {
+					open_id: localStorage.open_id
+				},
+				{emulateJSON: true}).then((response) => {
+					facility_adress = response.body.data.user_address
+					this.$router.push({ name:'qr_code', params: { aim: aim, txt: aim + '&' + id + '&' + facility_adress }})
+				}, (response) => {
+							// error callback 
+				})
 			}
-			if(this.is_yz) {
-				url = API_ROUTER_CONFIG.owner_get_code
+			if(this.is_owner) {
 				aim = 'worker_enter_fj'
+				this.$router.push({ name:'qr_code', params: { aim: aim, txt: aim + '&' + id }})
 			}
-			console.log(url)
-			this.$http.post(url, {
-				open_id: ''
-			},
-			{emulateJSON: true}).then((response) => {
-				this.$router.push({ name:'qr_code', params: { aim: aim, txt: response.body.data.user_address + '&' + 'open_id' }})
-			}, (response) => {
-			            // error callback 
-			})
+		
 		},
 	},
 	created(){
@@ -170,7 +183,6 @@ export default{
 	padding: 5px 0 5px 9.2vw;
 	font-size: 14px;
 	text-align: left;
-
 }
 .personal_abstract,
 .personal_number,
@@ -182,6 +194,9 @@ export default{
 .personal_number,
 .name{
 	padding-right: 13.5vw;
+}
+.personal_number a {
+	color: #fff;
 }
 .item{
 	padding: 2.3vh 9.8vw;

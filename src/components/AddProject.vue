@@ -18,13 +18,13 @@
                         </div>
                          <div v-if="is_worker" class="p_local">
                             <label class="p_lable p_lable_bottom">可接单时间</label>
-                             <Select @on-change="getTime" v-if="!posted_work" :label-in-value="true" v-model="form_data.project_time" placeholder="请选择" style="width:100px">
+                             <Select @on-change="getTime" v-if="!posted_work" :label-in-value="true" v-model="form_data.worker_accept_time" placeholder="请选择" style="width:100px">
                                 <Option v-for="(item, index) in time_list" :value="item.value" :key="index">{{ item.lable }}</Option>
                             </Select>
                         </div> 
-                        <textarea v-if="is_xmjl" v-model="form_data.projec_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
+                        <textarea v-if="is_xmjl" v-model="form_data.project_description" class="p_txt" placeholder="请输入你的项目简介"></textarea>
                         <div v-if="is_worker" class="p_txt">
-                            <div v-if="posted_work" class="add_project_res">已发布{{ project_time }}</div>
+                            <div v-if="posted_work" class="add_project_res">已发布{{ worker_accept_time }}</div>
                         </div>
                     </div>
                 </div>
@@ -56,19 +56,19 @@ export default {
             msg: '您确认发布新的项目？',
             cnotice_flag: false,
             form_data: {
-                project_name: "测试",
-                openid: '',
-                project_address_section: "洪山区",
-                project_address_detail: "武汉市洪山区",
-                projec_description: "测试",
-                // project_time: ''
+                project_name: "",
+                open_id: '',
+                project_address_section: "",
+                project_address_detail: "",
+                project_description: "",
+                worker_accept_time: ''
             },
             wx,
             posted_work: false,
             mFn(){
                 console.log('请绑定函数！')
             },
-            project_time: '',
+            worker_accept_time: '',
             is_xmjl: false,
             is_worker: false,
             is_wy: false,
@@ -86,7 +86,7 @@ export default {
         localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
         localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
         localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
-        this.form_data.openid = localStorage.openid
+        this.form_data.open_id = localStorage.open_id
 
         this.SDKRegister(this, () => {
 			
@@ -105,14 +105,17 @@ export default {
             this.cnotice_flag = true
         },
         getTime(obj) {
-            this.project_time = obj.label
+            this.worker_accept_time = obj.label
         },
         postOrder(){
             // 发布接单后的逻辑处理
             this.posted_work = true
 
             this.$http.post( API_ROUTER_CONFIG.accept_time,
-            this.form_data,
+            {
+                worker_accept_time: this.form_data.worker_accept_time,
+                open_id: this.form_data.open_id
+            },
             {emulateJSON: true}).then((response) => {
                 if(response.body.status == 1) {
                     this.cnotice_flag = false
@@ -127,7 +130,8 @@ export default {
             {emulateJSON: true}).then((response) => {
                 if(response.body.status == 1) {
                     this.cnotice_flag = false
-                    this.$router.push({ name: 'project_detail', params: { obj: this.form_data }})
+                    var _obj = response.body.data
+                    this.$router.push({ name: 'project_detail', params: { obj: _obj }})
                 }
             }, (response) => {
                       // error callback 
@@ -140,10 +144,11 @@ export default {
         },
         scanQrcode(){
             this.wx.scanQRCode({
-                needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                 scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
                 success: function (res) {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                    this.project_address_detail = result
                 }
             })
         }

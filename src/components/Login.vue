@@ -28,7 +28,7 @@ var wx = require('weixin-js-sdk')
 export default {
     data () {
         return {
-            user_tel: '18627029526',
+            user_tel: '',
             auth_code: '',
             empty_flag: '',
 			phone_flag:true,
@@ -54,31 +54,34 @@ export default {
 				return
 			}
             this.$http.post(API_ROUTER_CONFIG.login ,{
-                user_tel: this.user_tel
+				user_tel: this.user_tel,
+				auth_code: this.auth_code
             },
 			{emulateJSON: true}).then((response) => {
-				var info = response.body.data
-				info.openid = info.open_id
-
-				// 用返回数据设置用户类型
-				info.is_xmjl = false
-				info.is_worker = false
-				info.is_owner = false
-				info.is_wy = false
-				if(info.user_type == 1) {
-					info.is_xmjl = true
-				} else if(info.user_type == 2) {
-					info.is_wy = true
-				} else if(info.user_type == 3) {
-					info.is_owner = true
+				if(response.body.status == 0) {
+					alert(response.body.msg)
 				} else {
-					info.is_worker = true
+					var info = response.body.data
+
+					// 用返回数据设置用户类型
+					info.is_xmjl = false
+					info.is_worker = false
+					info.is_owner = false
+					info.is_wy = false
+					if(info.user_type == 1) {
+						info.is_xmjl = true
+					} else if(info.user_type == 2) {
+						info.is_wy = true
+					} else if(info.user_type == 3) {
+						info.is_owner = true
+					} else {
+						info.is_worker = true
+					}
+					//将用户信息存储到localstorage
+					this.upDateLocalStorage(info)
+
+					this.$router.push('home')
 				}
-
-				//将用户信息存储到localstorage
-				this.upDateLocalStorage(info)
-
-                this.$router.push('home')
 			}, (response) => {
 					// error callback 
             })
@@ -118,9 +121,7 @@ export default {
 		}
 	},
 	created() {
-		this.SDKRegister(this, () => {
-			
-		})
+		this.SDKRegister(this, () => {})
 	}
 }
 </script>

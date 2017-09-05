@@ -4,7 +4,7 @@
             <Icon class="icon" type="ios-arrow-back"></Icon>
         </div>
         <div class="title">{{ msg }}</div>
-        <img v-tap="{ methods: scanQrcode }" v-if="is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
+        <img v-tap="{ methods: workerEnterPeoject }" v-if="is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
     </div>
 </template>
 <script>
@@ -34,6 +34,7 @@ export default {
                 scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
                 success: function (res) {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                    this.parseQr(result)
                 }
             })
         },
@@ -43,26 +44,26 @@ export default {
             if(aim == 'worker_enter_project') {
                 var project_owner_open_id = arr[1]
                 var project_id = arr[2]
-                workerEnterPeoject(project_id, project_owner_open_id)
+                this.workerEnterPeoject(project_id, project_owner_open_id)
             }
             if(aim == 'worker_enter_xq') {
                 var facility_id = arr[1]
                 var facility_adress = arr[2]
-                workerEnterXq(facility_id, facility_adress)
+                this.workerEnterXq(facility_id, facility_adress)
             }
             if(aim == 'worker_enter_fj') {
                 var owener_id = arr[1]
-                workerEnterFj(owener_id)
+                this.workerEnterFj(owener_id)
             }
         },
         workerEnterPeoject(project_id, project_owner_open_id) {
             this.$http.post( API_ROUTER_CONFIG.worker_addin_project,
             {
-                project_id: project_id,
-                open_id: project_owner_open_id
+                project_id: '86',
+                open_id: 'oqb76v0pqFzPfx1Gz5zbfuTRrlbE'
             },
             {emulateJSON: true}).then((response) => {
-                console.log(response)
+                console.log(response.data.result)
             }, (response) => {
                         // error callback 
             })
@@ -70,12 +71,12 @@ export default {
         workerEnterXq(facility_id, facility_adress) {
             this.$http.post( API_ROUTER_CONFIG.facility_visit,
             {
-                facility_id: facility_id,
+                facility_id: 'oqb76v4-Ied_vIOvV_-eHduVj2A',
                 open_id: this.open_id,
-                facility_adress: facility_adress
+                facility_adress: '哈哈哈哈哈'
             },
             {emulateJSON: true}).then((response) => {
-                
+                alert(response.data.result)
             }, (response) => {
                         // error callback 
             })
@@ -83,12 +84,12 @@ export default {
         workerEnterFj(owener_id) {
             this.$http.post( API_ROUTER_CONFIG.owner_visit,
             {
-                owener_id: owener_id,
+                owener_id: 'oqb76v_v-Xeyf33TOAO77nlPs5fg',
                 open_id: this.open_id,
             },
             {emulateJSON: true}).then((response) => {
-                item.focus_status = 1
-                console.log(response)
+                // item.focus_status = 1
+                alert(response.data.result)
             }, (response) => {
                         // error callback 
             })
@@ -99,7 +100,7 @@ export default {
         localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
         localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
         localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
-        
+        this.open_id = localStorage.open_id
         this.SDKRegister(this, () => {
 			
         })
