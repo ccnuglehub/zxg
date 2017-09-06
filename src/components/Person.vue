@@ -96,8 +96,16 @@ export default{
 			this.$router.push('focus')
 		},
 		exit() {
-			localStorage.clear()
-			this.$router.push('login')
+			this.$http.post( API_ROUTER_CONFIG.delete_user, {
+				open_id: localStorage.open_id,
+				user_type: localStorage.user_type
+			},
+			{emulateJSON: true}).then((response) => {
+				localStorage.clear()
+				this.$router.push('register')
+			}, (response) => {
+						// error callback 
+			})
 		},
 		goScanQr(){
 			var aim, id = localStorage.open_id, facility_adress

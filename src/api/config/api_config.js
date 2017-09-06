@@ -80,6 +80,8 @@ const api_router_config = {
 	banner: host_config.Ip+"zxg/weixin/index?c=news&f=banner",
 	//获取用户详细信息
 	get_user_detail: host_config.Ip+"zxg/weixin/index?c=register&f=get_user_detail",
+	//注销用户
+	delete_user: host_config.Ip+"zxg/weixin/index?c=register&f=delete_user"
 }
 
 const api_assets_config = {
