@@ -18,7 +18,7 @@
                         </div>
                          <div v-if="is_worker" class="p_local">
                             <label class="p_lable p_lable_bottom">可接单时间</label>
-                             <Select @on-change="getTime" v-if="!posted_work" :label-in-value="true" v-model="form_data.worker_accept_time" placeholder="请选择" style="width:100px">
+                             <Select @on-change="getTime" v-if="!posted_work" :label-in-value="true" v-model="worker_form_data.worker_accept_time" placeholder="请选择" style="width:100px">
                                 <Option v-for="(item, index) in time_list" :value="item.value" :key="index">{{ item.lable }}</Option>
                             </Select>
                         </div> 
@@ -47,6 +47,7 @@ import Menue from './common/Menue.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 var wx = require('weixin-js-sdk')
 import { mapState, mapActions } from 'vuex'
+import { checkEmpty } from '@/util/util'
 
 export default {
   	name: 'add_project',
@@ -59,8 +60,10 @@ export default {
                 project_name: "",
                 open_id: '',
                 project_address_section: "",
-                project_address_detail: "",
+                project_address_detail: "华中师范大学珞喻路152号",
                 project_description: "",
+            },
+            worker_form_data: {
                 worker_accept_time: ''
             },
             wx,
@@ -101,6 +104,7 @@ export default {
         }
     },
 	methods: {
+        checkEmpty,
 		showNotice(){
             this.cnotice_flag = true
         },
@@ -110,10 +114,9 @@ export default {
         postOrder(){
             // 发布接单后的逻辑处理
             this.posted_work = true
-
             this.$http.post( API_ROUTER_CONFIG.accept_time,
             {
-                worker_accept_time: this.form_data.worker_accept_time,
+                worker_accept_time: this.worker_form_data.worker_accept_time,
                 open_id: this.form_data.open_id
             },
             {emulateJSON: true}).then((response) => {
@@ -125,9 +128,13 @@ export default {
             })
         },
         postProject(){
+            for(var key in this.form_data) {
+                alert(this.form_data[key])
+            }
             this.$http.post( API_ROUTER_CONFIG.add_project,
             this.form_data,
             {emulateJSON: true}).then((response) => {
+                alert(response.body.msg)
                 if(response.body.status == 1) {
                     this.cnotice_flag = false
                     var _obj = response.body.data
@@ -143,12 +150,21 @@ export default {
             this.cnotice_flag = false
         },
         scanQrcode(){
+            var self = this
             this.wx.scanQRCode({
                 needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                 scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
                 success: function (res) {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                    this.project_address_detail = result
+                    var facility_adress
+                    var arr = result.split('&')
+                    var aim = arr[0]
+                    if(aim == 'worker_enter_xq') {
+                        facility_adress = arr[2]
+                    } else {
+                        alert('发布项目只能扫描物业公司二维码！')
+                    }
+                    self.form_data.project_address_detail = facility_adress
                 }
             })
         }

@@ -18,6 +18,7 @@
 			<div class="input error"><span v-show="empty_flag">验证码不能为空</span></div>
 		</div> 
         <Button v-tap="{ methods: login }" class="login_bt" type="success" long>登录</Button>
+		<div class="register" v-tap="{ methods: goRegister }">注册新账号</div>
     </div>
 </template>
 <script>
@@ -49,6 +50,9 @@ export default {
         ...mapActions([
 			'upDateLocalStorage'
 		]),
+		goRegister() {
+			this.$router.push('register')
+		},
         login(){
             if(!this.phone_flag || this.checkEmpty(this.user_tel)) {
 				return
@@ -121,6 +125,7 @@ export default {
 		}
 	},
 	created() {
+		localStorage.clear()
 		this.SDKRegister(this, () => {})
 	}
 }
@@ -163,6 +168,12 @@ export default {
 	padding-left: 12px;
 	color: red;
 	height: 20px;
+}
+.register {
+	padding: 12px 12px;
+	width: 66%;
+	display: inline-block;
+	text-align: right;
 }
 </style>
 

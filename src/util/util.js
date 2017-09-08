@@ -21,10 +21,9 @@ const checkEmpty = val => {
 
 //把时间从秒转换为年月日
 const changeDate = val => {
-    console.log(val)
     if(val){
         // console.log(typeof val)
-        var val = parseInt(val)
+        var val = parseInt(val) * 1000
         // console.log(typeof val)
 
         var date = new Date(val),Y,M,D;

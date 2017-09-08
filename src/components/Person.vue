@@ -3,7 +3,9 @@
 		<Chead :msg="top_title"></Chead>
 		<div class="background">
 			<img class="person_bg" src="../assets/personBackground.jpg">
-			<img class="person_head" src="../assets/people.png">
+			<div @click="goAvatorUploader" class="person_head">
+				<img class="person_head_img" :src="person_data.user_avator">
+			</div>
 		</div>
 		<div class="abstract">
 			<div class="personal_abstract">个人简介:
@@ -71,7 +73,7 @@ import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import { changeType } from '@/util/util'
 import { mapState, mapActions } from 'vuex'
-import { API_ROUTER_CONFIG } from '@/api/config/api_config'
+import { HOST_CONFIG, API_ROUTER_CONFIG } from '@/api/config/api_config'
 // import { mapState, mapActions, mapGetters } from 'vuex'
 export default{
 	data(){
@@ -95,6 +97,13 @@ export default{
 		goFocus(){
 			this.$router.push('focus')
 		},
+		goAvatorUploader(){
+			this.$router.push({ name: 'upload_avator', params: { img_src: this.person_data.user_avator }})
+		},
+		workerAvatar(url){
+            // console.log(url)
+            return HOST_CONFIG.imageIp+url;
+        },
 		exit() {
 			this.$http.post( API_ROUTER_CONFIG.delete_user, {
 				open_id: localStorage.open_id,
@@ -102,13 +111,18 @@ export default{
 			},
 			{emulateJSON: true}).then((response) => {
 				localStorage.clear()
-				this.$router.push('register')
+				alert(response.body.msg)
+				if(response.body.status == 1) {
+					localStorage.clear()
+					this.$router.push('register')
+				}
 			}, (response) => {
 						// error callback 
 			})
 		},
 		goScanQr(){
 			var aim, id = localStorage.open_id, facility_adress
+			alert(id)
 			if(this.is_wy) {
 				aim = 'worker_enter_xq'
 				this.$http.post( API_ROUTER_CONFIG.facility_get_code, {
@@ -116,12 +130,15 @@ export default{
 				},
 				{emulateJSON: true}).then((response) => {
 					facility_adress = response.body.data.user_address
+					alert('物业公司id' + id)
+					alert('物业公司地址' + facility_adress)
 					this.$router.push({ name:'qr_code', params: { aim: aim, txt: aim + '&' + id + '&' + facility_adress }})
 				}, (response) => {
 							// error callback 
 				})
 			}
 			if(this.is_owner) {
+				alert('业主id' + id)
 				aim = 'worker_enter_fj'
 				this.$router.push({ name:'qr_code', params: { aim: aim, txt: aim + '&' + id }})
 			}
@@ -137,15 +154,9 @@ export default{
 		this.person_data.worker_description = localStorage.worker_description
 		this.person_data.user_name = localStorage.user_name
 		this.person_data.user_tel = localStorage.user_tel
+		this.person_data.user_avator = this.workerAvatar(localStorage.user_avatar)
 		this.person_data.user_type = this.changeType(localStorage.user_type)
 		this.open_id = localStorage.open_id
-		
-        // this.$http.post('url', data,
-        //     {emulateJSON: true}).then((response) => {
-                
-        //     }, (response) => {
-        //             // error callback 
-        // })
     },
 	components: {
 		Chead,
@@ -177,12 +188,18 @@ export default{
 	width: 100%;
 }
 .person_head{
-	height: 14.8vh;
-	border-radius: 7.9vh;
+	height: 102px;
+	width: 102px;
+	border: 1px solid grey;
+	border-radius: 50%;
+	overflow: hidden;
 	position: absolute;
 	top: 4vh;
 	left: 50%;
 	transform: translateX(-50%);
+}
+.person_head_img {
+	width: 100%;
 }
 .abstract{
 	background: rgb(134,210,198);

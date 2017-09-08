@@ -4,7 +4,7 @@
             <Icon class="icon" type="ios-arrow-back"></Icon>
         </div>
         <div class="title">{{ msg }}</div>
-        <img v-tap="{ methods: workerEnterPeoject }" v-if="is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
+        <img v-tap="{ methods: scanQrcode }" v-if="is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
     </div>
 </template>
 <script>
@@ -29,22 +29,24 @@ export default {
             this.$router.go(-1)
         },
         scanQrcode() {
+            var self = this
             this.wx.scanQRCode({
                 needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                 scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
                 success: function (res) {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                    this.parseQr(result)
+                    alert(result)
+                    self.parseQr(result)
                 }
             })
         },
         parseQr(result) {
             var arr = result.split('&')
             var aim = arr[0]
+            alert(aim)
             if(aim == 'worker_enter_project') {
-                var project_owner_open_id = arr[1]
-                var project_id = arr[2]
-                this.workerEnterPeoject(project_id, project_owner_open_id)
+                var project_id = arr[1]
+                this.workerEnterPeoject(project_id)
             }
             if(aim == 'worker_enter_xq') {
                 var facility_id = arr[1]
@@ -56,40 +58,44 @@ export default {
                 this.workerEnterFj(owener_id)
             }
         },
-        workerEnterPeoject(project_id, project_owner_open_id) {
+        workerEnterPeoject(project_id) {
+            alert('项目id为：' + project_id)
             this.$http.post( API_ROUTER_CONFIG.worker_addin_project,
             {
-                project_id: '86',
-                open_id: 'oqb76v0pqFzPfx1Gz5zbfuTRrlbE'
+                project_id: project_id,
+                open_id: localStorage.open_id
             },
             {emulateJSON: true}).then((response) => {
-                console.log(response.data.result)
+                console.log(response)
             }, (response) => {
                         // error callback 
             })
         },
         workerEnterXq(facility_id, facility_adress) {
+            alert('物业经理的id是' + facility_id)
+            alert('物业公司的地址是' + facility_adress)
             this.$http.post( API_ROUTER_CONFIG.facility_visit,
             {
-                facility_id: 'oqb76v4-Ied_vIOvV_-eHduVj2A',
+                facility_id: facility_id,
                 open_id: this.open_id,
-                facility_adress: '哈哈哈哈哈'
+                facility_adress: facility_adress
             },
             {emulateJSON: true}).then((response) => {
-                alert(response.data.result)
+                
             }, (response) => {
                         // error callback 
             })
         },
         workerEnterFj(owener_id) {
+            alert('业主的id是' + owener_id)
             this.$http.post( API_ROUTER_CONFIG.owner_visit,
             {
-                owener_id: 'oqb76v_v-Xeyf33TOAO77nlPs5fg',
+                owener_id: owener_id,
                 open_id: this.open_id,
             },
             {emulateJSON: true}).then((response) => {
                 // item.focus_status = 1
-                alert(response.data.result)
+                alert(response.data.msg)
             }, (response) => {
                         // error callback 
             })

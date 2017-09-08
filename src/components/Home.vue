@@ -44,13 +44,11 @@ export default {
         var arg = window.location.href.parseURL() || {
             params: {}
         }
-
         if(arg.params.open_id) {
             var open_id = arg.params.open_id
             var user_type = arg.params.user_type
             this.upDateLocalStorage({
                 open_id: open_id,
-                openid: open_id,
                 user_tel: arg.params.user_tel,
                 user_type: user_type
             })

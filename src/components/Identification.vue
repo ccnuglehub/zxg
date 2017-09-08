@@ -3,17 +3,10 @@
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="identification">
             <div class="title">请上传清晰的本人大头照及身份证照</div>
-            <img class="preview" :src="img_data_1" />
+            <img v-if="img_data" class="preview" :src="img_data" />
             <div class="up_box_top">
-                <span class="up_title">上传大头照</span>
-                <div v-tap="{ methods: choseImage, params: 0 }" class="uploader">
-                    <Icon type="camera" size="20"></Icon>
-                </div>
-            </div>
-            <img class="preview" :src="img_data_2" />
-            <div class="up_box">
-                <span class="up_title">上传身份证</span>
-                <div v-tap="{ methods: choseImage, params: 1 }" class="uploader">
+                <!-- <span class="up_title">上传大头照</span> -->
+                <div v-tap="{ methods: choseImage }" class="uploader">
                     <Icon type="camera" size="20"></Icon>
                 </div>
             </div>
@@ -24,77 +17,72 @@
 
 <script>
 import Chead from './common/Header.vue'
-// import { mapState, mapActions, mapGetters } from 'vuex'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 var wx = require('weixin-js-sdk')
+import { checkEmpty } from '../util/util.js'
 
 export default {
     data () {
             return {
                 top_title: '实名认证',
                 wx,
-                img_data_1: "",
-                img_data_2: "",
-                mediaId: []
+                img_data: "",
+                mediaId: ''
             }
         },
         methods: {
-            choseImage(item){
-                var _index = item.params
+            checkEmpty,
+            choseImage(){
                 var self = this
                 this.wx.chooseImage({
                     count: 1, // 默认9
                     sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
                     sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
                     success: function (res) {
-                        var localIds = res.localIds.toString(); // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                        self.getImageData(localIds, _index)
-                        self.uploadImage(localIds, _index)
+                        var localId = res.localIds.toString(); // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        self.getImageData(localId)
+                        self.uploadImage(localId)
                     }
                 })
             },
-            getImageData(localIds, index) {
+            getImageData(localId) {
                 var self = this
                 this.wx.getLocalImgData({
-                    localId: localIds,
+                    localId: localId,
                     success: function (res) {
-                        if(index == 0) {
-                             self.img_data_1 = res.localData
-                        }
-                        if(index == 1) {
-                            self.img_data_2 = res.localData
-                        }
+                        self.img_data = res.localData
                     }
                 }) 
             },
-            uploadImage(localId, index){
+            uploadImage(localId){
                 var self = this
                 this.wx.uploadImage({
                     localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
                     isShowProgressTips: 1, // 默认为1，显示进度提示
                     success: function (res) {
-                        self.mediaId[index] = res.serverId; // 返回图片的服务器端ID
+                        self.mediaId = res.serverId; // 返回图片的服务器端ID
                     },
                     fail:function(res){
                     }
                 })
             },
             putImageToServer(){
+                if(this.checkEmpty(this.mediaId)) {
+                    alert('请选择图片后再上传！')
+                }
                 var open_id = localStorage.open_id
-                for(let i = 0; i<this.mediaId.length;i++) {
-                    this.$http.post( API_ROUTER_CONFIG.identity,
-                    {
-                        media_id: this.mediaId[i],
-                        open_id: open_id
-                    },
-                    {emulateJSON: true}).then((response) => {
-                        if(response.body.status == 1) {
-                            alert(response.body.msg)
-                        }
-                    }, (response) => {
+                this.$http.post( API_ROUTER_CONFIG.identity,
+                {
+                    media_id: this.mediaId,
+                    open_id: open_id
+                },
+                {emulateJSON: true}).then((response) => {
+                    if(response.body.status == 1) {
+                        alert(response.body.msg)
+                    }
+                }, (response) => {
                             // error callback 
                 })
-                }
             }
         },
         components: {

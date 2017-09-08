@@ -4,8 +4,8 @@
         <div class="focus">
             <div v-tap="{ methods: goWorkerDetail, params: item }" v-for="(item,index) in focus_list" :key="index" class="item_list">
                 <div class="type item">{{ changeType(item.user_type) }}</div>
-                <div class="name item">{{ item.user_name }}</div>
-                <div class="free_time item txt_ell">{{  new Date().getMonth() + 1 + '月' + ( parseInt(new Date().getDate()) + parseInt(item.worker_accept_time)) + '日后可接单' }}</div>
+                <div class="name item txt_ell">{{ item.user_name }}</div>
+                <div class="free_time item txt_ell">{{  item.worker_accept_time | filterDate }}</div>
             </div>
         </div>
     </div>
@@ -22,6 +22,15 @@ export default {
             top_title: '我的关注',
             focus_list: [],
             open_id: '',
+        }
+    },
+    filters: {
+        filterDate: function (value) {
+            if (value < 90) {
+                return value + '天后可接单'
+            } else {
+                return '暂不可接单'
+            }
         }
     },
     created(){
@@ -81,7 +90,8 @@ export default {
     width: 145px;
 }
 .name {
-    width: 66px;
+    max-width: 6em;
+    margin-right: 1em;
 }
 .item_list {
     line-height: 55px;

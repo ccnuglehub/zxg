@@ -6,12 +6,17 @@
             <div class="work_info lb_item">
                 <div class="work_info_top">
                     <div class="lb_item worker_type">{{ changeType(worker_detail.user_type) }}</div>
-                    <div class="lb_item worker_name">{{ worker_detail.user_name }}</div>
+                    <div class="lb_item txt_ell worker_name">{{ worker_detail.user_name }}</div>
+                    <Button v-tap="{ methods: focus, worker_id: worker_detail.worker_id }" class="login_bt" type="success" short>关注</Button>
                 </div>
                 <Rate allow-half v-model="worker_detail.worker_average_rate"></Rate>
-                <div class="work_info_bottom">
+                <div class="work_info_middle">
                     <div class="lb_item worker_auth">{{ worker_detail.user_is_identify == 1 ? '已实名认证' : '未实名认证'}}</div>
                     <div class="lb_item">已接单：{{ worker_detail.worker_orders_count }}</div>
+                </div>
+                <div class="work_info_bottom">
+                    <div class="lb_item worker_auth">关注量：{{ worker_detail.focus_count }}</div>
+                    <div class="lb_item">{{ worker_detail.worker_accept_day | filterDate }}</div>
                 </div>
             </div>
         </div>
@@ -76,7 +81,16 @@ export default {
             page: 0,
             get_data_flag: true
 		}
-  	},
+    },
+    filters: {
+        filterDate: function (value) {
+            if (value < 90) {
+                return value + '天后可接单'
+            } else {
+                return '暂不可接单'
+            }
+        }
+    },
     created(){
         this.page = 0
         if(this.$route.params.focus_worker) {
@@ -96,6 +110,19 @@ export default {
     methods: {
         changeType,
         changeDate,
+        focus(params){
+            this.$http.post( API_ROUTER_CONFIG.focus_worker,
+            {
+                focus_user_id: this.open_id,
+                focused_user_id: params.worker_id
+            },
+            {emulateJSON: true}).then((response) => {
+                
+                console.log(response)
+            }, (response) => {
+                        // error callback 
+            })
+        },
         workerAvatar(url){
             // console.log(url)
             return HOST_CONFIG.imageIp+url;
@@ -109,7 +136,7 @@ export default {
             },
             {emulateJSON: true}).then((response) => {
                 console.log(response)
-                this.worker_comments = response.body.data
+                this.worker_comments = this.worker_comments.concat(response.body.data)
                 this.get_data_flag = true
             }, (response) => {
                     // error callback 
@@ -157,11 +184,18 @@ export default {
 }
 .worker_name {
     font-size: 16px;
+    max-width: 5em;
 }
 .worker_name,
 .worker_type {
     color: #fff;
     font-weight: 500;
+}
+.login_bt {
+    padding: 2px 8px;
+    margin-left: 22px;
+    font-size: 14px;
+    font-weight: bold;
 }
 .lb_item {
     vertical-align: middle;
@@ -170,11 +204,11 @@ export default {
 .worker_auth {
     margin-right: 28px;
 }
+.work_info_middle,
 .work_info_bottom {
     color: rgb(255,152,0);
 }
 .worker_info {
-
     padding: 2.3vh 9vw;
     font-size: 16px;
     text-align: left;

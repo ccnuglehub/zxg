@@ -4,7 +4,10 @@
         <div class="project_details">
             <div class="project_intro">
                 <div class="intro_title">项目简介</div>
-                <div class="intro_txt">{{ detail.project_description || detail.project_decription || detail.projec_description }}</div>
+                <div class="intro_txt">
+                    <!-- <div class="project_title">{{ detail.project_name }}</div> -->
+                    <div class="project_cont">{{ detail.project_description }}</div>
+                </div>
                 <div class="intro_etc">
                     <div class="etc_items">
                         <div class="etc_item">{{ detail.project_address_section }}</div>
@@ -27,14 +30,13 @@
                 <div v-for="(item, index) in work_list" :key="index" class="etc_items_bottom_box">
                     <div class="etc_items_bottom">
                         <div class="etc_bottom_type">{{ changeType(item.user_type) }}</div>
-                        <div class="etc_bottom_name">{{ item.user_name }}</div>
+                        <div class="etc_bottom_name txt_ell">{{ item.user_name }}</div>
                     </div>
                     <div class="bt_box_bottom">
                         <div class="bt_item_bottom">
-                            <!-- <div v-if="item.p2w_status == 0" class="bt">{{ item.p2w_status | getStatus }}</div>
+                            <div v-if="item.p2w_status == 0" v-tap="{ methods: changeStatus, params: item }" class="bt">{{ item.p2w_status | getStatus }}</div>
                             <div v-if="item.p2w_status == 1" v-tap="{ methods: showEnotce }" class="bt">{{ item.p2w_status | getStatus }}</div>
-                            <div v-if="item.p2w_status == 2" class="bt bt_grey">{{ item.p2w_status | getStatus }}</div> -->
-                            <div v-tap="{ methods: showEnotce }" class="bt">评价</div>
+                            <div v-if="item.p2w_status == 2" class="bt bt_grey">{{ item.p2w_status | getStatus }}</div>
                         </div>
                         <div class="bt_item_bottom">
                             <div v-if="item.focus_status == 0" v-tap="{ methods: focus, params: item }" class="bt">关注</div>
@@ -58,23 +60,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="etc_items_bottom_box">
-                    <div class="etc_items_bottom">
-                        <div class="etc_bottom_type">油漆工</div>
-                        <div class="etc_bottom_name">王凯</div>
-                    </div>
-                    <div class="bt_box_bottom">
-                        <div class="bt_item_bottom">
-                            <div v-tap="{ methods: changToComplete }" class="bt">进行中</div>
-                        </div>
-                        <div class="bt_item_bottom">
-                            <div v-tap="{ methods: focus }" class="bt">关注</div>
-                        </div>
-                        <div class="bt_item_bottom">
-                            <div v-tap="{ methods: showDeleteNotice }" class="bt">移除</div>
-                        </div>
-                    </div>
-                </div> -->
             </div>
             <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
          </div>
@@ -85,7 +70,7 @@
 import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
-import { changeDate, changeType } from '../util/util.js'
+import { changeDate, changeType, checkEmpty } from '../util/util.js'
 import { mapState, mapActions } from 'vuex'
 export default {
   	name: 'project_detail',
@@ -118,10 +103,10 @@ export default {
     filters: {
         getStatus: function(status){
             if(status == 0) {
-                return '进行中'
+                return '完成'
             }
             if(status == 1) {
-                return '待评价'
+                return '评价'
             }
             if(status == 2) {
                 return '已评价'
@@ -165,6 +150,19 @@ export default {
         ]),
         changeDate,
         changeType,
+        checkEmpty,
+        changeStatus(item) {
+            this.$http.post( API_ROUTER_CONFIG.worker_project_status,
+            {
+                p2w_status: item.params.p2w_status,
+                p2w_id: item.params.p2w_id
+            },
+            {emulateJSON: true}).then((response) => {
+                
+            }, (response) => {
+                    // error callback 
+            })
+        },
         closeD(){
             this.cnotice_flag = false
         },
@@ -217,26 +215,9 @@ export default {
             this.$http.post( API_ROUTER_CONFIG.worker_rate,
             this.form_rate,
             {emulateJSON: true}).then((response) => {
-                if(true) {
-                    
-                } else {
-
-                }
-                console.log(response)
+                this.closeD()
             }, (response) => {
                     // error callback 
-            })
-        },
-        changToComplete(){
-            this.$http.post( API_ROUTER_CONFIG.worker_project_status,
-            {
-                p2w_status: 0,
-	            p2w_id: ""
-            },
-            {emulateJSON: true}).then((response) => {
-                console.log(response)
-            }, (response) => {
-                        // error callback 
             })
         },
         showCompleteNotice(){
@@ -257,7 +238,7 @@ export default {
             this.evaluate_flag = false
         },
         addWorker(){
-            var txt = 'worker_enter_project' + '&' + this.open_id + '&' + this.detail.project_id
+            var txt = 'worker_enter_project&' + this.detail.project_id
             this.$router.push({ name: 'qr_code', params: { from: 'project_detail', txt: txt }})
         },
         focus(item){
@@ -376,7 +357,7 @@ export default {
     text-align: center;
 }
 .etc_items_bottom {
-    width: 35%;
+    width: 38%;
 }
 .etc_items_bottom_box {
     width: 100%;
@@ -385,9 +366,11 @@ export default {
     padding: 10px 0;
     border-bottom: 1px solid rgb(227,227,227);
 }
-.etc_bottom_type,
+.etc_bottom_type {
+    width: 5em;
+}
 .etc_bottom_name {
-    width: 50%;
+    width: 3em;
 }
 .etc_bottom_type {
     font-size: 16px;
@@ -399,7 +382,7 @@ export default {
     text-align: center;
 }
 .bt_box_bottom {
-    width: 65%;
+    width: 62%;
 }
 .bt_item_bottom {
     width: 33.3%;
@@ -412,9 +395,6 @@ export default {
 .project_intro_bottom {
     padding-bottom: 16px;
     border-radius: 8px;
-}
-.bt_item_bottom .bt {
-    min-width: 64px;
 }
 .evaluate {
     width: 69vw;

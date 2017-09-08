@@ -25,17 +25,18 @@
                 <div class="work_info lb_item">
                     <div class="work_info_top">
                         <div class="lb_item worker_type">{{workerType2Word(worker.user_type)}}</div>
-                        <div class="lb_item worker_name">{{worker.user_name}}</div>
+                        <div class="lb_item worker_name txt_ell">{{worker.user_name}}</div>
                         <div class="lb_item worker_auth" :class="{ unauthed: !identify(worker.user_is_identify), authed:identify(worker.user_is_identify)}">{{workerIdentify(worker.user_is_identify)}}</div>
                     </div>
                     <Rate allow-half disabled v-model.number="worker.worker_average_rate"></Rate>
+                    <div class="lb_item worker_region">关注量：{{ worker.focus_count }}</div>
                     <div class="work_info_bottom">
                         <div class="lb_item worker_region">{{ worker.user_address }}</div>
-                        <div class="lb_item">已接单：{{worker.worker_orders_count}}</div>
+                        <div class="lb_item worker_region">已接单：{{ worker.worker_orders_count }}</div>
+                        <div class="lb_item">{{ worker.worker_accept_day | filterDate }}</div>
                     </div>
                 </div>
             </div>
-            
         </div>
         <Menue></Menue>
 <!--         <mt-datetime-picker
@@ -114,7 +115,16 @@ export default {
             get_data_flag: true,
             page_flag: 'rate_list'
 		}
-  	},
+    },
+    filters: {
+        filterDate: function (value) {
+            if (value < 90) {
+                return value + '天后可接单'
+            } else {
+                return '暂不可接单'
+            }
+        }
+    },
 	methods: {
         openLocaPicker() {
             this.loca_wrap_flag = true
@@ -415,7 +425,8 @@ export default {
     margin-right: 10px;
 }
 .worker_name {
-    margin-right: 7%;
+    margin-right: 6px;
+    max-width: 5em;
 }
 .worker_auth {
     font-size: 12px;
@@ -429,7 +440,7 @@ export default {
     display: inline-block;
 }
 .worker_region {
-    margin-right: 28px;
+    margin-right: 12px;
 }
 .authed {
     color:rgb(76,175,80);

@@ -72,4 +72,8 @@ body {
 /* .ivu-select-placeholder {
     display: inline-block !important;
 }  */
+.picker-center-highlight {
+    background: grey;
+    opacity: .3;
+}
 </style>

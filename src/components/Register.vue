@@ -117,13 +117,7 @@ export default {
 		])
 	},
 	created(){
-		// var obj = this.upDateLocalStorage(['open_id', 'is_xmjl', 'is_worker', 'is_wy', 'is_owner'])
-		// this.is_xmjl = obj.is_xmjl
-        // this.is_worker = obj.is_worker
-        // this.is_owner = obj.is_owner
-        // this.is_wy = obj.is_wy
-		// this.form_data.open_id = obj.open_id
-
+		localStorage.clear()
 		var arg = window.location.href.parseURL()
 		if(arg.params.status == 0) {
 			this.show_notice = true
@@ -171,8 +165,7 @@ export default {
 			if(value == 3) {
 				// yz
 				this.is_owner = true
-			}
-			if(value == 4) {
+			} else {
 				// gy
 				this.is_worker = true
 			}
@@ -217,29 +210,29 @@ export default {
                       // error callback 
             })
 		},
-		register(){
-			if(!this.phone_flag || !this.name_flag || this.empty_flag) {
-				return
-			}
-			if(this.checkEmpty(this.form_data.user_name) || this.checkEmpty(this.form_data.user_tel)) {
-				return
-			}
-			console.log(this.form_data)
-			return
-			this.$http.post(API_ROUTER_CONFIG.add_user,
-				this.form_data,
-			{emulateJSON: true}).then((response) => {
-				var info = response.body.data
-				info.openid = info.open_id
+		// register(){
+		// 	if(!this.phone_flag || !this.name_flag || this.empty_flag) {
+		// 		return
+		// 	}
+		// 	if(this.checkEmpty(this.form_data.user_name) || this.checkEmpty(this.form_data.user_tel)) {
+		// 		return
+		// 	}
+		// 	console.log(this.form_data)
+		// 	return
+		// 	this.$http.post(API_ROUTER_CONFIG.add_user,
+		// 		this.form_data,
+		// 	{emulateJSON: true}).then((response) => {
+		// 		var info = response.body.data
+		// 		info.openid = info.open_id
 
-				//将用户信息存储到localstorage
-				this.upDateLocalStorage(info)
+		// 		//将用户信息存储到localstorage
+		// 		this.upDateLocalStorage(info)
 
-                this.$router.push('home')
-			}, (response) => {
-					// error callback 
-            })
-		},
+        //         this.$router.push('home')
+		// 	}, (response) => {
+		// 			// error callback 
+        //     })
+		// },
 		closeD() {
 			this.show_notice = false
 		},
