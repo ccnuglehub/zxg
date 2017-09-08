@@ -116,7 +116,7 @@ export default new Router({
     },
     {
       path: '*',
-      component: Register
+      component: Home
     }
   ]
 })

@@ -158,7 +158,13 @@ export default {
                 p2w_id: item.params.p2w_id
             },
             {emulateJSON: true}).then((response) => {
-                
+                if(response.body.status == 1) {
+                    item.params.p2w_status = 1
+                } else {
+                    this.mFn = this.closeD
+                    this.msg = response.body.msg
+                    this.cnotice_flag = true
+                }
             }, (response) => {
                     // error callback 
             })
@@ -174,9 +180,11 @@ export default {
             ,
             {emulateJSON: true}).then((response) => {
                 if(response.body.data.status = 1) {
-                    this.from_add_project = true
+                    this.detail.project_status = 1
                 } else {
-
+                    this.mFn = this.closeD
+                    this.msg = response.body.msg
+                    this.cnotice_flag = true
                 }
             }, (response) => {
                     // error callback 
@@ -203,7 +211,13 @@ export default {
             }
             ,
             {emulateJSON: true}).then((response) => {
-                console.log(response)
+                if(response.body.status == 1) {
+                    this.$router.push({ name: 'project_detail'})
+                } else {
+                    this.mFn = this.closeD
+                    this.msg = response.body.msg
+                    this.cnotice_flag = true
+                }
             }, (response) => {
                     // error callback 
             })
@@ -215,7 +229,7 @@ export default {
             this.$http.post( API_ROUTER_CONFIG.worker_rate,
             this.form_rate,
             {emulateJSON: true}).then((response) => {
-                this.closeD()
+                this.evaluate_flag = false
             }, (response) => {
                     // error callback 
             })
@@ -242,15 +256,13 @@ export default {
             this.$router.push({ name: 'qr_code', params: { from: 'project_detail', txt: txt }})
         },
         focus(item){
-            console.log(item)
             this.$http.post( API_ROUTER_CONFIG.focus_worker,
             {
                 focus_user_id: this.open_id,
                 focused_user_id: item.params.p2w_worker_id
             },
             {emulateJSON: true}).then((response) => {
-                item.focus_status = 1
-                console.log(response)
+                item.params.focus_status = 1
             }, (response) => {
                         // error callback 
             })

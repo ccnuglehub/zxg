@@ -8,11 +8,11 @@
 			</div>
 		</div>
 		<div class="abstract">
-			<div class="personal_abstract">个人简介:
-				<span class="description txt_ell">{{ person_data.worker_description }}</span>
-			</div>
 			<div class="personal_detail">
 				<span class="type">姓名：{{ person_data.user_name }}</span>
+			</div>
+			<div v-if="is_worker"  class="personal_abstract">个人简介:
+				<span class="description txt_ell">{{ person_data.worker_description }}</span>
 			</div>
 			<div class="personal_detail">
 				<span class="type">工作类型：{{ person_data.user_type }}</span>

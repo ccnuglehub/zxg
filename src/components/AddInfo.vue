@@ -20,11 +20,13 @@
                     <div v-tap="{ methods: addInfo }" class="bt">提交</div>
                 </Form>
             </div>
+            <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
         </div>
     </div>
 </template>
 
 <script>
+import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { mapActions, mapState } from 'vuex'
@@ -35,17 +37,22 @@ export default {
     data(){
         return {
             top_title: '完善个人信息',
+            msg: '',
+            cnotice_flag: false,
             form_data: {
                 open_id: '',
                 user_name: "",
-                // user_tel: '',
+                user_type: localStorage.user_type,
                 user_address: "",
                 worker_description: "",
             },
             is_xmjl: false,
             is_worker: false,
             is_wy: false,
-            is_owner: false
+            is_owner: false,
+            mFn(){
+                console.log('请绑定函数！')
+            },
         }
     },
     created(){
@@ -64,7 +71,9 @@ export default {
         addInfo(){
             for(var key in this.form_data) {
                 if(this.checkEmpty(this.form_data[key])) {
-                    alert('您有必填项未填写，请填写后重试！')
+                    this.msg = '您有必填项未填写，请填写后重试！'
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
                     return
                 }
             }
@@ -74,16 +83,23 @@ export default {
 				if(response.body.status == 1) {
                     //将localstorage的用户信息更新
                     this.upDateLocalStorage(this.form_data)
-                    
                     this.$router.go(-1)
+                } else {
+                    this.msg = response.body.msg
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
                 }
 			}, (response) => {
                       // error callback 
             })
-        }
+        },
+        closeD(){
+            this.cnotice_flag = false
+        },
     },
     components: {
         Chead,
+        CNotice
     }
 }
 </script>

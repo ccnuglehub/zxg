@@ -7,9 +7,10 @@
                 <div class="work_info_top">
                     <div class="lb_item worker_type">{{ changeType(worker_detail.user_type) }}</div>
                     <div class="lb_item txt_ell worker_name">{{ worker_detail.user_name }}</div>
-                    <Button v-tap="{ methods: focus, worker_id: worker_detail.worker_id }" class="login_bt" type="success" short>关注</Button>
+                    <Button v-if="worker_detail.focus_status != 1" v-tap="{ methods: focus, worker: worker_detail }" class="login_bt" type="success" short>关注</Button>
+                    <Button v-if="worker_detail.focus_status == 1" class="login_bt bt_grey" type="success" short>已关注</Button>
                 </div>
-                <Rate allow-half v-model="worker_detail.worker_average_rate"></Rate>
+                <Rate disabled allow-half v-model="worker_detail.worker_average_rate"></Rate>
                 <div class="work_info_middle">
                     <div class="lb_item worker_auth">{{ worker_detail.user_is_identify == 1 ? '已实名认证' : '未实名认证'}}</div>
                     <div class="lb_item">已接单：{{ worker_detail.worker_orders_count }}</div>
@@ -113,8 +114,8 @@ export default {
         focus(params){
             this.$http.post( API_ROUTER_CONFIG.focus_worker,
             {
-                focus_user_id: this.open_id,
-                focused_user_id: params.worker_id
+                focus_user_id: localStorage.open_id,
+                focused_user_id: params.worker.worker_id
             },
             {emulateJSON: true}).then((response) => {
                 
@@ -180,7 +181,7 @@ export default {
 }
 .worker_type {
     font-size: 17px;
-    margin-right: 22px;
+    margin-right: 12px;
 }
 .worker_name {
     font-size: 16px;
@@ -193,7 +194,7 @@ export default {
 }
 .login_bt {
     padding: 2px 8px;
-    margin-left: 22px;
+    margin-left: 12px;
     font-size: 14px;
     font-weight: bold;
 }
@@ -259,6 +260,13 @@ export default {
 }
 .description {
     line-height: 1.2em;
+}
+.bt_grey {
+    background: grey;
+    border: 0;
+}
+.evaluate_list:last-child {
+    margin-bottom: 30px;
 }
 </style>
 
