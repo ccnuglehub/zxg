@@ -47,16 +47,25 @@ export default {
             this.$router.push('find_worker')
         },
         goReProject(){
-            this.$router.push('add_project')
+            this.isLogin('add_project')
         },
         goMyProject(){
-            this.$router.push('my_project')
+            this.isLogin('my_project')
         },
         goVisitor(){
-            this.$router.push('visitor')
+            this.isLogin('visitor')
         },
         goPerson(){
-            this.$router.push('person')
+            this.isLogin('person')
+        },
+        isLogin(arg) {
+            if(localStorage.open_id) {
+                this.$router.push(arg)
+                return
+            } else {
+                this.$router.push('login')
+                return
+            }
         }
     },
     created() {

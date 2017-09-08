@@ -11,7 +11,7 @@
                         </div>
                         <div v-if="is_xmjl" class="p_local">
                             <label class="p_lable p_lable_bottom">项目地点</label>
-                            <Select v-model="form_data.project_address_section" style="width:100px">
+                            <Select v-model="form_data.project_address_section" :placeholder="city_list[0].value" style="width:100px">
                                 <Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.value }}</Option>
                             </Select>
                             <img v-tap="{ methods: scanQrcode }" class="qr_logo" src="../assets/qr_code.png">
@@ -60,7 +60,7 @@ export default {
                 project_name: "",
                 open_id: '',
                 project_address_section: "",
-                project_address_detail: "华中师范大学珞喻路152号",
+                project_address_detail: "",
                 project_description: "",
             },
             worker_form_data: {
@@ -112,6 +112,12 @@ export default {
             this.worker_accept_time = obj.label
         },
         postOrder(){
+            if(this.checkEmpty(this.worker_form_data.worker_accept_time)) {
+                this.msg = '请选择接单时间后重试！'
+                this.mFn = this.closeD
+                this.cnotice_flag = true
+                return
+            }
             // 发布接单后的逻辑处理
             this.posted_work = true
             this.$http.post( API_ROUTER_CONFIG.accept_time,
@@ -129,22 +135,28 @@ export default {
         },
         postProject(){
             for(var key in this.form_data) {
-                alert(this.form_data[key])
+                if(this.checkEmpty(this.form_data[key])) {
+                    this.msg = "您有必填项为填写，请填写后重试！"
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
+                    return
+                }
             }
             this.$http.post( API_ROUTER_CONFIG.add_project,
             this.form_data,
             {emulateJSON: true}).then((response) => {
-                alert(response.body.msg)
                 if(response.body.status == 1) {
                     this.cnotice_flag = false
                     var _obj = response.body.data
                     this.$router.push({ name: 'project_detail', params: { obj: _obj }})
+                } else {
+                    this.msg = response.body.msg
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
                 }
             }, (response) => {
                       // error callback 
             })
-            // this.cnotice_flag = false
-            // this.$router.push({ name: 'project_detail', params: { obj: {} }})
         },
         closeD(){
             this.cnotice_flag = false
@@ -162,7 +174,9 @@ export default {
                     if(aim == 'worker_enter_xq') {
                         facility_adress = arr[2]
                     } else {
-                        alert('发布项目只能扫描物业公司二维码！')
+                        this.msg = '发布项目只能扫描物业公司二维码！'
+                        this.mFn = this.closeD
+                        this.cnotice_flag = true
                     }
                     self.form_data.project_address_detail = facility_adress
                 }

@@ -15,6 +15,12 @@ export default {
         parseUrl
     },
     created() {
+        if(!localStorage.is_worker && !localStorage.is_xmjl && !localStorage.is_wy && !localStorage.is_owner) {
+            localStorage.is_xmjl = true
+            localStorage.is_worker =false
+            localStorage.is_wy = false
+            localStorage.is_owner = false
+        }
         parseUrl()
         if(localStorage.open_id) {
             this.$router.push('home')

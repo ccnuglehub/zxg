@@ -2,7 +2,10 @@
     <div class="wrap">
         <Chead :msg="top_title" :icon="true"></Chead>
         <div class="identification">
-            <div class="title">请上传清晰的本人大头照及身份证照</div>
+            <div v-if="user_is_identify == 0" class="title">请上传清晰的本人大头照及身份证照</div>
+            <div v-if="user_is_identify == 1" class="title">审核通过</div>
+            <div v-if="user_is_identify == 2" class="title">照片已上传，请耐心等待审核</div>
+            <div v-if="user_is_identify == 3" class="title">审核未通过，请再次上传清晰的本人大头照及身份证照</div>
             <img v-if="img_data" class="preview" :src="img_data" />
             <div class="up_box_top">
                 <!-- <span class="up_title">上传大头照</span> -->
@@ -12,10 +15,12 @@
             </div>
             <div v-tap="{ methods: putImageToServer }" class="bt">确认上传</div>
         </div>
+        <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
     </div>    
 </template>
 
 <script>
+import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 var wx = require('weixin-js-sdk')
@@ -27,11 +32,20 @@ export default {
                 top_title: '实名认证',
                 wx,
                 img_data: "",
-                mediaId: ''
+                mediaId: '',
+                user_is_identify: localStorage.user_is_identify,
+                msg: '',
+                cnotice_flag: false,
+                mFn(){
+                    console.log('请绑定函数！')
+                },
             }
         },
         methods: {
             checkEmpty,
+            closeD(){
+                this.cnotice_flag = false
+            },
             choseImage(){
                 var self = this
                 this.wx.chooseImage({
@@ -68,7 +82,9 @@ export default {
             },
             putImageToServer(){
                 if(this.checkEmpty(this.mediaId)) {
-                    alert('请选择图片后再上传！')
+                    this.msg = '请选择图片后再上传！'
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
                 }
                 var open_id = localStorage.open_id
                 this.$http.post( API_ROUTER_CONFIG.identity,
@@ -78,7 +94,11 @@ export default {
                 },
                 {emulateJSON: true}).then((response) => {
                     if(response.body.status == 1) {
-                        alert(response.body.msg)
+                        localStorage.user_is_identify = 2
+                    } else {
+                        this.msg = response.body.msg
+                        this.mFn = this.closeD
+                        this.cnotice_flag = true
                     }
                 }, (response) => {
                             // error callback 
@@ -87,6 +107,7 @@ export default {
         },
         components: {
             Chead,
+            CNotice
         },
         created() {
             this.SDKRegister(this, () => {

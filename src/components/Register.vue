@@ -26,7 +26,7 @@
 		</div>  
 		<div class="select_box">
 			<label class="select_lable">请选择身份</label>
-			<Select @on-change="getUserType" v-model="form_data.user_type" placeholder="请选择" class="select">
+			<Select @on-change="getUserType" v-model="form_data.user_type" :placeholder="user_type_list[0].value" class="select">
 				<Option v-for="(item, index) in user_type_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div>
@@ -38,7 +38,7 @@
 		</div>
 		 <div v-if="is_worker" class="select_box">
 			<label class="select_lable"></label>
-			<Select v-model="form_data.user_address" class="select">
+			<Select v-model="form_data.user_address" :placeholder="city_list[0].value" class="select">
 				<Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div> 
@@ -117,7 +117,6 @@ export default {
 		])
 	},
 	created(){
-		localStorage.clear()
 		var arg = window.location.href.parseURL()
 		if(arg.params.status == 0) {
 			this.show_notice = true
@@ -157,17 +156,18 @@ export default {
 			if(value == 1) {
 				// xmjl
 				this.is_xmjl = true
-			}
-			if(value == 2) {
-				// wygs
-				this.is_wy = true
-			}
-			if(value == 3) {
-				// yz
-				this.is_owner = true
 			} else {
-				// gy
-				this.is_worker = true
+				if(value == 2) {
+					// wygs
+					this.is_wy = true
+				} else {
+					if(value == 3) {
+						// yz
+						this.is_owner = true
+					} else {
+						this.is_worker = true
+					}
+				}
 			}
 			var obj = {}
 			obj.is_xmjl = this.is_xmjl
@@ -177,6 +177,7 @@ export default {
 			this.upDateLocalStorage(obj)
 		},
 		sendMcodeTimer(){
+			localStorage.clear()
 			var self = this
 			if(self.time_count != 61) {
 				return

@@ -18,11 +18,11 @@ export default {
 </script>
 <style scoped>
 .log_cont {
-    position: absolute;
+    position: fixed;
     border-radius: 8px;
-    top: 26%;
+    top: 36%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     background: rgb(241,241,241);
     padding: 0 12px;
     z-index: 100;

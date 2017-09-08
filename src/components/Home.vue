@@ -64,6 +64,21 @@ export default {
             }, (response) => {
                     // error callback 
             })
+        } else {
+            if(localStorage.open_id) {
+                this.$http.post( API_ROUTER_CONFIG.get_user_detail,
+                {
+                    user_type: localStorage.user_type,
+                    open_id: localStorage.open_id
+                },
+                {emulateJSON: true}).then((response) => {
+                    if(response.status == 200) {
+                        this.upDateLocalStorage(response.body.data)
+                    }
+                }, (response) => {
+                        // error callback 
+                })
+            }
         }
         var is_worker
         is_worker = localStorage.is_worker

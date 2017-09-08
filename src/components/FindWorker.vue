@@ -28,7 +28,7 @@
                         <div class="lb_item worker_name txt_ell">{{worker.user_name}}</div>
                         <div class="lb_item worker_auth" :class="{ unauthed: !identify(worker.user_is_identify), authed:identify(worker.user_is_identify)}">{{workerIdentify(worker.user_is_identify)}}</div>
                     </div>
-                    <Rate allow-half disabled v-model.number="worker.worker_average_rate"></Rate>
+                    <Rate disabled allow-half disabled v-model.number="worker.worker_average_rate"></Rate>
                     <div class="lb_item worker_region">关注量：{{ worker.focus_count }}</div>
                     <div class="work_info_bottom">
                         <div class="lb_item worker_region">{{ worker.user_address }}</div>
@@ -167,11 +167,15 @@ export default {
             } else {
                 local_data = this.local_slots[0].values[2]
             }
-            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=address_list',
-            {
+            var res_data = {
                 account: this.page,
-                address: local_data
-            },
+                address: local_data,
+            }
+            if(localStorage.open_id) {
+                res_data.open_id = localStorage.open_id
+            }
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=address_list',
+            res_data,
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
                     this.get_data_flag = true
@@ -201,11 +205,15 @@ export default {
             } else {
                 time_data = this.time_slots[0].values[2]
             }
-            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=time_list',
-            {
+            var res_data = {
                 account: this.page,
                 time: this.changeAcceptDuty(time_data),
-            },
+            }
+            if(localStorage.open_id) {
+                res_data.open_id = localStorage.open_id
+            }
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=time_list',
+            res_data,
             {emulateJSON: true}).then((response) => {
                 if(response.status == "200"){
                     // console.log(response.body.data.length)
@@ -238,11 +246,15 @@ export default {
             } else {
                 type_data = this.type_slots[0].values[2]
             }
-            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=type_list',
-            {
+            var res_data = {
                 account: this.page,
-                user_type: changeType2Number(type_data)
-            },
+                user_type: changeType2Number(type_data),
+            }
+            if(localStorage.open_id) {
+                res_data.open_id = localStorage.open_id
+            }
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=type_list',
+            res_data,
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
                     this.get_data_flag = true
@@ -271,10 +283,14 @@ export default {
         },
         slotByRate(e, flag){
             this.page_flag = 'rate_list'
-            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
-            {
+            var res_data = {
                 account: this.page,
-            },
+            }
+            if(localStorage.open_id) {
+                res_data.open_id = localStorage.open_id
+            }
+            this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
+            res_data,
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
                     // console.log(response.body)
@@ -287,9 +303,12 @@ export default {
             })
         },
         goWorkerDetail(obj){
-
-            var worker = obj.worker;
-            this.$router.push({ name:'worker_detail', params:{ find_worker : worker }})
+            if(localStorage.open_id) {
+                var worker = obj.worker;
+                this.$router.push({ name:'worker_detail', params:{ find_worker : worker }})
+            } else {
+                this.$router.push('login')
+            }
         },
         workerAvatar(url){
             // console.log(url)
@@ -350,10 +369,14 @@ export default {
 	},
     created(){
         this.get_data_flag = false
+        var res_data = {
+            account: this.page,
+        }
+        if(localStorage.open_id) {
+            res_data.open_id = localStorage.open_id
+        }
         this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
-            {
-                account: this.page,
-            },
+            res_data,
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
                     // console.log(response.body)

@@ -91,6 +91,7 @@ export default {
             })
         },
         sendMcodeTimer(){
+			localStorage.clear()
 			var self = this
 			if(self.time_count != 61) {
 				return
@@ -125,7 +126,6 @@ export default {
 		}
 	},
 	created() {
-		localStorage.clear()
 		this.SDKRegister(this, () => {})
 	}
 }

@@ -5,9 +5,12 @@
         </div>
         <div class="title">{{ msg }}</div>
         <img v-tap="{ methods: scanQrcode }" v-if="is_worker && qr" class="qr_logo" src="../../assets/qr_code.png">
+        <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="_msg"></CNotice>
     </div>
 </template>
+
 <script>
+import CNotice from '../common/Notice.vue'
 import { mapState } from 'vuex'
 var wx = require('weixin-js-sdk')
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
@@ -19,7 +22,12 @@ export default {
             is_worker: false,
             is_wy: false,
             is_owner: false,
-            wx 
+            wx ,
+            _msg: '',
+            cnotice_flag: false,
+            mFn(){
+                console.log('请绑定函数！')
+            },
         }
     },
     props:['msg','icon','qr'],
@@ -28,6 +36,9 @@ export default {
         back() {
             this.$router.go(-1)
         },
+        closeD(){
+            this.cnotice_flag = false
+        },
         scanQrcode() {
             var self = this
             this.wx.scanQRCode({
@@ -35,7 +46,7 @@ export default {
                 scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
                 success: function (res) {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                    alert(result)
+                    // alert(result)
                     self.parseQr(result)
                 }
             })
@@ -43,7 +54,7 @@ export default {
         parseQr(result) {
             var arr = result.split('&')
             var aim = arr[0]
-            alert(aim)
+            // alert(aim)
             if(aim == 'worker_enter_project') {
                 var project_id = arr[1]
                 this.workerEnterPeoject(project_id)
@@ -59,21 +70,29 @@ export default {
             }
         },
         workerEnterPeoject(project_id) {
-            alert('项目id为：' + project_id)
+            // alert('项目id为：' + project_id)
             this.$http.post( API_ROUTER_CONFIG.worker_addin_project,
             {
                 project_id: project_id,
                 open_id: localStorage.open_id
             },
             {emulateJSON: true}).then((response) => {
-                console.log(response)
+                if(response.body.status == 1) {
+                    this._msg = '您已成功加入项目！'
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
+                } else {
+                    this._msg = response.body.msg
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
+                }
             }, (response) => {
                         // error callback 
             })
         },
         workerEnterXq(facility_id, facility_adress) {
-            alert('物业经理的id是' + facility_id)
-            alert('物业公司的地址是' + facility_adress)
+            // alert('物业经理的id是' + facility_id)
+            // alert('物业公司的地址是' + facility_adress)
             this.$http.post( API_ROUTER_CONFIG.facility_visit,
             {
                 facility_id: facility_id,
@@ -81,21 +100,36 @@ export default {
                 facility_adress: facility_adress
             },
             {emulateJSON: true}).then((response) => {
-                
+                if(response.body.status == 1) {
+                    this._msg = '欢迎进入小区!'
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
+                } else {
+                    this._msg = response.body.msg
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
+                }
             }, (response) => {
                         // error callback 
             })
         },
         workerEnterFj(owener_id) {
-            alert('业主的id是' + owener_id)
+            // alert('业主的id是' + owener_id)
             this.$http.post( API_ROUTER_CONFIG.owner_visit,
             {
                 owener_id: owener_id,
                 open_id: this.open_id,
             },
             {emulateJSON: true}).then((response) => {
-                // item.focus_status = 1
-                alert(response.data.msg)
+                if(response.body.status == 1) {
+                    this._msg = '欢迎进入房间!'
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
+                } else {
+                    this._msg = response.body.msg
+                    this.mFn = this.closeD
+                    this.cnotice_flag = true
+                }
             }, (response) => {
                         // error callback 
             })
@@ -110,6 +144,9 @@ export default {
         this.SDKRegister(this, () => {
 			
         })
+    },
+    components: {
+        CNotice
     }
 }
 </script>
