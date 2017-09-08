@@ -2,12 +2,12 @@
     <div v-tap="{ methods: nclick }" class="log_cont">
         <Icon class="bt_close" type="close-circled"></Icon>
         <div class="log_txt">{{ msg }}</div>
-        <div v-tap="{ methods: mclick }" class="bt_ok">确认</div>
+        <div v-tap="{ methods: mclick }" class="bt_ok">{{ btmsg ? btmsg : '确认'}}</div>
     </div>
 </template>
 <script>
 export default {
-    props: ['msg','mclick','nclick'],
+    props: ['msg','mclick','nclick', 'btmsg'],
   	name: 'notice',
   	data () {
     	return {
@@ -20,11 +20,12 @@ export default {
 .log_cont {
     position: absolute;
     border-radius: 8px;
-    top: 22%;
+    top: 26%;
     left: 50%;
     transform: translateX(-50%);
     background: rgb(241,241,241);
     padding: 0 12px;
+    z-index: 100;
 }
 .log_txt {
     width: 65vw;

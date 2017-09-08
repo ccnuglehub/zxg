@@ -41,6 +41,30 @@ export default {
         }
     },
     created(){
+        var arg = window.location.href.parseURL() || {
+            params: {}
+        }
+        if(arg.params.open_id) {
+            var open_id = arg.params.open_id
+            var user_type = arg.params.user_type
+            this.upDateLocalStorage({
+                open_id: open_id,
+                user_tel: arg.params.user_tel,
+                user_type: user_type
+            })
+            this.$http.post( API_ROUTER_CONFIG.get_user_detail,
+            {
+                user_type: user_type,
+                open_id: open_id
+            },
+            {emulateJSON: true}).then((response) => {
+                if(response.status == 200) {
+                    this.upDateLocalStorage(response.body.data)
+                }
+            }, (response) => {
+                    // error callback 
+            })
+        }
         var is_worker
         is_worker = localStorage.is_worker
         if(is_worker) {
@@ -55,6 +79,9 @@ export default {
         })
     },
     methods:{
+        ...mapActions([
+			'upDateLocalStorage'
+		]),
         getNewslist(){
 
             this.get_data_flag = false

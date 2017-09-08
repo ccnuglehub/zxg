@@ -3,17 +3,16 @@
         <Chead :msg="top_title" :icon="true"></Chead>
         <!-- <img src="logo.png"> -->
         <h1 class="qr_desp">{{ msg }}</h1>
-        <!--<div v-vue-q-art="config"></div>-->
-        <vue-q-art :config="config" :downloadButton="downloadButton"></vue-q-art>
+        <vue-qr :text="value" :autoColor='true' height="200"  width="200"></vue-qr>
     </div>
 </template>
 
 <script>
 import Chead from './common/Header.vue'
-import VueQArt from './VueQart.vue'
+import VueQr from 'vue-qr'
 export default {
     components: {
-        VueQArt,
+        VueQr,
         Chead
     },
     name: 'qrcode',
@@ -21,16 +20,14 @@ export default {
         return {
             msg: '请扫码二维码',
             top_title: "生成二维码",
-            config: {
-                value: '',
-                imagePath: '../../static/test.png',
-                filter: 'color'
-            },
-            downloadButton: true
+            value: '',
+            src: '../../static/test.png',
         }
     },
     created() {
-        this.config.value = this.$route.params.data
+        // if(this.$route.params.from = 'project_detail') {
+            this.value = this.$route.params.txt
+        // }
     }
 }
 </script>

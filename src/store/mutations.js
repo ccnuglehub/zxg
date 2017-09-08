@@ -26,6 +26,15 @@ const mutations = {
 			console.error('upDateLocalStorage方法的参数只能是对象')
 		}
 	},
+	upDateSessionStorage(state, obj) {
+		if(typeof obj == 'object') { 
+			for(var key in obj) {
+				sessionStorage[key] = obj[key]
+			}
+		} else {
+			console.error('upDateSessionStorage方法的参数只能是对象')
+		}
+	},
 	getLocalStorage(state, data) {
 		var obj = {}
 		if (Object.prototype.toString.call(data) === '[object String]') {

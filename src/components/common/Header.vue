@@ -10,6 +10,7 @@
 <script>
 import { mapState } from 'vuex'
 var wx = require('weixin-js-sdk')
+import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 
 export default {
     data(){
@@ -28,12 +29,75 @@ export default {
             this.$router.go(-1)
         },
         scanQrcode() {
+            var self = this
             this.wx.scanQRCode({
-                needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                 scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
                 success: function (res) {
                     var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                    alert(result)
+                    self.parseQr(result)
                 }
+            })
+        },
+        parseQr(result) {
+            var arr = result.split('&')
+            var aim = arr[0]
+            alert(aim)
+            if(aim == 'worker_enter_project') {
+                var project_id = arr[1]
+                this.workerEnterPeoject(project_id)
+            }
+            if(aim == 'worker_enter_xq') {
+                var facility_id = arr[1]
+                var facility_adress = arr[2]
+                this.workerEnterXq(facility_id, facility_adress)
+            }
+            if(aim == 'worker_enter_fj') {
+                var owener_id = arr[1]
+                this.workerEnterFj(owener_id)
+            }
+        },
+        workerEnterPeoject(project_id) {
+            alert('项目id为：' + project_id)
+            this.$http.post( API_ROUTER_CONFIG.worker_addin_project,
+            {
+                project_id: project_id,
+                open_id: localStorage.open_id
+            },
+            {emulateJSON: true}).then((response) => {
+                console.log(response)
+            }, (response) => {
+                        // error callback 
+            })
+        },
+        workerEnterXq(facility_id, facility_adress) {
+            alert('物业经理的id是' + facility_id)
+            alert('物业公司的地址是' + facility_adress)
+            this.$http.post( API_ROUTER_CONFIG.facility_visit,
+            {
+                facility_id: facility_id,
+                open_id: this.open_id,
+                facility_adress: facility_adress
+            },
+            {emulateJSON: true}).then((response) => {
+                
+            }, (response) => {
+                        // error callback 
+            })
+        },
+        workerEnterFj(owener_id) {
+            alert('业主的id是' + owener_id)
+            this.$http.post( API_ROUTER_CONFIG.owner_visit,
+            {
+                owener_id: owener_id,
+                open_id: this.open_id,
+            },
+            {emulateJSON: true}).then((response) => {
+                // item.focus_status = 1
+                alert(response.data.msg)
+            }, (response) => {
+                        // error callback 
             })
         }
     },
@@ -42,7 +106,7 @@ export default {
         localStorage.is_worker == 'true' ? this.is_worker = true : this.is_worker = false
         localStorage.is_wy == 'true' ? this.is_wy = true : this.is_wy = false
         localStorage.is_owner == 'true' ? this.is_owner = true : this.is_owner = false
-        
+        this.open_id = localStorage.open_id
         this.SDKRegister(this, () => {
 			
         })

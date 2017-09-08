@@ -20,22 +20,23 @@
             </div>
 		</div>
         <div class="item_list">
-            <div v-tap="{ methods: goWorkerDetail, index: index }" class="item_list_item" :key="index" v-for="(worker ,index) in workers">
+            <div v-tap="{ methods: goWorkerDetail, worker: worker }" class="item_list_item" :key="index" v-for="(worker ,index) in workers">
                 <img class="work_photo" :src="workerAvatar(worker.user_avatar)">
                 <div class="work_info lb_item">
                     <div class="work_info_top">
                         <div class="lb_item worker_type">{{workerType2Word(worker.user_type)}}</div>
-                        <div class="lb_item worker_name">{{worker.user_name}}</div>
+                        <div class="lb_item worker_name txt_ell">{{worker.user_name}}</div>
                         <div class="lb_item worker_auth" :class="{ unauthed: !identify(worker.user_is_identify), authed:identify(worker.user_is_identify)}">{{workerIdentify(worker.user_is_identify)}}</div>
                     </div>
                     <Rate allow-half disabled v-model.number="worker.worker_average_rate"></Rate>
+                    <div class="lb_item worker_region">关注量：{{ worker.focus_count }}</div>
                     <div class="work_info_bottom">
-                        <div class="lb_item worker_region">{{worker.user_address}}</div>
-                        <div class="lb_item">已接单：{{worker.worker_orders_count}}</div>
+                        <div class="lb_item worker_region">{{ worker.user_address }}</div>
+                        <div class="lb_item worker_region">已接单：{{ worker.worker_orders_count }}</div>
+                        <div class="lb_item">{{ worker.worker_accept_day | filterDate }}</div>
                     </div>
                 </div>
             </div>
-            
         </div>
         <Menue></Menue>
 <!--         <mt-datetime-picker
@@ -65,7 +66,7 @@
 <script>
 import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
-import {HOST_CONFIG} from '@/api/config/api_config'
+import { HOST_CONFIG } from '@/api/config/api_config'
 import { changeType2Number, changeRate2Number } from '@/util/util'
 export default {
   	name: 'work',
@@ -87,7 +88,6 @@ export default {
             local_slots: [
                 {
                 flex: 1,
-                //
                 values: ['江岸区', '江汉区', '硚口区', '汉阳区', '武昌区', '青山区','洪山区','蔡甸区','江夏区','黄陂区','新洲区'],
                     className: 'local_slots',
                     textAlign: 'center',
@@ -115,7 +115,16 @@ export default {
             get_data_flag: true,
             page_flag: 'rate_list'
 		}
-  	},
+    },
+    filters: {
+        filterDate: function (value) {
+            if (value < 90) {
+                return value + '天后可接单'
+            } else {
+                return '暂不可接单'
+            }
+        }
+    },
 	methods: {
         openLocaPicker() {
             this.loca_wrap_flag = true
@@ -278,8 +287,9 @@ export default {
             })
         },
         goWorkerDetail(obj){
-            var index = obj.index;
-            this.$router.push({url:'worker_detail',params:{worker : this.workers && this.workers[index]}})
+
+            var worker = obj.worker;
+            this.$router.push({ name:'worker_detail', params:{ find_worker : worker }})
         },
         workerAvatar(url){
             // console.log(url)
@@ -415,7 +425,8 @@ export default {
     margin-right: 10px;
 }
 .worker_name {
-    margin-right: 7%;
+    margin-right: 6px;
+    max-width: 5em;
 }
 .worker_auth {
     font-size: 12px;
@@ -429,7 +440,7 @@ export default {
     display: inline-block;
 }
 .worker_region {
-    margin-right: 28px;
+    margin-right: 12px;
 }
 .authed {
     color:rgb(76,175,80);

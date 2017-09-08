@@ -8,9 +8,9 @@
                     <Form-item label="姓名">
                         <Input v-model="form_data.user_name" class="info_input" type="text"></Input>
                     </Form-item>
-                     <Form-item v-if="is_owner || is_wy || is_worker" label="电话">
-                        <Input class="info_input" type="text"></Input>
-                    </Form-item> 
+                    <!-- <Form-item v-if="is_owner || is_wy || is_worker" label="电话">
+                        <Input v-model="form_data.user_tel" class="info_input" type="text"></Input>
+                    </Form-item>  -->
                     <Form-item label="地址">
                         <Input v-model="form_data.user_address" class="info_input" type="text"></Input>
                     </Form-item>
@@ -28,14 +28,17 @@
 import Chead from './common/Header.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { mapActions, mapState } from 'vuex'
+import { checkEmpty } from '../util/util.js'
+
 export default {
     name: 'add_info',
     data(){
         return {
             top_title: '完善个人信息',
             form_data: {
-                open_id: '2adsfad1231',
+                open_id: '',
                 user_name: "",
+                // user_tel: '',
                 user_address: "",
                 worker_description: "",
             },
@@ -56,9 +59,15 @@ export default {
     methods: {
         ...mapActions([
             'upDateLocalStorage'
-		]),
+        ]),
+        checkEmpty,
         addInfo(){
-            console.log(this.form_data)
+            for(var key in this.form_data) {
+                if(this.checkEmpty(this.form_data[key])) {
+                    alert('您有必填项未填写，请填写后重试！')
+                    return
+                }
+            }
             this.$http.post( API_ROUTER_CONFIG.update_user, 
             this.form_data,
 			{emulateJSON: true}).then((response) => {

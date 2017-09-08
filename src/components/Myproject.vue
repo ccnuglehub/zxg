@@ -13,8 +13,8 @@
 					<span class="project_address">{{ item.project_address }}</span>
 				</div>
 				<div class="project_meta">
-					<span class="project_people">{{ item.project_people }}位工友参与</span>
-					<span class="project_time">{{ item.project_time }}</span>
+					<span class="project_worker_num">{{ item.project_worker_num }}位工友参与</span>
+					<span class="project_start_time">{{ changeDate(item.project_start_time) }}</span>
 				</div>
 			</div>
 		</div>
@@ -27,6 +27,7 @@ import Chead from './common/Header.vue'
 import Menue from './common/Menue.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { mapState, mapActions } from 'vuex'
+import { changeDate } from '../util/util.js'
 export default {
 	data() {
 		return{
@@ -34,11 +35,14 @@ export default {
 			process: false,
 			projects: [],
 			page: 0,
-			openid: '',
+			open_id: '',
 			getDataFn(){
 				console.log('这是一个函数！')
 			},
-			get_data_flag: true
+			get_data_flag: true,
+			changeDate,
+			p_flag: true,
+			c_flag: true
 		}
 	},
 	methods:{
@@ -57,6 +61,7 @@ export default {
 		},
 		getProgressInit(){
 			this.page = 0
+			this.projects = []
 			this.getDataFn = this.getProgress
 			this.getProgress()
 		},
@@ -66,19 +71,19 @@ export default {
 			this.$http.post( API_ROUTER_CONFIG.project_list,
 			{
 				account: this.page,
-				openid: this.openid,
+				open_id: this.open_id,
 				project_status: "0"
 			},
 			{emulateJSON: true}).then((response) => {
 				this.projects = this.projects.concat(response.body.data)
 				this.get_data_flag = true
-				console.log(this.projects)
 			}, (response) => {
 						// error callback 
 			})
 		},
 		getFinishedInit(){
 			this.page = 0
+			this.projects = []
 			this.getDataFn = this.getFinished
 			this.getFinished()
 		},
@@ -87,7 +92,7 @@ export default {
 			this.$http.post( API_ROUTER_CONFIG.project_list,
 			{
 				account: this.page,
-				openid: this.openid,
+				open_id: this.open_id,
 				project_status: "1"
 			}
 			,
@@ -111,7 +116,7 @@ export default {
 		}
 	},
 	created(){
-		this.openid = localStorage.openid
+		this.open_id = localStorage.open_id
 		this.getDataFn = this.getProgress
 		this.getProgress()
     },
@@ -173,14 +178,14 @@ export default {
 	font-size: 12px;
 	height: 4.7vh;
 }
-.project_people{
+.project_worker_num{
 	text-align: left;
 	float: left;
 	padding-left: 4.5vw;
 	font-size: 14px;
 	color: rgb(125, 124, 125);
 }
-.project_time{
+.project_start_time{
 	text-align: right;
 	float: right;
 	padding-right: 4.5vw;

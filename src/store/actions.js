@@ -8,6 +8,9 @@ const actions = {
 	upDateLocalStorage({ commit }, obj) {
 		commit('upDateLocalStorage', obj)
 	},
+	upDateSessionStorage({ commit }, obj) {
+		commit('upDateSessionStorage', obj)
+	},
 	getLocalStorage({ commit }, data) {
 		commit('getLocalStorage', data)
 	},

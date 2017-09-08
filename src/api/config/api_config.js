@@ -15,11 +15,11 @@ const host_config ={
 
 const api_router_config = {
 	//用户上传头像
-	upload_user_avatar: host_config.Ip+"zxg/index.php?g=Weixin&m=register&a=upload_user_avatar",
+	upload_user_avatar: host_config.Ip+"zxg/weixin/index?c=register&f=upload_user_avatar",
 	//完善个人信息
 	update_user: host_config.Ip+"zxg/weixin/index?c=register&f=update_user",
 	//实名认证
-	identity: host_config.Ip+"zxg/index.php?g=Weixin&m=register&a=identity",
+	identity: host_config.Ip+"zxg/weixin/index?c=register&f=identity",
 	//登录
 	login:host_config.Ip+"zxg/weixin/index?c=register&f=login",
 	//获取验证码
@@ -78,6 +78,10 @@ const api_router_config = {
 	news_list: host_config.Ip+"zxg/weixin/index?c=news&f=news_list",
 	//banner新闻请求
 	banner: host_config.Ip+"zxg/weixin/index?c=news&f=banner",
+	//获取用户详细信息
+	get_user_detail: host_config.Ip+"zxg/weixin/index?c=register&f=get_user_detail",
+	//注销用户
+	delete_user: host_config.Ip+"zxg/weixin/index?c=register&f=delete_user",
 }
 
 const api_assets_config = {

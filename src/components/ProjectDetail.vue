@@ -4,7 +4,10 @@
         <div class="project_details">
             <div class="project_intro">
                 <div class="intro_title">项目简介</div>
-                <div class="intro_txt">{{ detail.project_description || detail.project_decription || detail.projec_description }}</div>
+                <div class="intro_txt">
+                    <!-- <div class="project_title">{{ detail.project_name }}</div> -->
+                    <div class="project_cont">{{ detail.project_description }}</div>
+                </div>
                 <div class="intro_etc">
                     <div class="etc_items">
                         <div class="etc_item">{{ detail.project_address_section }}</div>
@@ -12,7 +15,7 @@
                         <div class="etc_item etc_name"></div>
                     </div>
                     <div class="bt_box">
-                        <div v-if="!from_add_project" v-tap="{ methods: showCompleteNotice }" class="bt">完成项目</div>
+                        <div v-if="detail.project_status == 0" v-tap="{ methods: showCompleteNotice }" class="bt">完成项目</div>
                         <div v-else class="bt bt_grey">完成项目</div>
                     </div>
                 </div>
@@ -20,18 +23,18 @@
             <div class="project_intro project_intro_bottom">
                 <div class="bottom_title">
                     <div class="intro_title intro_title_b">工人信息</div>
-                    <div v-tap="{ methods: addWorker }" class="b_bt_box">
+                    <div v-if="detail.project_status == 0" v-tap="{ methods: addWorker }" class="b_bt_box">
                         <div class="bt">添加工人</div>
                     </div>
                 </div>
                 <div v-for="(item, index) in work_list" :key="index" class="etc_items_bottom_box">
                     <div class="etc_items_bottom">
                         <div class="etc_bottom_type">{{ changeType(item.user_type) }}</div>
-                        <div class="etc_bottom_name">{{ item.user_name }}</div>
+                        <div class="etc_bottom_name txt_ell">{{ item.user_name }}</div>
                     </div>
                     <div class="bt_box_bottom">
                         <div class="bt_item_bottom">
-                            <div v-if="item.p2w_status == 0" class="bt">{{ item.p2w_status | getStatus }}</div>
+                            <div v-if="item.p2w_status == 0" v-tap="{ methods: changeStatus, params: item }" class="bt">{{ item.p2w_status | getStatus }}</div>
                             <div v-if="item.p2w_status == 1" v-tap="{ methods: showEnotce }" class="bt">{{ item.p2w_status | getStatus }}</div>
                             <div v-if="item.p2w_status == 2" class="bt bt_grey">{{ item.p2w_status | getStatus }}</div>
                         </div>
@@ -43,39 +46,22 @@
                             <div v-tap="{ methods: showDeleteNotice, params: item }" class="bt">移除</div>
                         </div>
                     </div>
+                    <div class="evaluate_wrap" v-if="evaluate_flag">
+                        <div class="evaluate">
+                            <div class="bt_close_box" v-tap="{ methods: closeEnotce }">
+                                <Icon class="bt_close" type="close-circled"></Icon>
+                            </div>
+                            <textarea v-model="form_rate.rate_content" class="e_txt" placeholder="请对工人的工作进行简短的评价"></textarea>
+                            <div class="e_title">请对工人的工作进行评分</div>
+                            <Rate allow-half v-model="form_rate.rate"></Rate>
+                            <div class="e_bt_box">
+                                <div v-tap="{ methods: Epost, params: item }" class="bt">确认评价</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- <div class="etc_items_bottom_box">
-                    <div class="etc_items_bottom">
-                        <div class="etc_bottom_type">油漆工</div>
-                        <div class="etc_bottom_name">王凯</div>
-                    </div>
-                    <div class="bt_box_bottom">
-                        <div class="bt_item_bottom">
-                            <div v-tap="{ methods: changToComplete }" class="bt">进行中</div>
-                        </div>
-                        <div class="bt_item_bottom">
-                            <div v-tap="{ methods: focus }" class="bt">关注</div>
-                        </div>
-                        <div class="bt_item_bottom">
-                            <div v-tap="{ methods: showDeleteNotice }" class="bt">移除</div>
-                        </div>
-                    </div>
-                </div> -->
             </div>
             <CNotice v-if="cnotice_flag" :nclick="closeD" :mclick="mFn" :msg="msg"></CNotice>
-            <div class="evaluate_wrap" v-if="evaluate_flag">
-                <div class="evaluate">
-                    <div class="bt_close_box" v-tap="{ methods: closeEnotce }">
-                        <Icon class="bt_close" type="close-circled"></Icon>
-                    </div>
-                    <textarea v-model="form_rate.rate_content" class="e_txt" placeholder="请对工人的工作进行简短的评价"></textarea>
-                    <div class="e_title">请对工人的工作进行评分</div>
-                    <Rate allow-half v-model="form_rate.rate"></Rate>
-                    <div class="e_bt_box">
-                        <div v-tap="{ methods: Epost }" class="bt">确认评价</div>
-                    </div>
-                </div>
-            </div>
          </div>
     </div>
 </template>
@@ -84,7 +70,7 @@
 import CNotice from './common/Notice.vue'
 import Chead from './common/Header.vue'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
-import { changeDate, changeType } from '../util/util.js'
+import { changeDate, changeType, checkEmpty } from '../util/util.js'
 import { mapState, mapActions } from 'vuex'
 export default {
   	name: 'project_detail',
@@ -105,21 +91,22 @@ export default {
             },
             form_rate: {
                 rated_user_id: "",
-                rate_name: "",
-                rate: "",
+                rate_name: localStorage.user_name,
+                rate: 0,
                 rate_content: "",
-                rate_project_name: "",
+                rate_project_name: '',
                 p2w_id: ""
-            }
+            },
+            project_id: ''
         }
     },
     filters: {
         getStatus: function(status){
             if(status == 0) {
-                return '进行中'
+                return '完成'
             }
             if(status == 1) {
-                return '待评价'
+                return '评价'
             }
             if(status == 2) {
                 return '已评价'
@@ -136,17 +123,46 @@ export default {
         //如果是项目发布后跳转
         if(this.$route.params.obj) {
             this.detail = this.$route.params.obj
-            this.from_add_project = true
-            this.detail.project_start_time =new Date().getTime()
+            this.upDateSessionStorage(this.detail)
+            this.from_add_project = false
+            // this.detail.project_start_time =new Date().getTime()
         }
+        //如果是项目列表跳转
         if(this.$route.params.item) {
             this.detail = this.$route.params.item
+            console.log(this.detail)
+            this.upDateSessionStorage(this.detail)
             this.getWorker(this.detail.project_id)
+        } else {
+            this.detail.project_description = sessionStorage.project_description
+            this.detail.project_address_section = sessionStorage.project_address_section
+            this.detail.project_start_time = sessionStorage.project_start_time
+            this.detail.project_name = sessionStorage.project_name
+            this.detail.project_status = sessionStorage.project_status
+            this.detail.project_worker_num = sessionStorage.project_worker_num
+            this.detail.project_manager_id = sessionStorage.project_manager_id
         }
+
     },
     methods: {
+        ...mapActions([
+            'upDateSessionStorage'
+        ]),
         changeDate,
         changeType,
+        checkEmpty,
+        changeStatus(item) {
+            this.$http.post( API_ROUTER_CONFIG.worker_project_status,
+            {
+                p2w_status: item.params.p2w_status,
+                p2w_id: item.params.p2w_id
+            },
+            {emulateJSON: true}).then((response) => {
+                
+            }, (response) => {
+                    // error callback 
+            })
+        },
         closeD(){
             this.cnotice_flag = false
         },
@@ -157,8 +173,8 @@ export default {
             }
             ,
             {emulateJSON: true}).then((response) => {
-                if(true) {
-                    
+                if(response.body.data.status = 1) {
+                    this.from_add_project = true
                 } else {
 
                 }
@@ -175,7 +191,6 @@ export default {
             ,
             {emulateJSON: true}).then((response) => {
                 this.work_list = response.body.data
-                console.log(this.work_list)
             }, (response) => {
                     // error callback 
             })
@@ -193,31 +208,16 @@ export default {
                     // error callback 
             })
         },
-        Epost(){
+        Epost(item){
+            this.form_rate.rated_user_id = item.params.open_id
+            this.form_rate.p2w_id = item.params.p2w_id
+            this.form_rate.rate_project_name = this.detail.project_name
             this.$http.post( API_ROUTER_CONFIG.worker_rate,
-            form_rate
-            ,
+            this.form_rate,
             {emulateJSON: true}).then((response) => {
-                if(true) {
-                    
-                } else {
-
-                }
-                console.log(response)
+                this.closeD()
             }, (response) => {
                     // error callback 
-            })
-        },
-        changToComplete(){
-            this.$http.post( API_ROUTER_CONFIG.worker_project_status,
-            {
-                p2w_status: 0,
-	            p2w_id: ""
-            },
-            {emulateJSON: true}).then((response) => {
-                console.log(response)
-            }, (response) => {
-                        // error callback 
             })
         },
         showCompleteNotice(){
@@ -235,16 +235,17 @@ export default {
             this.evaluate_flag = true
         },
         closeEnotce(){
-            console.log('j')
             this.evaluate_flag = false
         },
         addWorker(){
-            this.$router.push('qr_code')
+            var txt = 'worker_enter_project&' + this.detail.project_id
+            this.$router.push({ name: 'qr_code', params: { from: 'project_detail', txt: txt }})
         },
         focus(item){
+            console.log(item)
             this.$http.post( API_ROUTER_CONFIG.focus_worker,
             {
-                focus_user_id: "1adf123adaf",
+                focus_user_id: this.open_id,
                 focused_user_id: item.params.p2w_worker_id
             },
             {emulateJSON: true}).then((response) => {
@@ -356,7 +357,7 @@ export default {
     text-align: center;
 }
 .etc_items_bottom {
-    width: 35%;
+    width: 38%;
 }
 .etc_items_bottom_box {
     width: 100%;
@@ -365,9 +366,11 @@ export default {
     padding: 10px 0;
     border-bottom: 1px solid rgb(227,227,227);
 }
-.etc_bottom_type,
+.etc_bottom_type {
+    width: 5em;
+}
 .etc_bottom_name {
-    width: 50%;
+    width: 3em;
 }
 .etc_bottom_type {
     font-size: 16px;
@@ -379,7 +382,7 @@ export default {
     text-align: center;
 }
 .bt_box_bottom {
-    width: 65%;
+    width: 62%;
 }
 .bt_item_bottom {
     width: 33.3%;
@@ -393,14 +396,12 @@ export default {
     padding-bottom: 16px;
     border-radius: 8px;
 }
-.bt_item_bottom .bt {
-    min-width: 64px;
-}
 .evaluate {
     width: 69vw;
     font-size: 0;
     padding-top: 15px;
     position: absolute;
+    text-align: center;
     top: 28vh;
     left: 50%;
     transform: translateX(-50%);

@@ -46,7 +46,7 @@ export default {
             workers: [],
             get_data_flag: true,
             page: 0,
-            limitation: ''
+            limitation: '',
 		}
   	},
 	methods: {
@@ -70,11 +70,14 @@ export default {
             }
             if(params.reset) {
                 this.page = 0
+                this.workers = []
             }
             this.$http.post( API_ROUTER_CONFIG.visitor_list_limitation,
             {
                 account: this.page,
-                limitation: this.limitation
+                limitation: this.limitation,
+                owner_type: localStorage.user_type,
+                open_id: localStorage.open_id
             },
             {emulateJSON: true}).then((response) => {
                 if(response.status == 200){
@@ -88,23 +91,36 @@ export default {
         onScroll() {
             if(this.get_data_flag) {
                 this.page++ 
-				this.getWorkerList({})
+                if(this.limitation) {
+                    this.getWorkerList({})
+                } else {
+                    this.getVisitorList(false)
+                }
 			}
-        }
-	},
-    created(){
-        this.$http.post(HOST_CONFIG.serverIp+'?c=worker&f=rate_list',
-        {
-            account: "0"
         },
-        {emulateJSON: true}).then((response) => {
-            if(response.status == 200){
-                var worker_data = changeRate2Number(response.body.data)
-                this.workers = this.workers.concat(worker_data)
+        getVisitorList(reset) {
+            if(reset) {
+                this.page = 0
+                this.workers = []
             }
-        }, (response) => {
-                // error callback 
-        })
+            this.$http.post( API_ROUTER_CONFIG.visitor_list,
+            {
+                owner_type: localStorage.user_type,
+                open_id: localStorage.open_id,
+                account: this.page
+            },
+            {emulateJSON: true}).then((response) => {
+                if(response.status == 200){
+                    var worker_data = changeRate2Number(response.body.data)
+                    this.workers = this.workers.concat(worker_data)
+                }
+            }, (response) => {
+                    // error callback 
+            })
+        }
+    },
+    created(){
+        this.getVisitorList(true)
     },
     components: {
         Chead,
@@ -116,6 +132,7 @@ export default {
 <style scoped>
 .visitor {
     min-height: 100vh;
+    background:#eee;
 }
 .top_menue {
     position: fixed;
@@ -140,7 +157,6 @@ export default {
 }
 .item_list {
      min-height: 88vh;
-     background:#eee;
      padding-top: 36px;
      font-size: 0;
      padding-bottom: 60px;

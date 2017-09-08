@@ -7,27 +7,18 @@
 <script>
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 import { mapActions, mapState } from 'vuex'
+import { parseUrl } from './util/util.js'
 
 export default {
     name: 'app',
-    data() {
-        return {
-            open_id: ''
-        }
+    methods: {
+        parseUrl
     },
-    computed: {
-		...mapState([
-			'xmjl_info'
-		])
-	},
     created() {
-        this.$http.get(API_ROUTER_CONFIG.get_open_id,
-        {emulateJSON: true}).then((response) => {
-            this.open_id = response.body.data.open_id
-            this.changeXmjlInfo(response.body.data)
-        }, (response) => {
-                // error callback 
-        })
+        parseUrl()
+        if(localStorage.open_id) {
+            this.$router.push('home')
+        }
     }
 }
 </script>
@@ -81,4 +72,8 @@ body {
 /* .ivu-select-placeholder {
     display: inline-block !important;
 }  */
+.picker-center-highlight {
+    background: grey;
+    opacity: .3;
+}
 </style>

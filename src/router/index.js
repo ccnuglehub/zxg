@@ -11,6 +11,7 @@ import NewsDetail from "@/components/NewsDetail"
 import Myproject from "@/components/Myproject"
 import Person from "@/components/Person"
 import ProjectDetail from '@/components/ProjectDetail'
+import UploadAvator from '@/components/UploadAvator'
 import QrCode from '@/components/QrCode'
 import Menue from '@/components/common/Menue'
 import Header from '@/components/common/Header'
@@ -37,11 +38,16 @@ export default new Router({
       path:"/newsDetail",
       name:"newsDetail",
       component:NewsDetail
-      },
+    },
     {
       path:'/project_detail',
       name:'project_detail',
       component: ProjectDetail,
+    },
+    {
+      path:'/upload_avator',
+      name:'upload_avator',
+      component: UploadAvator,
     },
     {
       path: '/register',

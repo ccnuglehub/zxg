@@ -32,40 +32,51 @@
 		</div>
 		<div v-if="is_worker" class="select_box">
 			<label class="select_lable"></label>
-			<Select v-model="form_data.user_work_type" class="select">
+			<Select v-model="form_data.user_type" class="select">
 				<Option v-for="(item, index) in user_work_type_list" :value="item.id" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div>
 		 <div v-if="is_worker" class="select_box">
 			<label class="select_lable"></label>
-			<Select class="select">
-				<Option v-for="(item, index) in city_list" :value="item.id" :key="index">{{ item.value }}</Option>
+			<Select v-model="form_data.user_address" class="select">
+				<Option v-for="(item, index) in city_list" :value="item.value" :key="index">{{ item.value }}</Option>
 			</Select>
 		</div> 
-		 <div v-if="is_owner" class="n_input_box">
-			<Input class="input" placeholder="请输入房屋地址">
+		<div v-if="is_owner" class="n_input_box">
+			<Input v-model="form_data.user_address" class="input" placeholder="请输入房屋地址">
 				<span slot="prepend"><Icon type="location"></Icon></span>
 			</Input>
 			<div class="input error"></div>
 		</div>
 		 <div v-if="is_wy" class="n_input_box">
-			<Input class="input" placeholder="请输入物业公司名称">
+			<Input v-model="form_data.facility_name" class="input" placeholder="请输入物业公司名称">
 				<span slot="prepend"><Icon type="ios-home"></Icon></span>
 			</Input>
 			<div class="input error"></div>
 		</div>
 		<div v-if="is_wy" class="n_input_box">
-			<Input class="input" placeholder="请输入小区地址">
+			<Input v-model="form_data.user_address" class="input" placeholder="请输入小区地址">
 				<span slot="prepend"><Icon type="location"></Icon></span>
 			</Input>
 			<div class="input error"></div>
 		</div>  
-		<Button v-tap="{ methods: register }" class="register_bt" type="success" long>注册</Button>
+		<form class="register_form" action="http://dashifan.cn/zxg/weixin/index?c=register&f=add_user" method="post">
+			<p class="register_item">姓名: <input type="text" v-model="form_data.user_name" name="user_name" /></p >
+			<p class="register_item">电话: <input type="text" v-model="form_data.user_tel" name="user_tel" /></p >
+			<p class="register_item">验证码: <input type="text" v-model="form_data.auth_code" name="auth_code" /></p >
+			<p class="register_item">用户类型: <input type="text" v-model="form_data.user_type" name="user_type" /></p >
+			<p v-if="is_wy" class="register_item">请输入物业公司名称: <input type="text" v-model="form_data.facility_name" name="facility_name" /></p >
+			<p v-if="!is_xmjl" class="register_item">地址: <input type="text" v-model="form_data.user_address" name="user_address" /></p >
+			<input class="register_bt" type="submit" value="注册" /> 
+		</form>
+		<!-- <Button v-tap="{ methods: register }" class="register_bt" type="success" long>注jj册</Button>   -->
+		<CNotice v-if="show_notice" :nclick="closeD" :mclick="mFn" :msg="msg" :btmsg="btmsg"></CNotice>
 	</div>
 </template>
 
 <script>
 import { checkPhone, checkName, checkEmpty } from '../util/util.js'
+import CNotice from './common/Notice.vue'
 import { mapActions, mapState } from 'vuex'
 import { API_ROUTER_CONFIG } from '@/api/config/api_config'
 export default {
@@ -79,8 +90,8 @@ export default {
 				user_tel: '',
 				user_type: '',
 				auth_code: '',
-				open_id: '3adf123adaf',
-				// user_work_type: '',
+				user_address: '',
+				facility_name: ''
 			},
 			bt_text: '发送验证码',
 			phone_flag: true,
@@ -89,7 +100,13 @@ export default {
 			is_xmjl: false,
             is_worker: false,
             is_wy: false,
-            is_owner: false
+			is_owner: false,
+			show_notice: false,
+			msg: '',
+			btmsg: '前往登录',
+			mFn: () => {
+				console.log('需绑定函数！')
+			}
 		}
 	},
 	computed: {
@@ -100,12 +117,21 @@ export default {
 		])
 	},
 	created(){
-		// var obj = this.upDateLocalStorage(['open_id', 'is_xmjl', 'is_worker', 'is_wy', 'is_owner'])
-		// this.is_xmjl = obj.is_xmjl
-        // this.is_worker = obj.is_worker
-        // this.is_owner = obj.is_owner
-        // this.is_wy = obj.is_wy
-		// this.form_data.open_id = obj.open_id
+		localStorage.clear()
+		var arg = window.location.href.parseURL()
+		if(arg.params.status == 0) {
+			this.show_notice = true
+			this.mFn = this.goLogin
+		}
+		if(arg.params.status == 1) {
+			this.show_notice = true
+			this.btmsg = '确定'
+			this.mFn = this.reTry
+		}
+		this.msg = decodeURI(arg.params.msg)
+	},
+	components: {
+		CNotice
 	},
 	methods: {
 		...mapActions([
@@ -139,8 +165,7 @@ export default {
 			if(value == 3) {
 				// yz
 				this.is_owner = true
-			}
-			if(value == 4) {
+			} else {
 				// gy
 				this.is_worker = true
 			}
@@ -185,32 +210,37 @@ export default {
                       // error callback 
             })
 		},
-		register(){
-			if(!this.phone_flag || !this.name_flag || this.empty_flag) {
-				return
-			}
-			if(this.checkEmpty(this.form_data.user_name) || this.checkEmpty(this.form_data.user_tel)) {
-				return
-			}
-			alert(this.form_data.user_name)
-			alert(this.form_data.user_tel)
-			alert(this.form_data.user_type)
-			alert(this.form_data.auth_code)
-			this.$http.post(API_ROUTER_CONFIG.add_user,
-				this.form_data,
-			{emulateJSON: true}).then((response) => {
-				var info = response.body.data
-				info.openid = info.open_id
+		// register(){
+		// 	if(!this.phone_flag || !this.name_flag || this.empty_flag) {
+		// 		return
+		// 	}
+		// 	if(this.checkEmpty(this.form_data.user_name) || this.checkEmpty(this.form_data.user_tel)) {
+		// 		return
+		// 	}
+		// 	console.log(this.form_data)
+		// 	return
+		// 	this.$http.post(API_ROUTER_CONFIG.add_user,
+		// 		this.form_data,
+		// 	{emulateJSON: true}).then((response) => {
+		// 		var info = response.body.data
+		// 		info.openid = info.open_id
 
-				alert(info.openid)
+		// 		//将用户信息存储到localstorage
+		// 		this.upDateLocalStorage(info)
 
-				//将用户信息存储到localstorage
-				this.upDateLocalStorage(info)
-
-                this.$router.push('home')
-			}, (response) => {
-					// error callback 
-            })
+        //         this.$router.push('home')
+		// 	}, (response) => {
+		// 			// error callback 
+        //     })
+		// },
+		closeD() {
+			this.show_notice = false
+		},
+		goLogin() {
+			this.$router.push('login')
+		},
+		reTry() {
+			this.show_notice = false
 		}
 	}
 }
@@ -221,6 +251,13 @@ export default {
 .register {
 	min-height: calc(100vh - 45px);
 	box-sizing: border-box;
+}
+.register_form {
+	margin: 0;
+	padding: 0;
+}
+.register_item {
+	display: none;
 }
 .app_logo {
 	margin-top: 36px;
@@ -257,6 +294,13 @@ export default {
 .input,
 .register_bt {
 	width: 66%;
+}
+.register_bt {
+	border: 1px solid #19be6b;
+	border-radius: 4px;
+	padding: 4px 0;
+	color: #fff;
+    background-color: #19be6b;
 }
 .m_bt {
 	width: 30%;
