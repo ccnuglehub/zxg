@@ -112,6 +112,7 @@ export default {
         changeType,
         changeDate,
         focus(params){
+            this.worker_detail.focus_status = 1
             this.$http.post( API_ROUTER_CONFIG.focus_worker,
             {
                 focus_user_id: localStorage.open_id,
@@ -119,7 +120,6 @@ export default {
             },
             {emulateJSON: true}).then((response) => {
                 
-                console.log(response)
             }, (response) => {
                         // error callback 
             })
