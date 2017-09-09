@@ -256,6 +256,7 @@ export default {
             this.$router.push({ name: 'qr_code', params: { from: 'project_detail', txt: txt }})
         },
         focus(item){
+            item.params.focus_status = 1
             this.$http.post( API_ROUTER_CONFIG.focus_worker,
             {
                 focus_user_id: this.open_id,
